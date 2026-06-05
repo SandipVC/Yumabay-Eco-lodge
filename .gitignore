@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build output
+client/dist/
+client/.vite/
+
+# Media files (large binaries — add to git-lfs or host separately)
+client/public/images/
+client/public/video/
+client/public/pdf/
+
+# Original source assets (base64-embedded in reference HTML)
+assets/
+
+# Environment secrets
+server/.env
+.env
+.env.local
+.env.*.local
+
+# Leads data (runtime-generated, not source code)
+server/data/leads.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
+
+# Reference HTML (large base64-embedded file, not part of the app)
+yuma_bay_website.html
+req.txt
