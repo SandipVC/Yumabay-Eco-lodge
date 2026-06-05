@@ -506,6 +506,9 @@ a  { color: inherit; }
 
 /* ── Site Map ── */
 .sitemap-page { padding: 140px 60px 100px; }
+.sitemap-plan-image { width: 100%; max-width: 1000px; margin: 0 auto; }
+.sitemap-plan-image img { width: 100%; height: auto; display: block; border-radius: 4px; border: 1px solid rgba(201,168,76,.2); }
+.sitemap-plan-caption { text-align: center; font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-top: 10px; font-family: 'Jost', sans-serif; }
 .sitemap-svg-container { position: relative; width: 100%; max-width: 1000px; margin: 0 auto; }
 .sitemap-svg-container svg { width: 100%; height: auto; }
 .sitemap-zone {

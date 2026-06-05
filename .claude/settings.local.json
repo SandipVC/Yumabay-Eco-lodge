@@ -19,7 +19,14 @@
       "mcp__Claude_in_Chrome__navigate",
       "Skill(update-config)",
       "Skill(update-config:*)",
-      "Bash(git checkout *)"
+      "Bash(git checkout *)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Bash(python -c \"import pypdf; print\\('pypdf ok'\\)\")",
+      "Bash(python -c \"import pdf2image; print\\('pdf2image ok'\\)\")",
+      "Bash(python -c \"import fitz; print\\('pymupdf ok'\\)\")",
+      "Bash(pip install *)",
+      "Bash(python -c \"import fitz; print\\('pymupdf ok', fitz.version\\)\")"
     ]
   }
 }

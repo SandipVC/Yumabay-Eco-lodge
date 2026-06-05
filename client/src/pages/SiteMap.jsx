@@ -110,7 +110,21 @@ export default function SiteMap() {
       </h1>
       <p className="section-body reveal rd2" style={{ maxWidth: 600 }}>{s.subtitle}</p>
 
-      <div className="sitemap-svg-container" style={{ marginTop: 48 }}>
+      {/* Official architectural master plan image */}
+      <div className="sitemap-plan-image reveal rd3" style={{ marginTop: 48 }}>
+        <img
+          src="/images/master-plan-layout.jpg"
+          alt="Yuma Bay Architectural Master Plan"
+        />
+        <p className="sitemap-plan-caption">
+          PLANTA ARQUITECTÓNICA · 1ER NIVEL · 1RA &amp; 2DA ETAPA
+        </p>
+      </div>
+
+      <p className="section-label reveal" style={{ marginTop: 56, marginBottom: 0 }}>
+        {s.phase === 'Phase' ? 'Interactive Zone Map' : 'Mapa de Zonas Interactivo'}
+      </p>
+      <div className="sitemap-svg-container" style={{ marginTop: 24 }}>
         <svg viewBox="0 0 840 480" xmlns="http://www.w3.org/2000/svg" style={{ background: 'rgba(13,59,82,.25)', borderRadius: 4 }}>
           {/* Water / Bay */}
           <rect x="0" y="440" width="840" height="40" fill="rgba(26,107,138,.3)" />
