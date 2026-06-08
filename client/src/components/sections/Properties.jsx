@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import { useLang } from '../../context/LanguageContext.jsx';
+import { useLang }    from '../../context/LanguageContext.jsx';
+import { useAssets }  from '../../hooks/useAssets.js';
 
-const PROPERTY_IMAGES = [
+const PROPERTY_DEFAULTS = [
   '/images/01_1 - Photo.jpg',
   '/images/01_2 - Photo.jpg',
   '/images/01_3 - Photo.jpg',
@@ -10,9 +11,13 @@ const PROPERTY_IMAGES = [
 ];
 
 export default function Properties() {
-  const { t } = useLang();
-  const p = t.properties;
-  const navigate = useNavigate();
+  const { t }      = useLang();
+  const p          = t.properties;
+  const navigate   = useNavigate();
+  const { assets } = useAssets();
+
+  const images = (assets?.properties?.length ? assets.properties : PROPERTY_DEFAULTS)
+    .map((src, i) => src || PROPERTY_DEFAULTS[i] || PROPERTY_DEFAULTS[0]);
 
   return (
     <section id="properties">
@@ -35,7 +40,7 @@ export default function Properties() {
             key={i}
             className={`prop-card reveal${i === 0 ? ' wide rd0' : i % 2 === 0 ? ' rd2' : ' rd1'}`}
           >
-            <img src={PROPERTY_IMAGES[i]} alt={item.name} loading="lazy" />
+            <img src={images[i]} alt={item.name} loading="lazy" />
             <div className="prop-overlay" />
             <div className="prop-content">
               <p className="prop-tag">{item.tag}</p>

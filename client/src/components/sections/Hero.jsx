@@ -1,9 +1,18 @@
-import { Link } from 'react-router-dom';
-import { useLang } from '../../context/LanguageContext.jsx';
+import { useLang }   from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
+
+const DEFAULTS = {
+  video:  '/video/hero.mp4',
+  poster: '/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png',
+};
 
 export default function Hero() {
-  const { t } = useLang();
-  const h = t.hero;
+  const { t }      = useLang();
+  const h          = t.hero;
+  const { assets } = useAssets();
+
+  const video  = assets?.hero?.video  || DEFAULTS.video;
+  const poster = assets?.hero?.poster || DEFAULTS.poster;
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
@@ -12,9 +21,9 @@ export default function Hero() {
       <div className="hero-bg" />
       <video
         className="hero-video"
-        src="/video/hero.mp4"
+        src={video}
         autoPlay muted loop playsInline
-        poster="/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png"
+        poster={poster}
       />
       <div className="hero-overlay" />
       <div className="hero-content">

@@ -33,7 +33,24 @@
       "Read(//c/Program Files/GitHub CLI/**)",
       "Read(//c/Users/Sandip/AppData/Local/Microsoft/WinGet/Packages/**)",
       "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" --version)",
-      "Bash(find \"/c/Users/Sandip\" -name \"gh.exe\" 2>/dev/null | head -5)"
+      "Bash(find \"/c/Users/Sandip\" -name \"gh.exe\" 2>/dev/null | head -5)",
+      "Bash(npx concurrently *)",
+      "Bash(node index.js)",
+      "Bash(curl -s http://localhost:3001/api/cms/assets)",
+      "Bash(node -e \"const d=require\\('fs'\\).readFileSync\\('/dev/stdin','utf8'\\); const j=JSON.parse\\(d\\); console.log\\('hero:', !!j.hero, '| gallery count:', j.gallery?.length, '| lounge:', j.lounge?.length\\)\")",
+      "Bash(python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('hero:', bool\\(d.get\\('hero'\\)\\), '| gallery:', len\\(d.get\\('gallery',[]\\)\\), '| lounge:', len\\(d.get\\('lounge',[]\\)\\)\\)\")",
+      "Bash(curl -s http://localhost:5173)",
+      "Bash(ipconfig)",
+      "Bash(findstr /R \"IPv4\")",
+      "Bash(taskkill /F /IM node.exe)",
+      "Bash(pkill -f node)",
+      "Bash(fuser -k 3001/tcp 5173/tcp 5174/tcp)",
+      "Bash(netstat -ano)",
+      "Bash(cmd.exe /C \"taskkill /IM node.exe /F\")",
+      "Bash(curl -s -I -X OPTIONS http://localhost:3001/api/cms/assets -H \"Origin: http://192.168.1.28:5173\")",
+      "Bash(git check-ignore *)",
+      "Bash(grep -rn *)",
+      "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('.claude/settings.local.json','utf8'\\)\\); console.log\\('settings.local.json: valid JSON'\\)\")"
     ]
   }
 }

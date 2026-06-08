@@ -1,7 +1,8 @@
-import { useLang } from '../../context/LanguageContext.jsx';
+import { useLang }   from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
 import { useNavigate } from 'react-router-dom';
 
-const LOUNGE_IMGS = [
+const LOUNGE_DEFAULTS = [
   '/images/YUMA BAY CLUB LOUNGE  (7).jpg',
   '/images/YUMA BAY CLUB LOUNGE  (8).jpg',
   '/images/YUMA BAY CLUB LOUNGE  (9).jpg',
@@ -9,9 +10,14 @@ const LOUNGE_IMGS = [
 ];
 
 export default function Lounge() {
-  const { t } = useLang();
-  const l = t.lounge;
-  const navigate = useNavigate();
+  const { t }      = useLang();
+  const l          = t.lounge;
+  const navigate   = useNavigate();
+  const { assets } = useAssets();
+
+  const loungeImgs = (assets?.lounge?.filter(Boolean).length
+    ? assets.lounge.filter(Boolean)
+    : LOUNGE_DEFAULTS).slice(0, 4);
 
   return (
     <section id="lounge">
@@ -30,7 +36,7 @@ export default function Lounge() {
           </button>
         </div>
         <div className="lounge-imgs">
-          {LOUNGE_IMGS.map((src, i) => (
+          {loungeImgs.map((src, i) => (
             <img key={i} src={src} alt={`Club Lounge ${i + 1}`} loading="lazy" />
           ))}
         </div>

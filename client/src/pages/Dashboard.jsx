@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import CmsPanel from '../components/cms/CmsPanel.jsx';
 
 const ADMIN_SECRET = 'yumabay-admin-2025';
 
@@ -27,8 +28,9 @@ function LoginForm({ onLogin }) {
 }
 
 export default function Dashboard() {
-  const [token, setToken]   = useState(sessionStorage.getItem('yb_admin') || '');
-  const [leads, setLeads]   = useState([]);
+  const [token, setToken]     = useState(sessionStorage.getItem('yb_admin') || '');
+  const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms'
+  const [leads, setLeads]     = useState([]);
   const [loading, setLoading] = useState(false);
   const [noteMap, setNoteMap] = useState({});
 
@@ -70,13 +72,34 @@ export default function Dashboard() {
         <div className="dashboard-header">
           <div>
             <p className="section-label" style={{ marginBottom: 8 }}>Yuma Bay</p>
-            <h1 className="section-title" style={{ fontSize: 40, marginBottom: 0 }}>Lead Dashboard</h1>
+            <h1 className="section-title" style={{ fontSize: 40, marginBottom: 0 }}>Admin Dashboard</h1>
           </div>
           <button className="btn-ghost" onClick={() => { sessionStorage.removeItem('yb_admin'); setToken(''); }}>
             Sign Out
           </button>
         </div>
 
+        {/* Top-level tabs */}
+        <div className="dashboard-tabs">
+          <button
+            className={`dash-tab-btn${tab === 'leads' ? ' active' : ''}`}
+            onClick={() => setTab('leads')}
+          >
+            📋 Leads
+          </button>
+          <button
+            className={`dash-tab-btn${tab === 'cms' ? ' active' : ''}`}
+            onClick={() => setTab('cms')}
+          >
+            🖼 Media Manager
+          </button>
+        </div>
+
+        {/* CMS Panel */}
+        {tab === 'cms' && <CmsPanel token={token} />}
+
+        {/* Leads tab */}
+        {tab === 'leads' && <>
         <div className="dashboard-stats">
           <div className="dash-stat">
             <div className="dash-stat-num">{leads.length}</div>
@@ -171,6 +194,7 @@ export default function Dashboard() {
             </table>
           </div>
         )}
+        </>}
       </div>
     </div>
   );

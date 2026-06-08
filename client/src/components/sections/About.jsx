@@ -1,8 +1,18 @@
-import { useLang } from '../../context/LanguageContext.jsx';
+import { useLang }   from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
+
+const DEFAULTS = {
+  main:   '/images/WhatsApp Image 2026-04-30 at 14.12.35.jpeg',
+  accent: '/images/LOCATION - GRUND.jpg',
+};
 
 export default function About() {
-  const { t } = useLang();
-  const a = t.about;
+  const { t }      = useLang();
+  const a          = t.about;
+  const { assets } = useAssets();
+
+  const mainImg   = assets?.about?.main   || DEFAULTS.main;
+  const accentImg = assets?.about?.accent || DEFAULTS.accent;
 
   return (
     <section id="about">
@@ -13,13 +23,13 @@ export default function About() {
         </div>
         <img
           className="about-main-img"
-          src="/images/WhatsApp Image 2026-04-30 at 14.12.35.jpeg"
+          src={mainImg}
           alt="Yuma Bay aerial view"
           loading="lazy"
         />
         <img
           className="about-accent-img"
-          src="/images/LOCATION - GRUND.jpg"
+          src={accentImg}
           alt="Boca de Yuma coastline"
           loading="lazy"
         />
