@@ -32,23 +32,34 @@ function writeAssets(data) {
   writeFileSync(ASSETS_FILE, JSON.stringify(data, null, 2));
 }
 
-// Only delete files that were uploaded via CMS (live under /images/cms/ or /video/)
+// Original bundled files that must never be physically deleted (only unlinked from the registry)
+const PROTECTED_FILES = new Set([
+  '/video/hero.mp4',
+  '/pdf/MASTER PLAN YUMA BAY.pdf',
+  '/pdf/PARCELAS VILLAS  YUMA BAY.pdf',
+]);
+
+// Only delete files that were uploaded via CMS (live under /images/cms/, /video/, or /pdf/)
 function deletePhysical(filePath) {
-  if (!filePath) return;
+  if (!filePath || PROTECTED_FILES.has(filePath)) return;
   const isCms   = filePath.includes('/images/cms/');
-  const isVideo = filePath.startsWith('/video/') && filePath !== '/video/hero.mp4';
-  if (!isCms && !isVideo) return;
+  const isVideo = filePath.startsWith('/video/');
+  const isPdf   = filePath.startsWith('/pdf/');
+  if (!isCms && !isVideo && !isPdf) return;
   const abs = join(PUBLIC_DIR, filePath);
   if (existsSync(abs)) { try { unlinkSync(abs); } catch {} }
 }
 
 // ── Multer storage ────────────────────────────────────────────────────────────
+const isVideoFile = (name) => /\.(mp4|webm|mov)$/i.test(name);
+const isPdfFile   = (name) => /\.pdf$/i.test(name);
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const isVideo = /\.(mp4|webm|mov)$/i.test(file.originalname);
-    const dest = isVideo
-      ? join(PUBLIC_DIR, 'video')
-      : join(PUBLIC_DIR, 'images', 'cms', req.params.section);
+    let dest;
+    if (isVideoFile(file.originalname))    dest = join(PUBLIC_DIR, 'video');
+    else if (isPdfFile(file.originalname)) dest = join(PUBLIC_DIR, 'pdf');
+    else                                    dest = join(PUBLIC_DIR, 'images', 'cms', req.params.section);
     mkdirSync(dest, { recursive: true });
     cb(null, dest);
   },
@@ -63,10 +74,10 @@ const upload = multer({
   storage,
   limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB (videos)
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov)$/i.test(file.originalname)) {
+    if (/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images (jpg, png, webp, gif) and videos (mp4, webm) are allowed.'));
+      cb(new Error('Only images (jpg, png, webp, gif), videos (mp4, webm), and PDFs are allowed.'));
     }
   },
 });
@@ -102,10 +113,13 @@ router.post('/assets/:section/:slot?', auth, upload.single('file'), (req, res) =
   if (!req.file) return res.status(400).json({ error: 'No file uploaded.' });
 
   const { section, slot } = req.params;
-  const isVideo = /\.(mp4|webm|mov)$/i.test(req.file.originalname);
+  const isVideo = isVideoFile(req.file.originalname);
+  const isPdf   = isPdfFile(req.file.originalname);
   const filePath = isVideo
     ? `/video/${req.file.filename}`
-    : `/images/cms/${section}/${req.file.filename}`;
+    : isPdf
+      ? `/pdf/${req.file.filename}`
+      : `/images/cms/${section}/${req.file.filename}`;
 
   const label = (req.body.label || req.file.originalname.replace(/\.[^.]+$/, '')).trim();
   const cat   = req.body.cat || 'Exterior';
@@ -152,6 +166,23 @@ router.post('/assets/:section/:slot?', auth, upload.single('file'), (req, res) =
       } else {
         assets.lounge.push(filePath);
       }
+      break;
+    }
+    case 'sitemap': {
+      if (!assets.sitemap) assets.sitemap = {};
+      const wantsPdf = slot === 'masterPdf' || slot === 'villasPdf';
+      // Validate file type matches the slot
+      if (wantsPdf && !isPdf) {
+        deletePhysical(filePath); // remove the just-saved wrong-type file
+        return res.status(400).json({ error: 'This slot requires a PDF file.' });
+      }
+      if (slot === 'planImage' && isPdf) {
+        deletePhysical(filePath);
+        return res.status(400).json({ error: 'The plan image slot requires an image file.' });
+      }
+      const key = wantsPdf ? slot : 'planImage';
+      deletePhysical(assets.sitemap[key]);
+      assets.sitemap[key] = filePath;
       break;
     }
     default:
@@ -207,6 +238,12 @@ router.delete('/assets/:section', auth, (req, res) => {
         deletePhysical(assets.lounge[idx]);
         assets.lounge[idx] = null;
       }
+      break;
+    }
+    case 'sitemap': {
+      const key = slot === 'masterPdf' || slot === 'villasPdf' ? slot : 'planImage';
+      deletePhysical(assets.sitemap?.[key]);
+      if (assets.sitemap) assets.sitemap[key] = null;
       break;
     }
     default:

@@ -14,40 +14,326 @@
     "/images/01_4 - Photo.jpg",
     "/images/LOCATION - GRUND 3.jpg"
   ],
+  "propertyPrices": [
+    "$280,000",
+    "$95,000",
+    "$120,000",
+    "$150,000",
+    "$320,000"
+  ],
   "gallery": [
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png",  "label": "Yuma Bay Overview",  "cat": "Exterior" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (3).png",  "label": "Aerial View",         "cat": "Exterior" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (7).png",  "label": "Villa Exterior",      "cat": "Exterior" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (9).png",  "label": "Beach Club",          "cat": "Exterior" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (11).png", "label": "Pool Area",           "cat": "Exterior" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (13).png", "label": "Garden Terrace",      "cat": "Exterior" },
-    { "src": "/images/LOCATION - GRUND.jpg",                      "label": "Boca de Yuma Coast",  "cat": "Exterior" },
-    { "src": "/images/LOCATION - GRUND 3.jpg",                    "label": "Location View",       "cat": "Exterior" },
-    { "src": "/images/LOCATION - GRUND - 2.jpg",                  "label": "Bahia de Yuma",       "cat": "Exterior" },
-    { "src": "/images/LOCATION - GRUND 4.jpg",                    "label": "Eastern Coast",       "cat": "Exterior" },
-    { "src": "/images/R-01.png", "label": "Living Room",    "cat": "Interior" },
-    { "src": "/images/R-02.png", "label": "Master Bedroom", "cat": "Interior" },
-    { "src": "/images/R-03.png", "label": "Kitchen",        "cat": "Interior" },
-    { "src": "/images/R-04.png", "label": "Bathroom",       "cat": "Interior" },
-    { "src": "/images/R-05.png", "label": "Terrace View",   "cat": "Interior" },
-    { "src": "/images/R-06.png", "label": "Dining Area",    "cat": "Interior" },
-    { "src": "/images/R-07.png", "label": "Second Bedroom", "cat": "Interior" },
-    { "src": "/images/R-08.png", "label": "Study",          "cat": "Interior" },
-    { "src": "/images/R-09.png", "label": "Jacuzzi",        "cat": "Interior" },
-    { "src": "/images/R-10.png", "label": "Corridor",       "cat": "Interior" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (1).jpg", "label": "Club Lounge",    "cat": "Amenities" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (2).jpg", "label": "Lounge Bar",     "cat": "Amenities" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (3).jpg", "label": "Lounge Terrace", "cat": "Amenities" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (4).jpg", "label": "Pool Deck",      "cat": "Amenities" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (5).jpg", "label": "Beach Club View","cat": "Amenities" },
-    { "src": "/images/YUMA BAY CLUB LOUNGE  (6).jpg", "label": "Club Interior",  "cat": "Amenities" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (15).png", "label": "Swimming Pool", "cat": "Amenities" },
-    { "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (17).png", "label": "Gym",           "cat": "Amenities" }
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png",
+      "label": "Yuma Bay Overview",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (3).png",
+      "label": "Aerial View",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (7).png",
+      "label": "Villa Exterior",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (9).png",
+      "label": "Beach Club",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (11).png",
+      "label": "Pool Area",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (13).png",
+      "label": "Garden Terrace",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/LOCATION - GRUND.jpg",
+      "label": "Boca de Yuma Coast",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/LOCATION - GRUND 3.jpg",
+      "label": "Location View",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/LOCATION - GRUND - 2.jpg",
+      "label": "Bahia de Yuma",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/LOCATION - GRUND 4.jpg",
+      "label": "Eastern Coast",
+      "cat": "Exterior"
+    },
+    {
+      "src": "/images/R-01.png",
+      "label": "Living Room",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-02.png",
+      "label": "Master Bedroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-03.png",
+      "label": "Kitchen",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-04.png",
+      "label": "Bathroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-05.png",
+      "label": "Terrace View",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-06.png",
+      "label": "Dining Area",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-07.png",
+      "label": "Second Bedroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-08.png",
+      "label": "Study",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-09.png",
+      "label": "Jacuzzi",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/R-10.png",
+      "label": "Corridor",
+      "cat": "Interior"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (1).jpg",
+      "label": "Club Lounge",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (2).jpg",
+      "label": "Lounge Bar",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (3).jpg",
+      "label": "Lounge Terrace",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (4).jpg",
+      "label": "Pool Deck",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (5).jpg",
+      "label": "Beach Club View",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/YUMA BAY CLUB LOUNGE  (6).jpg",
+      "label": "Club Interior",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (15).png",
+      "label": "Swimming Pool",
+      "cat": "Amenities"
+    },
+    {
+      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (17).png",
+      "label": "Gym",
+      "cat": "Amenities"
+    }
   ],
   "lounge": [
     "/images/YUMA BAY CLUB LOUNGE  (7).jpg",
     "/images/YUMA BAY CLUB LOUNGE  (8).jpg",
     "/images/YUMA BAY CLUB LOUNGE  (9).jpg",
     "/images/YUMA BAY CLUB LOUNGE  (10).jpg"
+  ],
+  "sitemap": {
+    "planImage": "/images/master-plan-layout.jpg",
+    "masterPdf": "/pdf/MASTER PLAN YUMA BAY.pdf",
+    "villasPdf": "/pdf/PARCELAS VILLAS  YUMA BAY.pdf"
+  },
+  "sitemapZones": [
+    {
+      "id": "villa-tipo-1",
+      "label": "Villa Tipo 1",
+      "type": "Villa",
+      "phase": 1,
+      "availability": "limited",
+      "beds": "3 Bedrooms",
+      "area": "222 m²",
+      "price": "From $280,000",
+      "units": 12,
+      "icon": "🏡",
+      "x": 52,
+      "y": 280,
+      "w": 120,
+      "h": 88
+    },
+    {
+      "id": "building-a",
+      "label": "Building A",
+      "type": "Apartments",
+      "phase": 1,
+      "availability": "available",
+      "beds": "Studio – 3BR",
+      "area": "Various",
+      "price": "From $95,000",
+      "units": 24,
+      "icon": "🏢",
+      "x": 200,
+      "y": 160,
+      "w": 90,
+      "h": 110
+    },
+    {
+      "id": "building-b",
+      "label": "Building B",
+      "type": "Apartments",
+      "phase": 1,
+      "availability": "available",
+      "beds": "Studio – 3BR",
+      "area": "Various",
+      "price": "From $95,000",
+      "units": 24,
+      "icon": "🏢",
+      "x": 304,
+      "y": 160,
+      "w": 90,
+      "h": 110
+    },
+    {
+      "id": "building-c",
+      "label": "Building C",
+      "type": "Apartments",
+      "phase": 1,
+      "availability": "available",
+      "beds": "Studio – 3BR",
+      "area": "Various",
+      "price": "From $95,000",
+      "units": 20,
+      "icon": "🏢",
+      "x": 408,
+      "y": 160,
+      "w": 90,
+      "h": 110
+    },
+    {
+      "id": "building-d",
+      "label": "Building D",
+      "type": "Apartments + Penthouse",
+      "phase": 1,
+      "availability": "limited",
+      "beds": "1–3BR + Penthouse",
+      "area": "Various",
+      "price": "From $110,000",
+      "units": 18,
+      "icon": "🏢",
+      "x": 512,
+      "y": 160,
+      "w": 90,
+      "h": 110
+    },
+    {
+      "id": "building-e",
+      "label": "Building E",
+      "type": "Apartments",
+      "phase": 2,
+      "availability": "available",
+      "beds": "Studio – 2BR",
+      "area": "Various",
+      "price": "From $95,000",
+      "units": 18,
+      "icon": "🏢",
+      "x": 616,
+      "y": 160,
+      "w": 90,
+      "h": 110
+    },
+    {
+      "id": "bungalows",
+      "label": "Bungalows",
+      "type": "Beachfront Bungalows",
+      "phase": 2,
+      "availability": "available",
+      "beds": "1–2 Bedrooms",
+      "area": "85–120 m²",
+      "price": "From $150,000",
+      "units": 16,
+      "icon": "🛖",
+      "x": 196,
+      "y": 290,
+      "w": 200,
+      "h": 78
+    },
+    {
+      "id": "eco-residences",
+      "label": "Eco Residences",
+      "type": "Eco Lodge",
+      "phase": 1,
+      "availability": "limited",
+      "beds": "1–2 Bedrooms",
+      "area": "100–140 m²",
+      "price": "From $120,000",
+      "units": 8,
+      "icon": "🌿",
+      "x": 412,
+      "y": 290,
+      "w": 140,
+      "h": 78
+    },
+    {
+      "id": "beach-club",
+      "label": "Beach Club",
+      "type": "Club de Playa",
+      "phase": 1,
+      "availability": "available",
+      "beds": "",
+      "area": "",
+      "price": "",
+      "units": "",
+      "icon": "🏖",
+      "x": 568,
+      "y": 290,
+      "w": 220,
+      "h": 110
+    },
+    {
+      "id": "pool-main",
+      "label": "Main Pool",
+      "type": "Amenity",
+      "phase": 1,
+      "availability": "available",
+      "beds": "",
+      "area": "",
+      "price": "",
+      "units": "",
+      "icon": "🏊",
+      "x": 200,
+      "y": 72,
+      "w": 240,
+      "h": 68
+    }
   ]
 }

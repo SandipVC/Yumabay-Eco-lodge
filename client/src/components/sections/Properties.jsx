@@ -19,6 +19,13 @@ export default function Properties() {
   const images = (assets?.properties?.length ? assets.properties : PROPERTY_DEFAULTS)
     .map((src, i) => src || PROPERTY_DEFAULTS[i] || PROPERTY_DEFAULTS[0]);
 
+  // Price override from CMS: stored as the amount only; prefix is localized.
+  const priceOverrides = assets?.propertyPrices || [];
+  const priceFor = (i, fallback) => {
+    const amt = priceOverrides[i];
+    return amt ? `${p.priceFrom} ${amt}` : fallback;
+  };
+
   return (
     <section id="properties">
       <div className="sec-header reveal">
@@ -46,7 +53,7 @@ export default function Properties() {
               <p className="prop-tag">{item.tag}</p>
               <h3 className="prop-name">{item.name}</h3>
               <p className="prop-area">{item.area}</p>
-              <p className="prop-price">{item.price}</p>
+              <p className="prop-price">{priceFor(i, item.price)}</p>
               <div className="prop-feats">
                 {item.feats.map((f, j) => (
                   <span key={j} className="prop-feat">{f}</span>

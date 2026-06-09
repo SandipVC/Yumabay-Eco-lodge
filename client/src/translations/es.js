@@ -44,6 +44,7 @@ export const es = {
     titleEm: 'vivir',
     subtitle: 'Desde apartamentos frente al mar hasta villas con piscina privada, cada residencia en Yuma Bay está diseñada para capturar la belleza de la costa caribeña.',
     enquire: 'Consultar Ahora',
+    priceFrom: 'Desde',
     items: [
       {
         tag: 'Fase 1 · Destacado',
