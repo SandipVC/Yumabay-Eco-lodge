@@ -44,6 +44,7 @@ export const en = {
     titleEm: 'living',
     subtitle: 'From oceanfront apartments to private pool villas, every residence at Yuma Bay is designed to capture the beauty of the Caribbean coast.',
     enquire: 'Enquire Now',
+    priceFrom: 'From',
     items: [
       {
         tag: 'Phase 1 · Featured',

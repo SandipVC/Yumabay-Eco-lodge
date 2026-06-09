@@ -15,15 +15,7 @@ export default function Contact() {
     if (state?.interest) setForm(f => ({ ...f, propertyInterest: state.interest }));
   }, [state]);
 
-  useEffect(() => {
-    const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
-      { threshold: 0.08 }
-    );
-    reveals.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  // Scroll-reveal is wired globally in Layout (useRevealAll, keyed on route).
 
   const validate = () => {
     const errs = {};
