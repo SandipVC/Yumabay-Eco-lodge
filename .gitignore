@@ -34,3 +34,8 @@ Thumbs.db
 # Reference HTML (large base64-embedded file, not part of the app)
 yuma_bay_website.html
 req.txt
+
+# Archives (project backups — never commit; they bloat the repo)
+*.rar
+*.zip
+*.7z
