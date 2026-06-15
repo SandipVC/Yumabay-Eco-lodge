@@ -81,12 +81,6 @@ export default function About() {
 
         <div className="about-side">
           <p className="section-body reveal rd2">{a.body}</p>
-          <button
-            className="btn-ghost reveal rd3"
-            onClick={() => document.getElementById('properties')?.scrollIntoView({ behavior: 'smooth' })}
-          >
-            {a.viewAll}
-          </button>
         </div>
       </div>
 
