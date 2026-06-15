@@ -3,6 +3,7 @@ import Navbar from './Navbar.jsx';
 import Footer from './Footer.jsx';
 import CustomCursor from '../ui/CustomCursor.jsx';
 import { useRevealAll } from '../ui/useReveal.js';
+import CookieConsent from '../ui/CookieConsent.jsx';
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -19,6 +20,7 @@ export default function Layout() {
         <Outlet />
       </main>
       <Footer />
+      <CookieConsent />
     </>
   );
 }
