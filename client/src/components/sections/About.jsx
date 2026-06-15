@@ -1,6 +1,8 @@
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
-import palmsUrl from '../../assets/figma/palms-about.png';
+import assetsUrls from '../../assetsUrls.json';
+
+const palmsUrl = assetsUrls['palms-about.png'];
 
 const DEFAULTS = {
   main:   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',

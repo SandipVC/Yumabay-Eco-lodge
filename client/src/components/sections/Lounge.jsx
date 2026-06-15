@@ -1,6 +1,8 @@
 import { useLang } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
-import patternUrl from '../../assets/figma/palm-band-lounge.png';
+import assetsUrls from '../../assetsUrls.json';
+
+const patternUrl = assetsUrls['palm-band-lounge.png'];
 
 export default function Lounge() {
   const { t }    = useLang();

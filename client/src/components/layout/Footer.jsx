@@ -1,7 +1,9 @@
 import { useLang } from '../../context/LanguageContext.jsx';
-import igIcon from '../../assets/figma/social-instagram.png';
-import fbIcon from '../../assets/figma/social-facebook.png';
-import twIcon from '../../assets/figma/social-twitter.png';
+import assetsUrls from '../../assetsUrls.json';
+
+const igIcon = assetsUrls['social-instagram.png'];
+const fbIcon = assetsUrls['social-facebook.png'];
+const twIcon = assetsUrls['social-twitter.png'];
 
 export default function Footer() {
   const { t } = useLang();

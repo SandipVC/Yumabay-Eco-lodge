@@ -6,7 +6,7 @@ import SiteMapBackdrop from '../components/sitemap/SiteMapBackdrop.jsx';
 import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 
 const SITEMAP_DEFAULTS = {
-  planImage: '/images/master-plan-layout.jpg',
+  planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
   masterPdf: '/pdf/MASTER PLAN YUMA BAY.pdf',
   villasPdf: '/pdf/PARCELAS VILLAS  YUMA BAY.pdf',
 };

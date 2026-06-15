@@ -1,18 +1,18 @@
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
-import badgeUrl from '../../assets/figma/badge-shape.svg';
-import iconPools    from '../../assets/figma/icon-pools.png';
-import iconGym      from '../../assets/figma/icon-gym.png';
-import iconBeach    from '../../assets/figma/icon-beach.png';
-import iconMarket   from '../../assets/figma/icon-market.png';
-import iconKids     from '../../assets/figma/icon-kids.png';
-import iconSecurity from '../../assets/figma/icon-security.png';
-import iconParking  from '../../assets/figma/icon-parking.png';
-import iconGreen    from '../../assets/figma/icon-green.png';
+import assetsUrls from '../../assetsUrls.json';
 
-// Figma icon per amenity, ordered to match the translation items
-// (pools, gym, beach club, market, kids, security, parking, green).
-const ICONS = [iconPools, iconGym, iconBeach, iconMarket, iconKids, iconSecurity, iconParking, iconGreen];
+const badgeUrl = assetsUrls['badge-shape.svg'];
+const ICONS = [
+  assetsUrls['icon-pools.png'],
+  assetsUrls['icon-gym.png'],
+  assetsUrls['icon-beach.png'],
+  assetsUrls['icon-market.png'],
+  assetsUrls['icon-kids.png'],
+  assetsUrls['icon-security.png'],
+  assetsUrls['icon-parking.png'],
+  assetsUrls['icon-green.png'],
+];
 
 const BG_DEFAULT = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 

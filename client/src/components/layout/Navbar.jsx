@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
-import menuIcon from '../../assets/figma/menu-lines.svg';
+import assetsUrls from '../../assetsUrls.json';
+
+const menuIcon = assetsUrls['menu-lines.svg'];
 
 export default function Navbar() {
   const { t, lang, toggle } = useLang();

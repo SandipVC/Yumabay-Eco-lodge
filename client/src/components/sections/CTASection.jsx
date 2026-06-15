@@ -1,7 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
-import patternUrl from '../../assets/figma/palm-band-cta.png';
-import circleUrl from '../../assets/figma/circle-logo.png';
+import assetsUrls from '../../assetsUrls.json';
+
+const patternUrl = assetsUrls['palm-band-cta.png'];
+const circleUrl = assetsUrls['circle-logo.png'];
 
 export default function CTASection() {
   const { t } = useLang();
