@@ -4,6 +4,7 @@ import { useLang } from '../../context/LanguageContext.jsx';
 import assetsUrls from '../../assetsUrls.json';
 
 const menuIcon = assetsUrls['menu-lines.svg'];
+const logoUrl  = assetsUrls['logo.png'];
 
 export default function Navbar() {
   const { t, lang, toggle } = useLang();
@@ -39,7 +40,9 @@ export default function Navbar() {
   return (
     <>
       <nav id="nav" className={scrolled || menuOpen ? 'scrolled' : ''}>
-        <Link to="/" className="nav-logo grad-text">YUMA BAY</Link>
+        <Link to="/" className="nav-logo">
+          <img src={logoUrl} alt="Yuma Bay Logo" />
+        </Link>
 
         <div className="nav-right">
           <button
@@ -67,11 +70,6 @@ export default function Navbar() {
           <button className="nav-overlay-link" onClick={() => scrollTo('location')}>{t.nav.location}</button>
           <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}>{t.nav.siteMap}</Link>
           <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}>{t.nav.reserveNow}</Link>
-          <div className="nav-overlay-meta">
-            <button onClick={() => { toggle(); setMenuOpen(false); }} className="lang-toggle">
-              {lang === 'en' ? 'Español' : 'English'}
-            </button>
-          </div>
         </div>
       )}
     </>

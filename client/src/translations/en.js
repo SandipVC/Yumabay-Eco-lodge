@@ -100,6 +100,7 @@ export const en = {
   amenities: {
     label: 'Amenities',
     title: 'Every detail\nconsidered',
+    body: 'A curated collection of amenities and services designed to elevate your living experience at Yuma Bay, blending luxury with the natural beauty of the Caribbean.',
     items: [
       { icon: '🏊', name: 'Swimming Pools', desc: "Two resort-style pools plus a children's pool within the beach club." },
       { icon: '🏋', name: 'Gymnasium', desc: 'Fully equipped fitness center with ocean-facing views.' },

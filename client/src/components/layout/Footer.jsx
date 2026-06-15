@@ -1,9 +1,10 @@
 import { useLang } from '../../context/LanguageContext.jsx';
 import assetsUrls from '../../assetsUrls.json';
 
-const igIcon = assetsUrls['social-instagram.png'];
-const fbIcon = assetsUrls['social-facebook.png'];
-const twIcon = assetsUrls['social-twitter.png'];
+const igIcon  = assetsUrls['social-instagram.png'];
+const fbIcon  = assetsUrls['social-facebook.png'];
+const twIcon  = assetsUrls['social-twitter.png'];
+const logoUrl = assetsUrls['logo.png'];
 
 export default function Footer() {
   const { t } = useLang();
@@ -12,7 +13,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="footer-main wrap">
-        <span className="footer-brand grad-text">YUMA BAY</span>
+        <img className="footer-brand" src={logoUrl} alt="Yuma Bay Logo" />
         <div className="footer-contact">
           <a href={`mailto:${f.email}`}>{f.email}</a>
           <a href={`tel:${f.phone.replace(/\s/g, '')}`}>{f.phone}</a>

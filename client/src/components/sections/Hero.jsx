@@ -2,9 +2,9 @@ import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 
 const DEFAULTS = {
-  // Static fallback shipped with the repo; override via CMS → Hero → Hero Image.
+  // No bundled media — the real hero image is served from Firebase Storage via CMS → Hero → Hero Image.
   image: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  // Last-resort fallback to an asset that always exists on disk.
+  // Last-resort transparent-pixel fallback.
   fallback: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 };
 

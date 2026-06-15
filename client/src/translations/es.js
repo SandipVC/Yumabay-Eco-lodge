@@ -100,6 +100,7 @@ export const es = {
   amenities: {
     label: 'Comodidades',
     title: 'Cada detalle\nconsiderado',
+    body: 'Una colección seleccionada de comodidades y servicios diseñados para elevar su experiencia de vida en Yuma Bay, combinando el lujo con la belleza natural del Caribe.',
     items: [
       { icon: '🏊', name: 'Piscinas', desc: 'Dos piscinas estilo resort y una piscina infantil dentro del club de playa.' },
       { icon: '🏋', name: 'Gimnasio', desc: 'Centro de fitness completamente equipado con vistas al mar.' },

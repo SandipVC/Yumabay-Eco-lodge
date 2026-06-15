@@ -60,9 +60,6 @@ export default function SiteMap() {
             src={planImage}
             alt="Yuma Bay Architectural Master Plan"
           />
-          <p className="sitemap-plan-caption">
-            PLANTA ARQUITECTÓNICA · 1ER NIVEL · 1RA &amp; 2DA ETAPA
-          </p>
         </div>
       )}
 

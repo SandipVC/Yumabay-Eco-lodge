@@ -1,0 +1,70 @@
+.scroll-stack-scroller {
+  position: relative;
+  width: 100%;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* Local scroll container styles when not using window scroll */
+.scroll-stack-scroller:not(.window-scroll) {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: visible;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+}
+
+.scroll-stack-inner {
+  padding: 40px 0 100px;
+  position: relative;
+}
+
+/* When using window scroll, adjust inner padding if needed */
+.scroll-stack-scroller.window-scroll .scroll-stack-inner {
+  padding-bottom: 250px; /* Leave space at bottom for pinning release */
+}
+
+.scroll-stack-card-wrapper {
+  position: relative;
+}
+
+.scroll-stack-card {
+  transform-origin: top center;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  position: relative;
+}
+
+/* Premium property card layout integration */
+.prop-card {
+  background: #041118;
+  border: 1px solid rgba(201, 168, 76, 0.15);
+  border-radius: 16px;
+  padding: 48px clamp(24px, 4.5vw, 70px);
+  max-width: 1280px;
+  margin-inline: auto;
+  transition: border-color 0.3s;
+}
+
+.prop-card:hover {
+  border-color: rgba(201, 168, 76, 0.35);
+}
+
+/* Remove border-bottom and default padding from .prop-row since they are now boxed in cards */
+.prop-card .prop-row {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.scroll-stack-end {
+  width: 100%;
+  height: 1px;
+}
