@@ -3,6 +3,34 @@ import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
 import { useLang } from '../context/LanguageContext.jsx';
 
+const safeSessionStorage = {
+  getItem(key) {
+    try {
+      return window.sessionStorage.getItem(key);
+    } catch (e) {
+      console.warn('sessionStorage is blocked or unavailable:', e.message);
+      return this._data[key] || null;
+    }
+  },
+  setItem(key, value) {
+    try {
+      window.sessionStorage.setItem(key, value);
+    } catch (e) {
+      console.warn('sessionStorage is blocked or unavailable:', e.message);
+      this._data[key] = String(value);
+    }
+  },
+  removeItem(key) {
+    try {
+      window.sessionStorage.removeItem(key);
+    } catch (e) {
+      console.warn('sessionStorage is blocked or unavailable:', e.message);
+      delete this._data[key];
+    }
+  },
+  _data: {}
+};
+
 function LoginForm({ onLogin }) {
   const { t } = useLang();
   const d = t.dashboard.login;
@@ -53,7 +81,7 @@ function LoginForm({ onLogin }) {
 export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
-  const [token, setToken]     = useState(sessionStorage.getItem('yb_admin') || '');
+  const [token, setToken]     = useState(safeSessionStorage.getItem('yb_admin') || '');
   const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
   const [loading, setLoading] = useState(false);
@@ -65,7 +93,7 @@ export default function Dashboard() {
     try {
       const res  = await fetch('/api/leads', { headers: { Authorization: `Bearer ${token}` } });
       if (res.status === 401) {
-        sessionStorage.removeItem('yb_admin');
+        safeSessionStorage.removeItem('yb_admin');
         setToken('');
         return;
       }
@@ -83,7 +111,7 @@ export default function Dashboard() {
 
   useEffect(() => { fetchLeads(); }, [fetchLeads]);
 
-  const handleLogin = (key) => { sessionStorage.setItem('yb_admin', key); setToken(key); };
+  const handleLogin = (key) => { safeSessionStorage.setItem('yb_admin', key); setToken(key); };
 
   const updateLead = async (id, body) => {
     await fetch(`/api/leads/${id}`, {
@@ -114,7 +142,7 @@ export default function Dashboard() {
             >
               {lang === 'en' ? '🌐 EN → ES' : '🌐 ES → EN'}
             </button>
-            <button className="btn-ghost" onClick={() => { sessionStorage.removeItem('yb_admin'); setToken(''); }}>
+            <button className="btn-ghost" onClick={() => { safeSessionStorage.removeItem('yb_admin'); setToken(''); }}>
               {d.signOut}
             </button>
           </div>
