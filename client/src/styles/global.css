@@ -64,6 +64,8 @@ body {
 .grad-text {
   display: inline-block;
   color: var(--white); /* Fallback for browsers with clipping issues */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 @supports (-webkit-background-clip: text) or (background-clip: text) {
@@ -107,8 +109,8 @@ a  { color: inherit; }
 @media (pointer: coarse) { .cursor, .cursor-ring { display: none; } }
 
 /* ── Scroll reveal ── */
-.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s, transform .7s; }
-.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal { opacity: 0; transform: translate3d(0, 28px, 0); transition: opacity .7s, transform .7s; }
+.reveal.visible { opacity: 1; transform: translate3d(0, 0, 0); }
 .rd1 { transition-delay: .1s; }
 .rd2 { transition-delay: .2s; }
 .rd3 { transition-delay: .3s; }
