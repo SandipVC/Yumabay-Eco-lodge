@@ -1,30 +1,33 @@
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import patternUrl from '../../assets/figma/palm-band-cta.png';
+import circleUrl from '../../assets/figma/circle-logo.png';
 
 export default function CTASection() {
   const { t } = useLang();
   const c = t.cta;
   const navigate = useNavigate();
 
+  // Figma renders the heading as one flowing block.
+  const title = `${c.title.replace(/\n/g, ' ')} ${c.titleEm}`;
+
   return (
     <section id="cta">
-      <div className="cta-content">
-        <p className="cta-eyebrow reveal">{c.eyebrow}</p>
-        <h2 className="cta-title reveal rd1">
-          {c.title.split('\n').map((line, i) => (
-            <span key={i}>{line}{i === 0 && <br />}</span>
-          ))}
-          <em>{c.titleEm}</em>
-        </h2>
-        <div className="cta-actions reveal rd2">
-          <button className="btn-white" onClick={() => navigate('/contact')}>
-            {c.brochureBtn}
-          </button>
-          <button className="btn-outline" onClick={() => navigate('/contact')}>
-            {c.visitBtn}
-          </button>
+      <div className="cta-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
+      <div className="cta-inner wrap">
+        <div>
+          <p className="cta-eyebrow reveal">{c.eyebrow}</p>
+          <h2 className="cta-title reveal rd1">{title}</h2>
         </div>
+        <button
+          className="cta-circle reveal rd2"
+          onClick={() => navigate('/contact')}
+          aria-label={c.visitBtn}
+        >
+          <img src={circleUrl} alt="" />
+        </button>
       </div>
+      <div className="cta-divider" />
     </section>
   );
 }

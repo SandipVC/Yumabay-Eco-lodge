@@ -1,44 +1,28 @@
-import { useLang }   from '../../context/LanguageContext.jsx';
-import { useAssets } from '../../hooks/useAssets.js';
+import { useLang } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
-
-const LOUNGE_DEFAULTS = [
-  '/images/YUMA BAY CLUB LOUNGE  (7).jpg',
-  '/images/YUMA BAY CLUB LOUNGE  (8).jpg',
-  '/images/YUMA BAY CLUB LOUNGE  (9).jpg',
-  '/images/YUMA BAY CLUB LOUNGE  (10).jpg',
-];
+import patternUrl from '../../assets/figma/palm-band-lounge.png';
 
 export default function Lounge() {
-  const { t }      = useLang();
-  const l          = t.lounge;
-  const navigate   = useNavigate();
-  const { assets } = useAssets();
+  const { t }    = useLang();
+  const l        = t.lounge;
+  const navigate = useNavigate();
 
-  const loungeImgs = (assets?.lounge?.filter(Boolean).length
-    ? assets.lounge.filter(Boolean)
-    : LOUNGE_DEFAULTS).slice(0, 4);
+  // Figma renders the heading as one flowing block (wraps naturally).
+  const title = `${l.title.replace(/\n/g, ' ')} ${l.titleEm}`;
 
   return (
     <section id="lounge">
-      <div className="lounge-grid">
-        <div className="lounge-info reveal">
+      <div className="lounge-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
+      <div className="lounge-inner wrap">
+        <div className="lounge-head reveal">
           <p className="section-label">{l.label}</p>
-          <h2 className="section-title">
-            {l.title.split('\n').map((line, i) => (
-              <span key={i}>{line}{i === 0 && <br />}</span>
-            ))}
-            <em>{l.titleEm}</em>
-          </h2>
+          <h2 className="section-title">{title}</h2>
+        </div>
+        <div className="lounge-side reveal rd1">
           <p className="section-body">{l.body}</p>
-          <button className="btn-primary" onClick={() => navigate('/contact')}>
+          <button className="btn-dark" onClick={() => navigate('/contact')}>
             {l.bookBtn}
           </button>
-        </div>
-        <div className="lounge-imgs">
-          {loungeImgs.map((src, i) => (
-            <img key={i} src={src} alt={`Club Lounge ${i + 1}`} loading="lazy" />
-          ))}
         </div>
       </div>
     </section>

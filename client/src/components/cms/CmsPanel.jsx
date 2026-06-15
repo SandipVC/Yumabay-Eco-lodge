@@ -16,7 +16,7 @@ const PROPERTY_NAMES = [
 const GALLERY_CATS = ['Exterior', 'Interior', 'Amenities'];
 
 const SECTIONS = [
-  { id: 'hero',       label: '🎬 Hero',       desc: 'Background video & poster' },
+  { id: 'hero',       label: '🎬 Hero',       desc: 'Hero background image' },
   { id: 'about',      label: '🏠 About',      desc: 'Main & accent images' },
   { id: 'properties', label: '🏗 Properties', desc: 'Images & prices' },
   { id: 'gallery',    label: '🖼 Gallery',    desc: 'Add / remove gallery photos' },
@@ -154,8 +154,8 @@ function HeroSection({ assets, token, refresh }) {
   }
 
   const slots = [
-    { key: 'video',  label: 'Background Video', accept: 'video/mp4,video/webm' },
-    { key: 'poster', label: 'Poster / Fallback Image', accept: 'image/*' },
+    { key: 'poster', label: 'Hero Image', accept: 'image/*' },
+    { key: 'video',  label: 'Background Video (legacy / unused)', accept: 'video/mp4,video/webm' },
   ];
 
   return (

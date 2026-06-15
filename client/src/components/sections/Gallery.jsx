@@ -59,38 +59,39 @@ export default function Gallery() {
   const prev  = ()  => setLightbox(i => (i - 1 + filtered.length) % filtered.length);
   const next  = ()  => setLightbox(i => (i + 1) % filtered.length);
 
+  // Figma renders the heading as one flowing line.
+  const title = `${g.title} ${g.titleEm} ${g.titleEnd.replace(/\n/g, ' ').trim()}`;
+
   return (
     <section id="gallery">
-      <div className="gallery-head">
-        <p className="section-label reveal">{g.label}</p>
-        <h2 className="section-title reveal rd1">
-          {g.title} <em>{g.titleEm}</em>
-          {g.titleEnd}
-        </h2>
+      <div className="gallery-head wrap">
+        <div>
+          <p className="section-label reveal">{g.label}</p>
+          <h2 className="section-title reveal rd1">{title}</h2>
+        </div>
+        <div className="gallery-filters reveal rd1">
+          {g.filters.map((f) => (
+            <button
+              key={f}
+              className={`filter-btn${active === f ? ' active' : ''}`}
+              onClick={() => setActive(f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
       </div>
 
-      <div className="gallery-filters">
-        {g.filters.map((f) => (
-          <button
-            key={f}
-            className={`filter-btn${active === f ? ' active' : ''}`}
-            onClick={() => setActive(f)}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
-
-      <div className="masonry">
+      <div className="mosaic">
         {filtered.map((img, i) => (
           <div
             key={img.src}
-            className="masonry-item"
+            className="mosaic-item"
             onClick={() => open(i)}
           >
             <img src={img.src} alt={img.label} loading="lazy" />
-            <div className="masonry-overlay">
-              <span className="masonry-label">{img.label}</span>
+            <div className="mosaic-overlay">
+              <span className="mosaic-label">{img.label}</span>
             </div>
           </div>
         ))}

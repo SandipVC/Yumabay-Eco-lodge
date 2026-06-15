@@ -26,31 +26,29 @@ export default function Properties() {
     return amt ? `${p.priceFrom} ${amt}` : fallback;
   };
 
+  // Figma renders the heading as one flowing line.
+  const title = `${p.title.replace(/\n/g, ' ')} ${p.titleEm}`;
+
+  const enquire = (name) => navigate('/contact', { state: { interest: name } });
+
   return (
     <section id="properties">
-      <div className="sec-header reveal">
+      <div className="props-head wrap reveal">
         <div>
           <p className="section-label">{p.label}</p>
-          <h2 className="section-title">
-            {p.title.split('\n').map((line, i) => (
-              <span key={i}>{line}{i === 0 && <br />}</span>
-            ))}
-            <em>{p.titleEm}</em>
-          </h2>
+          <h2 className="section-title">{title}</h2>
         </div>
-        <p className="sec-header-body">{p.subtitle}</p>
+        <p className="props-sub">{p.subtitle}</p>
       </div>
 
-      <div className="props-grid">
+      <div className="props-list">
         {p.items.map((item, i) => (
-          <div
-            key={i}
-            className={`prop-card reveal${i === 0 ? ' wide rd0' : i % 2 === 0 ? ' rd2' : ' rd1'}`}
-          >
-            <img src={images[i]} alt={item.name} loading="lazy" />
-            <div className="prop-overlay" />
-            <div className="prop-content">
-              <p className="prop-tag">{item.tag}</p>
+          <article key={i} className={`prop-row reveal${i % 2 === 1 ? ' flip' : ''}`}>
+            <div className="prop-media" onClick={() => enquire(item.name)}>
+              <img src={images[i]} alt={item.name} loading="lazy" />
+              <span className="prop-view" aria-hidden />
+            </div>
+            <div className="prop-info">
               <h3 className="prop-name">{item.name}</h3>
               <p className="prop-area">{item.area}</p>
               <p className="prop-price">{priceFor(i, item.price)}</p>
@@ -59,14 +57,11 @@ export default function Properties() {
                   <span key={j} className="prop-feat">{f}</span>
                 ))}
               </div>
-              <button
-                className="prop-enquire"
-                onClick={() => navigate('/contact', { state: { interest: item.name } })}
-              >
+              <button className="prop-enquire" onClick={() => enquire(item.name)}>
                 {p.enquire}
               </button>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </section>

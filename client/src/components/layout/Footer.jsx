@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import igIcon from '../../assets/figma/social-instagram.png';
+import fbIcon from '../../assets/figma/social-facebook.png';
+import twIcon from '../../assets/figma/social-twitter.png';
 
 export default function Footer() {
   const { t } = useLang();
@@ -7,42 +9,20 @@ export default function Footer() {
 
   return (
     <footer>
-      <div className="footer-top">
-        <div>
-          <div className="footer-brand">YUMA BAY</div>
-          <p className="footer-tagline">{f.tagline}</p>
+      <div className="footer-main wrap">
+        <span className="footer-brand grad-text">YUMA BAY</span>
+        <div className="footer-contact">
+          <a href={`mailto:${f.email}`}>{f.email}</a>
+          <a href={`tel:${f.phone.replace(/\s/g, '')}`}>{f.phone}</a>
         </div>
-        <div className="footer-col">
-          <h4>{f.propertiesCol}</h4>
-          <ul>
-            {f.propertiesLinks.map((l, i) => (
-              <li key={i}><Link to="/contact">{l}</Link></li>
-            ))}
-          </ul>
-        </div>
-        <div className="footer-col">
-          <h4>{f.devCol}</h4>
-          <ul>
-            {f.devLinks.map((l, i) => (
-              <li key={i}><Link to="/sitemap">{l}</Link></li>
-            ))}
-          </ul>
-        </div>
-        <div className="footer-col">
-          <h4>{f.contactCol}</h4>
-          <ul>
-            <li style={{ whiteSpace: 'pre-line' }}>{f.address}</li>
-            <li><a href={`mailto:${f.email}`}>{f.email}</a></li>
-            <li><a href={`tel:${f.phone.replace(/\s/g,'')}`}>{f.phone}</a></li>
-          </ul>
-        </div>
+        <p className="footer-address">{f.address.replace(/\n/g, ' ')}</p>
       </div>
-      <div className="footer-bottom">
+      <div className="footer-bottom wrap">
         <p className="footer-copy">{f.copyright}</p>
         <div className="footer-social">
-          <a href="#" aria-label="Instagram">{f.instagram}</a>
-          <a href="#" aria-label="Facebook">{f.facebook}</a>
-          <a href="https://wa.me/18090000000" aria-label="WhatsApp">{f.whatsapp}</a>
+          <a href="#" aria-label={f.instagram}><img src={igIcon} alt={f.instagram} /></a>
+          <a href="#" aria-label={f.facebook}><img src={fbIcon} alt={f.facebook} /></a>
+          <a href="https://wa.me/18090000000" aria-label={f.whatsapp}><img src={twIcon} alt={f.whatsapp} /></a>
         </div>
       </div>
     </footer>
