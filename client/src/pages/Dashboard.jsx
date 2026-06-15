@@ -1,35 +1,60 @@
 import { useState, useEffect, useCallback } from 'react';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
-
-const ADMIN_SECRET = 'yumabay-admin-2025';
+import TextContentSection from '../components/cms/TextContentSection.jsx';
+import { useLang } from '../context/LanguageContext.jsx';
 
 function LoginForm({ onLogin }) {
-  const [key, setKey]     = useState('');
-  const [err, setErr]     = useState('');
-  const submit = (e) => {
+  const { t } = useLang();
+  const d = t.dashboard.login;
+  const [key, setKey] = useState('');
+  const [err, setErr] = useState('');
+  const [verifying, setVerifying] = useState(false);
+
+  const submit = async (e) => {
     e.preventDefault();
-    if (key === ADMIN_SECRET) { onLogin(key); }
-    else setErr('Invalid secret key.');
+    if (!key.trim()) return;
+    setVerifying(true);
+    setErr('');
+    try {
+      const res = await fetch('/api/leads', {
+        headers: { Authorization: `Bearer ${key}` },
+      });
+      if (res.ok) {
+        onLogin(key);
+      } else {
+        setErr(d.error);
+      }
+    } catch (err) {
+      setErr('Connection error. Please try again.');
+    } finally {
+      setVerifying(false);
+    }
   };
+
   return (
     <div className="admin-login">
-      <h2>Dashboard</h2>
+      <h2>{d.title}</h2>
       <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
         <input
           type="password" className="form-input"
-          placeholder="Admin secret key"
+          placeholder={d.placeholder}
           value={key} onChange={e => setKey(e.target.value)}
+          disabled={verifying}
         />
         {err && <span className="form-error">{err}</span>}
-        <button type="submit" className="btn-primary">Access Dashboard</button>
+        <button type="submit" className="btn-primary" disabled={verifying}>
+          {verifying ? 'Verifying...' : d.btn}
+        </button>
       </form>
     </div>
   );
 }
 
 export default function Dashboard() {
+  const { lang, toggle: toggleLang, t } = useLang();
+  const d = t.dashboard;
   const [token, setToken]     = useState(sessionStorage.getItem('yb_admin') || '');
-  const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms'
+  const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
   const [loading, setLoading] = useState(false);
   const [noteMap, setNoteMap] = useState({});
@@ -39,6 +64,11 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const res  = await fetch('/api/leads', { headers: { Authorization: `Bearer ${token}` } });
+      if (res.status === 401) {
+        sessionStorage.removeItem('yb_admin');
+        setToken('');
+        return;
+      }
       const data = await res.json();
       if (res.ok) {
         setLeads(data.leads || []);
@@ -46,6 +76,8 @@ export default function Dashboard() {
         (data.leads || []).forEach(l => { nm[l.id] = l.notes || ''; });
         setNoteMap(nm);
       }
+    } catch (err) {
+      console.error('Failed to fetch leads:', err);
     } finally { setLoading(false); }
   }, [token]);
 
@@ -71,12 +103,21 @@ export default function Dashboard() {
       <div className="dashboard-page">
         <div className="dashboard-header">
           <div>
-            <p className="section-label" style={{ marginBottom: 8 }}>Yuma Bay</p>
-            <h1 className="section-title" style={{ fontSize: 40, marginBottom: 0 }}>Admin Dashboard</h1>
+            <p className="section-label" style={{ marginBottom: 8 }}>{d.eyebrow}</p>
+            <h1 className="section-title" style={{ fontSize: 40, marginBottom: 0 }}>{d.title}</h1>
           </div>
-          <button className="btn-ghost" onClick={() => { sessionStorage.removeItem('yb_admin'); setToken(''); }}>
-            Sign Out
-          </button>
+          <div style={{ display: 'flex', gap: 10 }}>
+            <button
+              className="btn-ghost"
+              onClick={toggleLang}
+              title={d.toggleLangTitle}
+            >
+              {lang === 'en' ? '🌐 EN → ES' : '🌐 ES → EN'}
+            </button>
+            <button className="btn-ghost" onClick={() => { sessionStorage.removeItem('yb_admin'); setToken(''); }}>
+              {d.signOut}
+            </button>
+          </div>
         </div>
 
         {/* Top-level tabs */}
@@ -85,44 +126,51 @@ export default function Dashboard() {
             className={`dash-tab-btn${tab === 'leads' ? ' active' : ''}`}
             onClick={() => setTab('leads')}
           >
-            📋 Leads
+            {d.tabLeads}
           </button>
           <button
             className={`dash-tab-btn${tab === 'cms' ? ' active' : ''}`}
             onClick={() => setTab('cms')}
           >
-            🖼 Media Manager
+            {d.tabMedia}
+          </button>
+          <button
+            className={`dash-tab-btn${tab === 'text' ? ' active' : ''}`}
+            onClick={() => setTab('text')}
+          >
+            {d.tabText}
           </button>
         </div>
 
         {/* CMS Panel */}
-        {tab === 'cms' && <CmsPanel token={token} />}
+        {tab === 'cms'  && <CmsPanel token={token} />}
+        {tab === 'text' && <TextContentSection token={token} />}
 
         {/* Leads tab */}
         {tab === 'leads' && <>
         <div className="dashboard-stats">
           <div className="dash-stat">
             <div className="dash-stat-num">{leads.length}</div>
-            <div className="dash-stat-lbl">Total Leads</div>
+            <div className="dash-stat-lbl">{d.totalLeads}</div>
           </div>
           <div className="dash-stat">
             <div className="dash-stat-num">{newCount}</div>
-            <div className="dash-stat-lbl">New</div>
+            <div className="dash-stat-lbl">{d.newLeads}</div>
           </div>
           <div className="dash-stat">
             <div className="dash-stat-num">{leads.filter(l => l.status === 'contacted').length}</div>
-            <div className="dash-stat-lbl">Contacted</div>
+            <div className="dash-stat-lbl">{d.contacted}</div>
           </div>
           <div className="dash-stat">
             <div className="dash-stat-num">{leads.filter(l => l.status === 'closed').length}</div>
-            <div className="dash-stat-lbl">Closed</div>
+            <div className="dash-stat-lbl">{d.closed}</div>
           </div>
         </div>
 
-        {loading && <p style={{ color: 'rgba(255,255,255,.4)', letterSpacing: '.2em', fontSize: 12 }}>Loading…</p>}
+        {loading && <p style={{ color: 'rgba(255,255,255,.4)', letterSpacing: '.2em', fontSize: 12 }}>{d.loading}</p>}
 
         {!loading && leads.length === 0 && (
-          <p style={{ color: 'rgba(255,255,255,.35)', fontSize: 14 }}>No leads yet. Enquiries submitted via the contact form will appear here.</p>
+          <p style={{ color: 'rgba(255,255,255,.35)', fontSize: 14 }}>{d.noLeads}</p>
         )}
 
         {leads.length > 0 && (
@@ -130,8 +178,8 @@ export default function Dashboard() {
             <table className="leads-table">
               <thead>
                 <tr>
-                  <th>Date</th><th>Name</th><th>Email</th><th>Phone</th>
-                  <th>Interest</th><th>Lang</th><th>Message</th><th>Status</th><th>Actions</th>
+                  <th>{d.thDate}</th><th>{d.thName}</th><th>{d.thEmail}</th><th>{d.thPhone}</th>
+                  <th>{d.thInterest}</th><th>{d.thLang}</th><th>{d.thMessage}</th><th>{d.thStatus}</th><th>{d.thActions}</th>
                 </tr>
               </thead>
               <tbody>
@@ -159,19 +207,19 @@ export default function Dashboard() {
                     <td>
                       {lead.status === 'new' && (
                         <button className="lead-action-btn" onClick={() => updateLead(lead.id, { status: 'contacted' })}>
-                          Contacted
+                          {d.btnContacted}
                         </button>
                       )}
                       {lead.status !== 'closed' && (
                         <button className="lead-action-btn" onClick={() => updateLead(lead.id, { status: 'closed' })}>
-                          Close
+                          {d.btnClose}
                         </button>
                       )}
                       <div style={{ marginTop: 8, display: 'flex', gap: 6 }}>
                         <input
                           type="text" className="form-input"
                           style={{ padding: '4px 8px', fontSize: 11, width: 140 }}
-                          placeholder="Add note…"
+                          placeholder={d.notePlaceholder}
                           value={noteMap[lead.id] || ''}
                           onChange={e => setNoteMap(m => ({ ...m, [lead.id]: e.target.value }))}
                         />
@@ -179,12 +227,12 @@ export default function Dashboard() {
                           className="lead-action-btn"
                           onClick={() => updateLead(lead.id, { notes: noteMap[lead.id] })}
                         >
-                          Save
+                          {d.noteSave}
                         </button>
                       </div>
                       {lead.notes && (
                         <p style={{ fontSize: 10, color: 'rgba(255,255,255,.35)', marginTop: 4 }}>
-                          Note: {lead.notes}
+                          {d.notePrefix}: {lead.notes}
                         </p>
                       )}
                     </td>

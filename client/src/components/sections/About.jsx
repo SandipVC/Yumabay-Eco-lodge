@@ -3,8 +3,8 @@ import { useAssets } from '../../hooks/useAssets.js';
 import palmsUrl from '../../assets/figma/palms-about.png';
 
 const DEFAULTS = {
-  main:   '/images/WhatsApp Image 2026-04-30 at 14.12.35.jpeg',
-  accent: '/images/LOCATION - GRUND - 2.jpg',
+  main:   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  accent: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 };
 
 export default function About() {

@@ -14,7 +14,7 @@ import iconGreen    from '../../assets/figma/icon-green.png';
 // (pools, gym, beach club, market, kids, security, parking, green).
 const ICONS = [iconPools, iconGym, iconBeach, iconMarket, iconKids, iconSecurity, iconParking, iconGreen];
 
-const BG_DEFAULT = '/images/YUMA BAY CLUB LOUNGE  (8).jpg';
+const BG_DEFAULT = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export default function Amenities() {
   const { t } = useLang();

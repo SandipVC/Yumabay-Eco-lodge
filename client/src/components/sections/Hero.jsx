@@ -3,9 +3,9 @@ import { useAssets } from '../../hooks/useAssets.js';
 
 const DEFAULTS = {
   // Static fallback shipped with the repo; override via CMS → Hero → Hero Image.
-  image: '/images/hero.jpg',
+  image: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
   // Last-resort fallback to an asset that always exists on disk.
-  fallback: '/images/RENDER ANLAGE YUMA BAY ECO LODGE (9).png',
+  fallback: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 };
 
 export default function Hero() {

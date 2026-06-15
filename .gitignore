@@ -39,3 +39,5 @@ req.txt
 *.rar
 *.zip
 *.7z
+
+server/service-account.json

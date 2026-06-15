@@ -3,11 +3,11 @@ import { useLang }    from '../../context/LanguageContext.jsx';
 import { useAssets }  from '../../hooks/useAssets.js';
 
 const PROPERTY_DEFAULTS = [
-  '/images/01_1 - Photo.jpg',
-  '/images/01_2 - Photo.jpg',
-  '/images/01_3 - Photo.jpg',
-  '/images/01_4 - Photo.jpg',
-  '/images/LOCATION - GRUND 3.jpg',
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 ];
 
 export default function Properties() {

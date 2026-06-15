@@ -97,6 +97,20 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
           <span>No image</span>
         </div>
       )}
+
+      {replacing && (
+        <div className="cms-thumb-uploading">
+          <span>Uploading</span>
+          <div className="cms-wave-container">
+            <div className="cms-wave-progress" />
+          </div>
+          <div className="cms-fluid-wave-bg">
+            <div className="cms-fluid-wave" />
+            <div className="cms-fluid-wave-2" />
+          </div>
+        </div>
+      )}
+
       <div className="cms-thumb-overlay">
         {onReplace && (
           <>
@@ -510,8 +524,17 @@ function GallerySection({ assets, token, refresh }) {
               <div key={item.id} className="cms-queue-item">
                 <div className="cms-queue-thumb">
                   <img src={item.preview} alt="" />
-                  {!uploading && (
+                  {!uploading ? (
                     <button className="cms-queue-remove" onClick={() => removeQueueItem(item.id)} title="Remove from queue">✕</button>
+                  ) : (
+                    <div className="cms-thumb-uploading mini">
+                      <div className="cms-wave-container">
+                        <div className="cms-wave-progress" />
+                      </div>
+                      <div className="cms-fluid-wave-bg">
+                        <div className="cms-fluid-wave" />
+                      </div>
+                    </div>
                   )}
                 </div>
                 <input
@@ -681,6 +704,17 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
     <div className="cms-pdf-slot">
       <p className="cms-slot-label">{label}</p>
       <div className="cms-pdf-card">
+        {busy && (
+          <div className="cms-thumb-uploading mini">
+            <span>Uploading</span>
+            <div className="cms-wave-container">
+              <div className="cms-wave-progress" />
+            </div>
+            <div className="cms-fluid-wave-bg">
+              <div className="cms-fluid-wave" />
+            </div>
+          </div>
+        )}
         <div className="cms-pdf-icon">📄</div>
         <div className="cms-pdf-info">
           {src ? (

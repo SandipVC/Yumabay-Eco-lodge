@@ -1,10 +1,10 @@
 {
   "hero": {
-    "video": "/video/hero.mp4",
-    "poster": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (9).png"
+    "video": "/video/1781503847161_Video_2026_05_29-1.mp4",
+    "poster": "/images/cms/hero/1781503825446_Gemini_Generated_Image_v6jo2cv6jo2cv6jo.png"
   },
   "about": {
-    "main": "/images/WhatsApp Image 2026-04-30 at 14.12.35.jpeg",
+    "main": "/images/cms/about/1781503865946_Screenshot_49.png",
     "accent": "/images/LOCATION - GRUND.jpg"
   },
   "properties": [
@@ -335,5 +335,625 @@
       "w": 240,
       "h": 68
     }
-  ]
+  ],
+  "translations": {
+    "en": {
+      "nav": {
+        "about": "About",
+        "properties": "Properties",
+        "gallery": "Gallery",
+        "amenities": "Amenities",
+        "location": "Location",
+        "contact": "Contact",
+        "siteMap": "Site Map",
+        "reserveNow": "Reserve Now"
+      },
+      "hero": {
+        "eyebrow": "Boca de Yuma · La Romana · Dominican Republic",
+        "title": "YUMA",
+        "titleEm": "BAY",
+        "tagline": "Eco Lodge & Residences",
+        "exploreBtn": "Explore Properties",
+        "discoverBtn": "Discover More"
+      },
+      "strip": [
+        "Beachfront Location",
+        "Private Pools & Jacuzzis",
+        "Luxury Villas & Apartments",
+        "Club de Playa",
+        "222 m² Villas"
+      ],
+      "about": {
+        "label": "About the Project",
+        "title": "Where the\nBahia meets",
+        "titleEm": "Paradise",
+        "body": "Nestled along the pristine shores of Boca de Yuma, Yuma Bay Eco Lodge is a landmark development where contemporary architecture harmonizes with the natural landscape of the Dominican Republic's eastern coast. A master-planned community offering villas, apartments, and world-class beach club facilities.",
+        "stat1Num": "222",
+        "stat1Lbl": "m² Villas",
+        "stat2Num": "2",
+        "stat2Lbl": "Phases",
+        "stat3Num": "5+",
+        "stat3Lbl": "Buildings",
+        "badge": "Phases",
+        "viewAll": "View All Properties"
+      },
+      "properties": {
+        "label": "Properties",
+        "title": "Spaces crafted\nfor",
+        "titleEm": "living",
+        "subtitle": "From oceanfront apartments to private pool villas, every residence at Yuma Bay is designed to capture the beauty of the Caribbean coast.",
+        "enquire": "Enquire Now",
+        "priceFrom": "From",
+        "items": [
+          {
+            "tag": "Phase 1 · Featured",
+            "name": "Villa Tipo 1",
+            "area": "222 m² · Private Pool & Jacuzzi",
+            "feats": [
+              "3 Bedrooms",
+              "Garden Terrace",
+              "Full Kitchen",
+              "Pantry"
+            ],
+            "price": "From $280,000"
+          },
+          {
+            "tag": "Buildings A–E",
+            "name": "Apartments",
+            "area": "Multi-level · Ocean Views",
+            "feats": [
+              "Studio–3BR",
+              "Balconies",
+              "Sea Views"
+            ],
+            "price": "From $95,000"
+          },
+          {
+            "tag": "Eco Lodge",
+            "name": "Eco Residences",
+            "area": "Beachfront · Private Access",
+            "feats": [
+              "Nature Views",
+              "Sea Breeze",
+              "Eco Design"
+            ],
+            "price": "From $120,000"
+          },
+          {
+            "tag": "Phase 2",
+            "name": "Bungalows",
+            "area": "Beachfront · Direct Access",
+            "feats": [
+              "1–2 Bedrooms",
+              "Sea View",
+              "Private Terrace"
+            ],
+            "price": "From $150,000"
+          },
+          {
+            "tag": "Signature",
+            "name": "Penthouse",
+            "area": "Top Floor · Panoramic Views",
+            "feats": [
+              "Private Terrace",
+              "Bay Views",
+              "Premium Finishes"
+            ],
+            "price": "From $320,000"
+          }
+        ]
+      },
+      "gallery": {
+        "label": "Visual Journey",
+        "title": "The",
+        "titleEm": "essence",
+        "titleEnd": "\nof Yuma Bay",
+        "filters": [
+          "All",
+          "Exterior",
+          "Interior",
+          "Amenities"
+        ]
+      },
+      "lounge": {
+        "label": "Club Lounge",
+        "title": "Where style\nmeets the",
+        "titleEm": "sea",
+        "body": "The Yuma Bay Club Lounge is a refined retreat designed for residents and guests — a space where tropical elegance and modern comfort converge at the edge of the Caribbean.",
+        "bookBtn": "Book a Visit"
+      },
+      "amenities": {
+        "label": "Amenities",
+        "title": "Every detail\nconsidered",
+        "items": [
+          {
+            "icon": "🏊",
+            "name": "Swimming Pools",
+            "desc": "Two resort-style pools plus a children's pool within the beach club."
+          },
+          {
+            "icon": "🏋",
+            "name": "Gymnasium",
+            "desc": "Fully equipped fitness center with ocean-facing views."
+          },
+          {
+            "icon": "🌴",
+            "name": "Club de Playa",
+            "desc": "Exclusive beach club with gazebos, snack bar, and direct beach access."
+          },
+          {
+            "icon": "🛒",
+            "name": "Mini Market",
+            "desc": "On-site convenience store for residents and guests."
+          },
+          {
+            "icon": "🎠",
+            "name": "Kids Area",
+            "desc": "Safe, shaded playground designed for children of all ages."
+          },
+          {
+            "icon": "🔒",
+            "name": "Gated Security",
+            "desc": "24/7 gated access with guardhouse for complete peace of mind."
+          },
+          {
+            "icon": "🚗",
+            "name": "Covered Parking",
+            "desc": "Ample designated parking for residents and guests."
+          },
+          {
+            "icon": "🌿",
+            "name": "Green Spaces",
+            "desc": "Lush mangrove-adjacent landscaping with tropical gardens throughout."
+          }
+        ]
+      },
+      "location": {
+        "label": "Location",
+        "title": "Calle Malecon,",
+        "titleEm": "Boca de Yuma",
+        "body": "Positioned on the Malecon of Boca de Yuma, Yuma Bay enjoys direct access to the Bahia de Yuma and is surrounded by the natural beauty of the Dominican Republic's eastern coast — mangroves, crystal waters, and centuries of Caribbean heritage.",
+        "distances": [
+          {
+            "name": "La Romana Airport",
+            "val": "~45",
+            "unit": "min"
+          },
+          {
+            "name": "Punta Cana",
+            "val": "~1.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Santo Domingo",
+            "val": "~2.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Beach Access",
+            "val": "Direct",
+            "unit": ""
+          }
+        ],
+        "enquireBtn": "Enquire Now"
+      },
+      "cta": {
+        "eyebrow": "Begin Your Journey",
+        "title": "Own a piece\nof",
+        "titleEm": "paradise",
+        "brochureBtn": "Request Brochure",
+        "visitBtn": "Schedule a Visit"
+      },
+      "contact": {
+        "label": "Contact Us",
+        "title": "Get in",
+        "titleEm": "touch",
+        "namePlaceholder": "Your Name",
+        "emailPlaceholder": "Email Address",
+        "phonePlaceholder": "Phone (optional)",
+        "interestLabel": "Property Interest",
+        "interestOptions": [
+          "Select a property",
+          "Villa Tipo 1",
+          "Apartments",
+          "Eco Residences",
+          "Bungalows",
+          "Penthouse"
+        ],
+        "messagePlaceholder": "Your message…",
+        "submitBtn": "Send Enquiry",
+        "sending": "Sending…",
+        "successTitle": "Enquiry received!",
+        "successBody": "Thank you for reaching out. We'll be in touch within 24–48 hours.",
+        "errorMsg": "Something went wrong. Please try again or email us directly."
+      },
+      "sitemap": {
+        "label": "Master Plan",
+        "title": "Site",
+        "titleEm": "Map",
+        "subtitle": "Click any zone to explore unit details, phases, and availability.",
+        "phase": "Phase",
+        "units": "units",
+        "availability": "Availability",
+        "available": "Available",
+        "limited": "Limited",
+        "soldOut": "Sold Out",
+        "downloadPlan": "Download Master Plan"
+      },
+      "footer": {
+        "tagline": "An eco-conscious luxury development on the shores of Boca de Yuma, Dominican Republic. Where nature, architecture, and the Caribbean come together.",
+        "propertiesCol": "Properties",
+        "propertiesLinks": [
+          "Villa Tipo 1",
+          "Apartments A–E",
+          "Bungalows",
+          "Floor Plans"
+        ],
+        "devCol": "Development",
+        "devLinks": [
+          "Master Plan",
+          "Phase 1",
+          "Phase 2",
+          "Beach Club"
+        ],
+        "contactCol": "Contact",
+        "address": "Santa Rosa #117\nLa Romana, DR",
+        "email": "info@yumabay.com",
+        "phone": "+1 (809) 000-0000",
+        "copyright": "© 2025 Yuma Bay Eco Lodge. All rights reserved.",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "whatsapp": "WhatsApp"
+      },
+      "dashboard": {
+        "eyebrow": "Yuma Bay",
+        "title": "Admin Dashboard",
+        "signOut": "Sign Out",
+        "toggleLangTitle": "Toggle language",
+        "tabLeads": "📋 Leads",
+        "tabMedia": "🖼 Media Manager",
+        "tabText": "✍ Text Content",
+        "totalLeads": "Total Leads",
+        "newLeads": "New",
+        "contacted": "Contacted",
+        "closed": "Closed",
+        "loading": "Loading…",
+        "noLeads": "No leads yet. Enquiries submitted via the contact form will appear here.",
+        "thDate": "Date",
+        "thName": "Name",
+        "thEmail": "Email",
+        "thPhone": "Phone",
+        "thInterest": "Interest",
+        "thLang": "Lang",
+        "thMessage": "Message",
+        "thStatus": "Status",
+        "thActions": "Actions",
+        "btnContacted": "Contacted",
+        "btnClose": "Close",
+        "notePlaceholder": "Add note…",
+        "noteSave": "Save",
+        "notePrefix": "Note",
+        "status": "Status",
+        "markContacted": "Mark Contacted",
+        "markClosed": "Mark Closed",
+        "notes": "Notes",
+        "saveNotes": "Save",
+        "login": {
+          "title": "Dashboard",
+          "placeholder": "Admin secret key",
+          "error": "Invalid secret key.",
+          "btn": "Access Dashboard"
+        }
+      }
+    },
+    "es": {
+      "nav": {
+        "about": "Nosotros",
+        "properties": "Propiedades",
+        "gallery": "Galería",
+        "amenities": "Comodidades",
+        "location": "Ubicación",
+        "contact": "Contacto",
+        "siteMap": "Plano",
+        "reserveNow": "Reservar Ahora"
+      },
+      "hero": {
+        "eyebrow": "Boca de Yuma · La Romana · República Dominicana",
+        "title": "YUMA",
+        "titleEm": "BAY",
+        "tagline": "Eco Lodge y Residencias",
+        "exploreBtn": "Ver Propiedades",
+        "discoverBtn": "Descubrir Más"
+      },
+      "strip": [
+        "Ubicación Frente al Mar",
+        "Piscinas Privadas y Jacuzzis",
+        "Villas y Apartamentos de Lujo",
+        "Club de Playa",
+        "Villas de 222 m²"
+      ],
+      "about": {
+        "label": "Sobre el Proyecto",
+        "title": "Donde la Bahía\nse encuentra con",
+        "titleEm": "el paraíso",
+        "body": "Ubicado a orillas de las prístinas costas de Boca de Yuma, Yuma Bay Eco Lodge es un desarrollo emblemático donde la arquitectura contemporánea se armoniza con el paisaje natural de la costa oriental de la República Dominicana. Una comunidad planificada que ofrece villas, apartamentos y el mejor club de playa.",
+        "stat1Num": "222",
+        "stat1Lbl": "m² Villas",
+        "stat2Num": "2",
+        "stat2Lbl": "Fases",
+        "stat3Num": "5+",
+        "stat3Lbl": "Edificios",
+        "badge": "Fases",
+        "viewAll": "Ver Todas las Propiedades"
+      },
+      "properties": {
+        "label": "Propiedades",
+        "title": "Espacios diseñados\npara",
+        "titleEm": "vivir",
+        "subtitle": "Desde apartamentos frente al mar hasta villas con piscina privada, cada residencia en Yuma Bay está diseñada para capturar la belleza de la costa caribeña.",
+        "enquire": "Consultar Ahora",
+        "priceFrom": "Desde",
+        "items": [
+          {
+            "tag": "Fase 1 · Destacado",
+            "name": "Villa Tipo 1",
+            "area": "222 m² · Piscina Privada y Jacuzzi",
+            "feats": [
+              "3 Habitaciones",
+              "Terraza con Jardín",
+              "Cocina Completa",
+              "Despensa"
+            ],
+            "price": "Desde $280,000"
+          },
+          {
+            "tag": "Edificios A–E",
+            "name": "Apartamentos",
+            "area": "Multi-nivel · Vistas al Mar",
+            "feats": [
+              "Estudio–3 hab.",
+              "Balcones",
+              "Vistas al Mar"
+            ],
+            "price": "Desde $95,000"
+          },
+          {
+            "tag": "Eco Lodge",
+            "name": "Residencias Eco",
+            "area": "Frente al Mar · Acceso Privado",
+            "feats": [
+              "Vistas a la Naturaleza",
+              "Brisa Marina",
+              "Diseño Eco"
+            ],
+            "price": "Desde $120,000"
+          },
+          {
+            "tag": "Fase 2",
+            "name": "Bungalows",
+            "area": "Frente al Mar · Acceso Directo",
+            "feats": [
+              "1–2 Habitaciones",
+              "Vista al Mar",
+              "Terraza Privada"
+            ],
+            "price": "Desde $150,000"
+          },
+          {
+            "tag": "Signature",
+            "name": "Penthouse",
+            "area": "Último Piso · Vistas Panorámicas",
+            "feats": [
+              "Terraza Privada",
+              "Vistas a la Bahía",
+              "Acabados Premium"
+            ],
+            "price": "Desde $320,000"
+          }
+        ]
+      },
+      "gallery": {
+        "label": "Viaje Visual",
+        "title": "La",
+        "titleEm": "esencia",
+        "titleEnd": "\nde Yuma Bay",
+        "filters": [
+          "Todo",
+          "Exterior",
+          "Interior",
+          "Comodidades"
+        ]
+      },
+      "lounge": {
+        "label": "Club Lounge",
+        "title": "Donde el estilo\nse une al",
+        "titleEm": "mar",
+        "body": "El Club Lounge de Yuma Bay es un refugio refinado diseñado para residentes y huéspedes — un espacio donde la elegancia tropical y el confort moderno convergen al borde del Caribe.",
+        "bookBtn": "Reservar una Visita"
+      },
+      "amenities": {
+        "label": "Comodidades",
+        "title": "Cada detalle\nconsiderado",
+        "items": [
+          {
+            "icon": "🏊",
+            "name": "Piscinas",
+            "desc": "Dos piscinas estilo resort y una piscina infantil dentro del club de playa."
+          },
+          {
+            "icon": "🏋",
+            "name": "Gimnasio",
+            "desc": "Centro de fitness completamente equipado con vistas al mar."
+          },
+          {
+            "icon": "🌴",
+            "name": "Club de Playa",
+            "desc": "Club de playa exclusivo con gazebos, snack bar y acceso directo a la playa."
+          },
+          {
+            "icon": "🛒",
+            "name": "Mini Mercado",
+            "desc": "Tienda de conveniencia en el lugar para residentes y huéspedes."
+          },
+          {
+            "icon": "🎠",
+            "name": "Área Infantil",
+            "desc": "Área de juegos segura y sombreada para niños de todas las edades."
+          },
+          {
+            "icon": "🔒",
+            "name": "Seguridad",
+            "desc": "Acceso controlado 24/7 con garita para total tranquilidad."
+          },
+          {
+            "icon": "🚗",
+            "name": "Estacionamiento",
+            "desc": "Amplio estacionamiento designado para residentes y huéspedes."
+          },
+          {
+            "icon": "🌿",
+            "name": "Áreas Verdes",
+            "desc": "Paisajismo adyacente a manglares con jardines tropicales."
+          }
+        ]
+      },
+      "location": {
+        "label": "Ubicación",
+        "title": "Calle Malecon,",
+        "titleEm": "Boca de Yuma",
+        "body": "Ubicado en el Malecón de Boca de Yuma, Yuma Bay tiene acceso directo a la Bahía de Yuma y está rodeado por la belleza natural de la costa oriental de la República Dominicana — manglares, aguas cristalinas y siglos de patrimonio caribeño.",
+        "distances": [
+          {
+            "name": "Aeropuerto La Romana",
+            "val": "~45",
+            "unit": "min"
+          },
+          {
+            "name": "Punta Cana",
+            "val": "~1.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Santo Domingo",
+            "val": "~2.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Acceso a la Playa",
+            "val": "Directo",
+            "unit": ""
+          }
+        ],
+        "enquireBtn": "Consultar Ahora"
+      },
+      "cta": {
+        "eyebrow": "Comienza Tu Viaje",
+        "title": "Posee un pedazo\nde",
+        "titleEm": "paraíso",
+        "brochureBtn": "Solicitar Brochure",
+        "visitBtn": "Programar una Visita"
+      },
+      "contact": {
+        "label": "Contáctanos",
+        "title": "Ponte en",
+        "titleEm": "contacto",
+        "namePlaceholder": "Tu Nombre",
+        "emailPlaceholder": "Correo Electrónico",
+        "phonePlaceholder": "Teléfono (opcional)",
+        "interestLabel": "Propiedad de Interés",
+        "interestOptions": [
+          "Selecciona una propiedad",
+          "Villa Tipo 1",
+          "Apartamentos",
+          "Residencias Eco",
+          "Bungalows",
+          "Penthouse"
+        ],
+        "messagePlaceholder": "Tu mensaje…",
+        "submitBtn": "Enviar Consulta",
+        "sending": "Enviando…",
+        "successTitle": "¡Consulta recibida!",
+        "successBody": "Gracias por contactarnos. Nos comunicaremos contigo en 24–48 horas.",
+        "errorMsg": "Algo salió mal. Por favor intenta de nuevo o escríbenos directamente."
+      },
+      "sitemap": {
+        "label": "Plano Maestro",
+        "title": "Plano del",
+        "titleEm": "Proyecto",
+        "subtitle": "Haz clic en cualquier zona para explorar detalles, fases y disponibilidad.",
+        "phase": "Fase",
+        "units": "unidades",
+        "availability": "Disponibilidad",
+        "available": "Disponible",
+        "limited": "Limitado",
+        "soldOut": "Agotado",
+        "downloadPlan": "Descargar Plano Maestro"
+      },
+      "footer": {
+        "tagline": "Un desarrollo de lujo eco-consciente a orillas de Boca de Yuma, República Dominicana. Donde la naturaleza, la arquitectura y el Caribe se unen.",
+        "propertiesCol": "Propiedades",
+        "propertiesLinks": [
+          "Villa Tipo 1",
+          "Apartamentos A–E",
+          "Bungalows",
+          "Planos"
+        ],
+        "devCol": "Desarrollo",
+        "devLinks": [
+          "Plano Maestro",
+          "Fase 1",
+          "Fase 2",
+          "Club de Playa"
+        ],
+        "contactCol": "Contacto",
+        "address": "Santa Rosa #117\nLa Romana, RD",
+        "email": "info@yumabay.com",
+        "phone": "+1 (809) 000-0000",
+        "copyright": "© 2025 Yuma Bay Eco Lodge. Todos los derechos reservados.",
+        "instagram": "Instagram",
+        "facebook": "Facebook",
+        "whatsapp": "WhatsApp"
+      },
+      "dashboard": {
+        "eyebrow": "Yuma Bay",
+        "title": "Panel de Administración",
+        "signOut": "Cerrar Sesión",
+        "toggleLangTitle": "Cambiar idioma",
+        "tabLeads": "📋 Leads",
+        "tabMedia": "🖼 Gestor de Medios",
+        "tabText": "✍ Contenido de Texto",
+        "totalLeads": "Total de Leads",
+        "newLeads": "Nuevos",
+        "contacted": "Contactados",
+        "closed": "Cerrados",
+        "loading": "Cargando…",
+        "noLeads": "Sin leads aún. Las consultas enviadas mediante el formulario de contacto aparecerán aquí.",
+        "thDate": "Fecha",
+        "thName": "Nombre",
+        "thEmail": "Correo",
+        "thPhone": "Teléfono",
+        "thInterest": "Interés",
+        "thLang": "Idioma",
+        "thMessage": "Mensaje",
+        "thStatus": "Estado",
+        "thActions": "Acciones",
+        "btnContacted": "Contactado",
+        "btnClose": "Cerrar",
+        "notePlaceholder": "Añadir nota…",
+        "noteSave": "Guardar",
+        "notePrefix": "Nota",
+        "status": "Estado",
+        "markContacted": "Marcar Contactado",
+        "markClosed": "Marcar Cerrado",
+        "notes": "Notas",
+        "saveNotes": "Guardar",
+        "login": {
+          "title": "Panel",
+          "placeholder": "Clave de administrador",
+          "error": "Clave inválida.",
+          "btn": "Acceder al Panel"
+        }
+      }
+    }
+  }
 }

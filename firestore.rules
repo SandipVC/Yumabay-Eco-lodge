@@ -1,0 +1,15 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Assets: readable by anyone, but writable only by the backend (which runs Admin SDK and bypasses rules)
+    match /assets/{document} {
+      allow read: if true;
+      allow write: if false;
+    }
+    
+    // Leads: private, not accessible directly from the frontend SDK (handled via backend API)
+    match /leads/{document} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,10 +1,11 @@
 import { Router } from 'express';
 import { body, validationResult } from 'express-validator';
 import nodemailer from 'nodemailer';
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { db, isFirebaseEnabled } from '../firebase.js';
 
 const router = Router();
 const __filename = fileURLToPath(import.meta.url);
@@ -90,9 +91,16 @@ router.post('/', validators, async (req, res) => {
   };
 
   try {
-    const leads = JSON.parse(readFileSync(LEADS_FILE, 'utf-8'));
-    leads.unshift(lead);
-    writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
+    if (isFirebaseEnabled) {
+      await db.collection('leads').doc(lead.id).set(lead);
+    } else {
+      let leads = [];
+      if (existsSync(LEADS_FILE)) {
+        leads = JSON.parse(readFileSync(LEADS_FILE, 'utf-8'));
+      }
+      leads.unshift(lead);
+      writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
+    }
   } catch (err) {
     console.error('Failed to save lead:', err.message);
     return res.status(500).json({ error: 'Failed to save your enquiry. Please try again.' });
