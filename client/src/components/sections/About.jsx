@@ -1,6 +1,11 @@
+import { useRef } from 'react';
+import { useInView } from 'motion/react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import palmsUrl from '../../assets/figma/palms-about.png';
+import TiltedCard from '../ui/TiltedCard.jsx';
+import CountUp from '../ui/CountUp.jsx';
+import SplitText from '../ui/SplitText.jsx';
 
 const DEFAULTS = {
   main:   '/images/WhatsApp Image 2026-04-30 at 14.12.35.jpeg',
@@ -11,6 +16,9 @@ export default function About() {
   const { t }      = useLang();
   const a          = t.about;
   const { assets } = useAssets();
+
+  const statsRef = useRef(null);
+  const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
   const mainImg   = assets?.about?.main   || DEFAULTS.main;
   const accentImg = assets?.about?.accent || DEFAULTS.accent;
@@ -31,13 +39,44 @@ export default function About() {
       <div className="about-inner">
         <div className="about-head">
           <p className="section-label reveal">{a.label}</p>
-          <h2 className="section-title reveal rd1">{title}</h2>
+          <SplitText
+            text={title}
+            className="section-title"
+            delay={10}
+            duration={0.25}
+            ease="power3.out"
+            splitType="chars"
+            tag="h2"
+            textAlign="left"
+          />
         </div>
 
         {/* Figma stacks the base render under the coastline aerial */}
-        <div className="about-card reveal rd1">
-          <img src={mainImg} alt="Yuma Bay aerial view" loading="lazy" />
-          <img src={accentImg} alt="Boca de Yuma coastline" loading="lazy" />
+        <div className="about-card reveal rd1" style={{ overflow: 'visible', background: 'none' }}>
+          <TiltedCard
+            imageSrc={mainImg}
+            altText="Yuma Bay aerial view"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            scaleOnHover={1.05}
+            rotateAmplitude={10}
+            showMobileWarning={false}
+            showTooltip={false}
+            displayOverlayContent={true}
+            overlayContent={
+              <>
+                <img
+                  src={accentImg}
+                  alt="Boca de Yuma coastline"
+                  className="tilted-card-img-accent"
+                  loading="lazy"
+                />
+                <div className="tilted-card-gradient-overlay" />
+              </>
+            }
+          />
         </div>
 
         <div className="about-side">
@@ -51,13 +90,27 @@ export default function About() {
         </div>
       </div>
 
-      <div className="about-stats reveal">
-        {stats.map((s, i) => (
-          <div className="stat" key={i}>
-            <div className="stat-num">{s.num}</div>
-            <div className="stat-lbl">{s.lbl}</div>
-          </div>
-        ))}
+      <div className="about-stats reveal" ref={statsRef}>
+        {stats.map((s, i) => {
+          const numMatch = s.num.match(/[\d.]+/);
+          const val = numMatch ? parseFloat(numMatch[0]) : 0;
+          const suffix = numMatch ? s.num.replace(numMatch[0], '') : s.num;
+          return (
+            <div className="stat" key={i}>
+              <div className="stat-num">
+                <CountUp
+                  from={0}
+                  to={val}
+                  duration={2}
+                  separator=","
+                  startWhen={statsInView}
+                />
+                {suffix}
+              </div>
+              <div className="stat-lbl">{s.lbl}</div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

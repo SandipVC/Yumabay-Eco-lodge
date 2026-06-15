@@ -10,7 +10,7 @@ export default function Footer() {
   return (
     <footer>
       <div className="footer-main wrap">
-        <span className="footer-brand grad-text">YUMA BAY</span>
+        <img className="footer-brand" src="/images/Group 2.png" alt="Yuma Bay Logo" />
         <div className="footer-contact">
           <a href={`mailto:${f.email}`}>{f.email}</a>
           <a href={`tel:${f.phone.replace(/\s/g, '')}`}>{f.phone}</a>

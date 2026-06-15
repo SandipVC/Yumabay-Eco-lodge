@@ -8,9 +8,16 @@ export default function Location() {
 
   return (
     <section id="location">
-      <p className="location-watermark" aria-hidden>
-        <span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span>
-      </p>
+      <div className="location-watermark" aria-hidden>
+        <div className="marquee-track">
+          <span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span>
+          <span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span>
+        </div>
+        <div className="marquee-track">
+          <span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span>
+          <span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span><span>YUMA BAY</span>
+        </div>
+      </div>
 
       <div className="location-card reveal">
         <iframe
@@ -20,16 +27,6 @@ export default function Location() {
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
         />
-        <a
-          className="location-chip"
-          href={MAPS_LINK}
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Open in Google Maps"
-        >
-          <div className="location-chip-title">{l.titleEm}</div>
-          <div className="location-chip-sub">{l.title.replace(/,\s*$/, '')} · Dominican Republic</div>
-        </a>
       </div>
     </section>
   );

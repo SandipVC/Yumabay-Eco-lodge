@@ -1,6 +1,7 @@
 import { useLang } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import patternUrl from '../../assets/figma/palm-band-lounge.png';
+import SplitText from '../ui/SplitText.jsx';
 
 export default function Lounge() {
   const { t }    = useLang();
@@ -16,7 +17,16 @@ export default function Lounge() {
       <div className="lounge-inner wrap">
         <div className="lounge-head reveal">
           <p className="section-label">{l.label}</p>
-          <h2 className="section-title">{title}</h2>
+          <SplitText
+            text={title}
+            className="section-title"
+            delay={10}
+            duration={0.25}
+            ease="power3.out"
+            splitType="chars"
+            tag="h2"
+            textAlign="left"
+          />
         </div>
         <div className="lounge-side reveal rd1">
           <p className="section-body">{l.body}</p>

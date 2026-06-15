@@ -37,7 +37,9 @@ export default function Navbar() {
   return (
     <>
       <nav id="nav" className={scrolled || menuOpen ? 'scrolled' : ''}>
-        <Link to="/" className="nav-logo grad-text">YUMA BAY</Link>
+        <Link to="/" className="nav-logo">
+          <img src="/images/Group 2.png" alt="Yuma Bay Logo" />
+        </Link>
 
         <div className="nav-right">
           <button
@@ -65,11 +67,6 @@ export default function Navbar() {
           <button className="nav-overlay-link" onClick={() => scrollTo('location')}>{t.nav.location}</button>
           <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}>{t.nav.siteMap}</Link>
           <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}>{t.nav.reserveNow}</Link>
-          <div className="nav-overlay-meta">
-            <button onClick={() => { toggle(); setMenuOpen(false); }} className="lang-toggle">
-              {lang === 'en' ? 'Español' : 'English'}
-            </button>
-          </div>
         </div>
       )}
     </>

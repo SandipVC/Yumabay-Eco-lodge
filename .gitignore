@@ -13,7 +13,8 @@ client/public/video/
 client/public/pdf/
 
 # Original source assets (base64-embedded in reference HTML)
-assets/
+# Anchored to repo root — `client/src/assets/` (Figma decorations) IS tracked.
+/assets/
 
 # Environment secrets
 server/.env

@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import Lightbox from '../ui/Lightbox.jsx';
+import SplitText from '../ui/SplitText.jsx';
 
 const GALLERY_DEFAULTS = [
   { src: '/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png',  label: 'Yuma Bay Overview',  cat: 'Exterior' },
@@ -67,7 +68,16 @@ export default function Gallery() {
       <div className="gallery-head wrap">
         <div>
           <p className="section-label reveal">{g.label}</p>
-          <h2 className="section-title reveal rd1">{title}</h2>
+          <SplitText
+            text={title}
+            className="section-title"
+            delay={10}
+            duration={0.25}
+            ease="power3.out"
+            splitType="chars"
+            tag="h2"
+            textAlign="left"
+          />
         </div>
         <div className="gallery-filters reveal rd1">
           {g.filters.map((f) => (
