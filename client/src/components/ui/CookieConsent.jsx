@@ -3,18 +3,39 @@ import { useLang } from '../../context/LanguageContext.jsx';
 
 const safeLocalStorage = {
   getItem(key) {
+    // 1. Try LocalStorage
     try {
-      return window.localStorage.getItem(key);
-    } catch (e) {
-      return this._data[key] || null;
-    }
+      if (window.localStorage) {
+        const val = window.localStorage.getItem(key);
+        if (val !== null) return val;
+      }
+    } catch (e) {}
+
+    // 2. Try Cookies
+    try {
+      const match = document.cookie.match(new RegExp('(^| )' + key + '=([^;]+)'));
+      if (match) return match[2];
+    } catch (e) {}
+
+    // 3. Try In-memory fallback
+    return this._data[key] || null;
   },
   setItem(key, value) {
+    // 1. Try LocalStorage
     try {
-      window.localStorage.setItem(key, value);
-    } catch (e) {
-      this._data[key] = String(value);
-    }
+      if (window.localStorage) {
+        window.localStorage.setItem(key, value);
+        return;
+      }
+    } catch (e) {}
+
+    // 2. Try Cookies
+    try {
+      document.cookie = `${key}=${value}; max-age=31536000; path=/; SameSite=Lax`;
+    } catch (e) {}
+
+    // 3. Try In-memory fallback
+    this._data[key] = String(value);
   },
   _data: {}
 };
