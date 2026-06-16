@@ -2,7 +2,7 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge
 **Local path:** `C:\Yumabay-Eco-lodge`
-**Last touched:** 2026-06-16 by Antigravity (Phase 4 commit `34b1001`)
+**Last touched:** 2026-06-16 by Antigravity (Sitemap backdrop and inline enquiry integration)
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -49,10 +49,11 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 | Phase 7: PDF brochures + final verify | `phase-7-verify` | ✅ Committed |
 | Post-Phase 7: Properties tag bug fix | `bug-text` | ✅ Committed |
 | Post-Phase 7: Global preloader & lazy loading | `feature-loading` | ✅ Committed |
+| Post-Phase 7: Sitemap backdrop & inline enquiry | `feature-sitemap` | ✅ Committed |
 
-**Current HEAD branch:** `feature-loading`. PRs to firebase branch not opened yet.
+**Current HEAD branch:** `feature-sitemap`. PRs to firebase branch not opened yet.
 
-**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`, then `bug-text → firebase`, then `feature-loading → firebase`. Or merge `feature-loading` directly (it inherits all previous phases).
+**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`, then `bug-text → firebase`, then `feature-loading → firebase`, then `feature-sitemap → firebase`. Or merge `feature-sitemap` directly (it inherits all previous phases).
 
 ---
 
@@ -114,6 +115,9 @@ Restored rendering of properties card tags (e.g. `"Edificio A-B"`) by adding `<s
 
 ### Post-Phase 7 — Global preloader & lazy loading (commit `8d50667`)
 Created a luxury preloader component (`Preloader.jsx` / `Preloader.css`) in the frontend client. It displays a gold progress bar and branding during the initial asset loading and critical images preloading, using `sessionStorage` to only show on first page open. Added lazy loading (`loading="lazy"`) to all footer images, sitemap plan image, and tilted cards.
+
+### Post-Phase 7 — Sitemap backdrop & inline enquiry (branch `feature-sitemap`)
+Replaced the visual geometric SVG backdrop layers on `/sitemap` with the master plan layout blueprint image (`Yumabay_Layout.png`), which was uploaded to Firebase Storage. Updated sitemap zone boundaries to be transparent by default, displaying golden/white border highlights on hover and active states. Integrated an inline contact enquiry form directly inside the right-hand details sidebar on sitemap zone/unit selection, sending lead details directly to the `/api/contact` API.
 
 ---
 
@@ -241,14 +245,14 @@ Dashboard auth = `ADMIN_SECRET` env var on server, sent as `Bearer` token in `se
 **Merge and Release.**
 
 Why next:
-- All features are complete, tested, and verified on branch `phase-7-verify`.
-- The final step is opening a pull request to merge `phase-7-verify` (or individual phase branches) into the target production branch `firebase`, and finally releasing to `main`.
+- All features, including the interactive sitemap backdrop and inline enquiry panel, are complete, tested, and verified on branch `feature-sitemap`.
+- The final step is opening a pull request to merge `feature-sitemap` (which inherits all preceding phase branches and bug fixes) into the target production branch `firebase`, and finally releasing to `main`.
 
 ---
 
 ## 10. Exact prompt to continue development
 
-Not applicable. All development phases of the PDF -> Website integration have been successfully completed and committed on branch `phase-7-verify`.
+Not applicable. All development phases and features, including sitemap layout and inline enquiry integration, have been successfully completed and committed on branch `feature-sitemap`.
 
 ---
 
