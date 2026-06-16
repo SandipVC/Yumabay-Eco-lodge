@@ -82,6 +82,7 @@ export default function Properties() {
             </div>
             <div className="prop-info">
               <div className="prop-header">
+                <span className="prop-tag">{item.tag}</span>
                 <h3 className="prop-name">{item.name}</h3>
                 <p className="prop-area">{item.area}</p>
               </div>
