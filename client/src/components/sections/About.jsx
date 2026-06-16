@@ -34,6 +34,8 @@ export default function About() {
     { num: a.stat3Num, lbl: a.stat3Lbl },
   ];
 
+  const p = t.project;
+
   return (
     <section id="about">
       <img className="about-palms" src={palmsUrl} alt="" aria-hidden loading="lazy" />
@@ -83,6 +85,13 @@ export default function About() {
 
         <div className="about-side">
           <p className="section-body reveal rd2">{a.body}</p>
+          {p && (p.phase1Area || p.totalConstruction) && (
+            <p className="about-fact-strip reveal rd2">
+              {p.phase1Area && <span>{p.phase1Label} · <strong>{p.phase1Area}</strong></span>}
+              {p.phase1Area && p.totalConstruction && <span aria-hidden> · </span>}
+              {p.totalConstruction && <span>{p.builtLabel} · <strong>{p.totalConstruction}</strong></span>}
+            </p>
+          )}
         </div>
       </div>
 
