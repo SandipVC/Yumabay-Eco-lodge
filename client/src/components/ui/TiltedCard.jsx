@@ -103,6 +103,7 @@ export default function TiltedCard({
           src={imageSrc}
           alt={altText}
           className="tilted-card-img"
+          loading="lazy"
           style={{
             width: imageWidth,
             height: imageHeight

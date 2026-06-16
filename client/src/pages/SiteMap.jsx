@@ -88,6 +88,7 @@ export default function SiteMap() {
           <img
             src={planImage}
             alt="Yuma Bay Architectural Master Plan"
+            loading="lazy"
           />
         </div>
       )}
