@@ -142,6 +142,25 @@ export default function Contact() {
                 </a>
               </span>
             </div>
+            <div className="contact-detail-item" style={{ marginTop: 24 }}>
+              <span className="contact-detail-label">{lang === 'es' ? 'Descargas' : 'Downloads'}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
+                <a
+                  href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media"
+                  target="_blank" rel="noopener noreferrer" className="btn-ghost"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px', fontSize: 13, textDecoration: 'none' }}
+                >
+                  📄 {lang === 'es' ? 'Descargar Folleto del Proyecto' : 'Download Project Brochure'}
+                </a>
+                <a
+                  href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
+                  target="_blank" rel="noopener noreferrer" className="btn-ghost"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px', fontSize: 13, textDecoration: 'none' }}
+                >
+                  📄 {lang === 'es' ? 'Descargar Guía de Amenidades' : 'Download Amenities Guide'}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
