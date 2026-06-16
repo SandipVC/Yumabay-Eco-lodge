@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
 import InventoryStatusBadge from '../components/cms/InventoryStatusBadge.jsx';
+import InventorySection from '../components/cms/InventorySection.jsx';
+import { useAssets } from '../hooks/useAssets.js';
 import { useLang } from '../context/LanguageContext.jsx';
 
 const safeSessionStorage = {
@@ -82,6 +84,7 @@ function LoginForm({ onLogin }) {
 export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
+  const { assets, refresh } = useAssets();
   const [token, setToken]     = useState(safeSessionStorage.getItem('yb_admin') || '');
   const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
@@ -169,6 +172,12 @@ export default function Dashboard() {
           >
             {d.tabText}
           </button>
+          <button
+            className={`dash-tab-btn${tab === 'inventory' ? ' active' : ''}`}
+            onClick={() => setTab('inventory')}
+          >
+            {d.tabInventory}
+          </button>
         </div>
 
         {/* CMS Panel */}
@@ -179,6 +188,7 @@ export default function Dashboard() {
             <TextContentSection token={token} />
           </>
         )}
+        {tab === 'inventory' && <InventorySection assets={assets} token={token} refresh={refresh} />}
 
         {/* Leads tab */}
         {tab === 'leads' && <>

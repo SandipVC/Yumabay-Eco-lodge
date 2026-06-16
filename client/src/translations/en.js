@@ -184,6 +184,7 @@ export const en = {
     tabLeads: '📋 Leads',
     tabMedia: '🖼 Media Manager',
     tabText: '✍ Text Content',
+    tabInventory: '🏢 Inventory',
     totalLeads: 'Total Leads',
     newLeads: 'New',
     contacted: 'Contacted',
