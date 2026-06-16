@@ -588,7 +588,7 @@ a  { color: inherit; }
 /* ── Club Lounge (Figma: bronze contour band) ── */
 #lounge {
   position: relative;
-  background: var(--bronze) url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Flounge-bg.png?alt=media') no-repeat center;
+  background: var(--bronze) url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2FFrame%201948756645.png?alt=media') no-repeat center;
   background-size: cover;
   padding: 100px 0; overflow: hidden;
 }
