@@ -1,178 +1,37 @@
 {
   "hero": {
-    "video": "/video/1781503847161_Video_2026_05_29-1.mp4",
-    "poster": "/images/cms/hero/1781503825446_Gemini_Generated_Image_v6jo2cv6jo2cv6jo.png"
+    "video": null,
+    "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2F1781515907879_wallpaper_aerial-photography-of-mountains-Dd_7xDCuuUo.jpg?alt=media"
   },
   "about": {
-    "main": "/images/cms/about/1781503865946_Screenshot_49.png",
-    "accent": "/images/LOCATION - GRUND.jpg"
+    "main": null,
+    "accent": null
   },
   "properties": [
-    "/images/01_1 - Photo.jpg",
-    "/images/01_2 - Photo.jpg",
-    "/images/01_3 - Photo.jpg",
-    "/images/01_4 - Photo.jpg",
-    "/images/LOCATION - GRUND 3.jpg"
+    null,
+    null,
+    null,
+    null,
+    null
   ],
   "propertyPrices": [
-    "$280,000",
-    "$95,000",
-    "$120,000",
-    "$150,000",
-    "$320,000"
+    "$383,230",
+    "$60,332",
+    "$93,798",
+    "$230,014",
+    ""
   ],
-  "gallery": [
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (1).png",
-      "label": "Yuma Bay Overview",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (3).png",
-      "label": "Aerial View",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (7).png",
-      "label": "Villa Exterior",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (9).png",
-      "label": "Beach Club",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (11).png",
-      "label": "Pool Area",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (13).png",
-      "label": "Garden Terrace",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/LOCATION - GRUND.jpg",
-      "label": "Boca de Yuma Coast",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/LOCATION - GRUND 3.jpg",
-      "label": "Location View",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/LOCATION - GRUND - 2.jpg",
-      "label": "Bahia de Yuma",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/LOCATION - GRUND 4.jpg",
-      "label": "Eastern Coast",
-      "cat": "Exterior"
-    },
-    {
-      "src": "/images/R-01.png",
-      "label": "Living Room",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-02.png",
-      "label": "Master Bedroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-03.png",
-      "label": "Kitchen",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-04.png",
-      "label": "Bathroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-05.png",
-      "label": "Terrace View",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-06.png",
-      "label": "Dining Area",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-07.png",
-      "label": "Second Bedroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-08.png",
-      "label": "Study",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-09.png",
-      "label": "Jacuzzi",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/R-10.png",
-      "label": "Corridor",
-      "cat": "Interior"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (1).jpg",
-      "label": "Club Lounge",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (2).jpg",
-      "label": "Lounge Bar",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (3).jpg",
-      "label": "Lounge Terrace",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (4).jpg",
-      "label": "Pool Deck",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (5).jpg",
-      "label": "Beach Club View",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/YUMA BAY CLUB LOUNGE  (6).jpg",
-      "label": "Club Interior",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (15).png",
-      "label": "Swimming Pool",
-      "cat": "Amenities"
-    },
-    {
-      "src": "/images/RENDER ANLAGE YUMA BAY ECO LODGE (17).png",
-      "label": "Gym",
-      "cat": "Amenities"
-    }
-  ],
+  "gallery": [],
   "lounge": [
-    "/images/YUMA BAY CLUB LOUNGE  (7).jpg",
-    "/images/YUMA BAY CLUB LOUNGE  (8).jpg",
-    "/images/YUMA BAY CLUB LOUNGE  (9).jpg",
-    "/images/YUMA BAY CLUB LOUNGE  (10).jpg"
+    null,
+    null,
+    null,
+    null
   ],
   "sitemap": {
-    "planImage": "/images/master-plan-layout.jpg",
-    "masterPdf": "/pdf/MASTER PLAN YUMA BAY.pdf",
-    "villasPdf": "/pdf/PARCELAS VILLAS  YUMA BAY.pdf"
+    "planImage": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media",
+    "masterPdf": null,
+    "villasPdf": null
   },
   "sitemapZones": [
     {
@@ -349,7 +208,6 @@
         "reserveNow": "Reserve Now"
       },
       "hero": {
-        "eyebrow": "Boca de Yuma · La Romana · Dominican Republic",
         "title": "YUMA",
         "titleEm": "BAY",
         "tagline": "Eco Lodge & Residences",
@@ -367,13 +225,10 @@
         "label": "About the Project",
         "title": "Where the\nBahia meets",
         "titleEm": "Paradise",
-        "body": "Nestled along the pristine shores of Boca de Yuma, Yuma Bay Eco Lodge is a landmark development where contemporary architecture harmonizes with the natural landscape of the Dominican Republic's eastern coast. A master-planned community offering villas, apartments, and world-class beach club facilities.",
         "stat1Num": "222",
         "stat1Lbl": "m² Villas",
         "stat2Num": "2",
         "stat2Lbl": "Phases",
-        "stat3Num": "5+",
-        "stat3Lbl": "Buildings",
         "badge": "Phases",
         "viewAll": "View All Properties"
       },
@@ -383,65 +238,7 @@
         "titleEm": "living",
         "subtitle": "From oceanfront apartments to private pool villas, every residence at Yuma Bay is designed to capture the beauty of the Caribbean coast.",
         "enquire": "Enquire Now",
-        "priceFrom": "From",
-        "items": [
-          {
-            "tag": "Phase 1 · Featured",
-            "name": "Villa Tipo 1",
-            "area": "222 m² · Private Pool & Jacuzzi",
-            "feats": [
-              "3 Bedrooms",
-              "Garden Terrace",
-              "Full Kitchen",
-              "Pantry"
-            ],
-            "price": "From $280,000"
-          },
-          {
-            "tag": "Buildings A–E",
-            "name": "Apartments",
-            "area": "Multi-level · Ocean Views",
-            "feats": [
-              "Studio–3BR",
-              "Balconies",
-              "Sea Views"
-            ],
-            "price": "From $95,000"
-          },
-          {
-            "tag": "Eco Lodge",
-            "name": "Eco Residences",
-            "area": "Beachfront · Private Access",
-            "feats": [
-              "Nature Views",
-              "Sea Breeze",
-              "Eco Design"
-            ],
-            "price": "From $120,000"
-          },
-          {
-            "tag": "Phase 2",
-            "name": "Bungalows",
-            "area": "Beachfront · Direct Access",
-            "feats": [
-              "1–2 Bedrooms",
-              "Sea View",
-              "Private Terrace"
-            ],
-            "price": "From $150,000"
-          },
-          {
-            "tag": "Signature",
-            "name": "Penthouse",
-            "area": "Top Floor · Panoramic Views",
-            "feats": [
-              "Private Terrace",
-              "Bay Views",
-              "Premium Finishes"
-            ],
-            "price": "From $320,000"
-          }
-        ]
+        "priceFrom": "From"
       },
       "gallery": {
         "label": "Visual Journey",
@@ -464,55 +261,12 @@
       },
       "amenities": {
         "label": "Amenities",
-        "title": "Every detail\nconsidered",
-        "items": [
-          {
-            "icon": "🏊",
-            "name": "Swimming Pools",
-            "desc": "Two resort-style pools plus a children's pool within the beach club."
-          },
-          {
-            "icon": "🏋",
-            "name": "Gymnasium",
-            "desc": "Fully equipped fitness center with ocean-facing views."
-          },
-          {
-            "icon": "🌴",
-            "name": "Club de Playa",
-            "desc": "Exclusive beach club with gazebos, snack bar, and direct beach access."
-          },
-          {
-            "icon": "🛒",
-            "name": "Mini Market",
-            "desc": "On-site convenience store for residents and guests."
-          },
-          {
-            "icon": "🎠",
-            "name": "Kids Area",
-            "desc": "Safe, shaded playground designed for children of all ages."
-          },
-          {
-            "icon": "🔒",
-            "name": "Gated Security",
-            "desc": "24/7 gated access with guardhouse for complete peace of mind."
-          },
-          {
-            "icon": "🚗",
-            "name": "Covered Parking",
-            "desc": "Ample designated parking for residents and guests."
-          },
-          {
-            "icon": "🌿",
-            "name": "Green Spaces",
-            "desc": "Lush mangrove-adjacent landscaping with tropical gardens throughout."
-          }
-        ]
+        "title": "Every detail\nconsidered"
       },
       "location": {
         "label": "Location",
         "title": "Calle Malecon,",
         "titleEm": "Boca de Yuma",
-        "body": "Positioned on the Malecon of Boca de Yuma, Yuma Bay enjoys direct access to the Bahia de Yuma and is surrounded by the natural beauty of the Dominican Republic's eastern coast — mangroves, crystal waters, and centuries of Caribbean heritage.",
         "distances": [
           {
             "name": "La Romana Airport",
@@ -597,7 +351,6 @@
           "Beach Club"
         ],
         "contactCol": "Contact",
-        "address": "Santa Rosa #117\nLa Romana, DR",
         "email": "info@yumabay.com",
         "phone": "+1 (809) 000-0000",
         "copyright": "© 2025 Yuma Bay Eco Lodge. All rights reserved.",
@@ -658,7 +411,6 @@
         "reserveNow": "Reservar Ahora"
       },
       "hero": {
-        "eyebrow": "Boca de Yuma · La Romana · República Dominicana",
         "title": "YUMA",
         "titleEm": "BAY",
         "tagline": "Eco Lodge y Residencias",
@@ -676,13 +428,10 @@
         "label": "Sobre el Proyecto",
         "title": "Donde la Bahía\nse encuentra con",
         "titleEm": "el paraíso",
-        "body": "Ubicado a orillas de las prístinas costas de Boca de Yuma, Yuma Bay Eco Lodge es un desarrollo emblemático donde la arquitectura contemporánea se armoniza con el paisaje natural de la costa oriental de la República Dominicana. Una comunidad planificada que ofrece villas, apartamentos y el mejor club de playa.",
         "stat1Num": "222",
         "stat1Lbl": "m² Villas",
         "stat2Num": "2",
         "stat2Lbl": "Fases",
-        "stat3Num": "5+",
-        "stat3Lbl": "Edificios",
         "badge": "Fases",
         "viewAll": "Ver Todas las Propiedades"
       },
@@ -692,65 +441,7 @@
         "titleEm": "vivir",
         "subtitle": "Desde apartamentos frente al mar hasta villas con piscina privada, cada residencia en Yuma Bay está diseñada para capturar la belleza de la costa caribeña.",
         "enquire": "Consultar Ahora",
-        "priceFrom": "Desde",
-        "items": [
-          {
-            "tag": "Fase 1 · Destacado",
-            "name": "Villa Tipo 1",
-            "area": "222 m² · Piscina Privada y Jacuzzi",
-            "feats": [
-              "3 Habitaciones",
-              "Terraza con Jardín",
-              "Cocina Completa",
-              "Despensa"
-            ],
-            "price": "Desde $280,000"
-          },
-          {
-            "tag": "Edificios A–E",
-            "name": "Apartamentos",
-            "area": "Multi-nivel · Vistas al Mar",
-            "feats": [
-              "Estudio–3 hab.",
-              "Balcones",
-              "Vistas al Mar"
-            ],
-            "price": "Desde $95,000"
-          },
-          {
-            "tag": "Eco Lodge",
-            "name": "Residencias Eco",
-            "area": "Frente al Mar · Acceso Privado",
-            "feats": [
-              "Vistas a la Naturaleza",
-              "Brisa Marina",
-              "Diseño Eco"
-            ],
-            "price": "Desde $120,000"
-          },
-          {
-            "tag": "Fase 2",
-            "name": "Bungalows",
-            "area": "Frente al Mar · Acceso Directo",
-            "feats": [
-              "1–2 Habitaciones",
-              "Vista al Mar",
-              "Terraza Privada"
-            ],
-            "price": "Desde $150,000"
-          },
-          {
-            "tag": "Signature",
-            "name": "Penthouse",
-            "area": "Último Piso · Vistas Panorámicas",
-            "feats": [
-              "Terraza Privada",
-              "Vistas a la Bahía",
-              "Acabados Premium"
-            ],
-            "price": "Desde $320,000"
-          }
-        ]
+        "priceFrom": "Desde"
       },
       "gallery": {
         "label": "Viaje Visual",
@@ -773,55 +464,12 @@
       },
       "amenities": {
         "label": "Comodidades",
-        "title": "Cada detalle\nconsiderado",
-        "items": [
-          {
-            "icon": "🏊",
-            "name": "Piscinas",
-            "desc": "Dos piscinas estilo resort y una piscina infantil dentro del club de playa."
-          },
-          {
-            "icon": "🏋",
-            "name": "Gimnasio",
-            "desc": "Centro de fitness completamente equipado con vistas al mar."
-          },
-          {
-            "icon": "🌴",
-            "name": "Club de Playa",
-            "desc": "Club de playa exclusivo con gazebos, snack bar y acceso directo a la playa."
-          },
-          {
-            "icon": "🛒",
-            "name": "Mini Mercado",
-            "desc": "Tienda de conveniencia en el lugar para residentes y huéspedes."
-          },
-          {
-            "icon": "🎠",
-            "name": "Área Infantil",
-            "desc": "Área de juegos segura y sombreada para niños de todas las edades."
-          },
-          {
-            "icon": "🔒",
-            "name": "Seguridad",
-            "desc": "Acceso controlado 24/7 con garita para total tranquilidad."
-          },
-          {
-            "icon": "🚗",
-            "name": "Estacionamiento",
-            "desc": "Amplio estacionamiento designado para residentes y huéspedes."
-          },
-          {
-            "icon": "🌿",
-            "name": "Áreas Verdes",
-            "desc": "Paisajismo adyacente a manglares con jardines tropicales."
-          }
-        ]
+        "title": "Cada detalle\nconsiderado"
       },
       "location": {
         "label": "Ubicación",
         "title": "Calle Malecon,",
         "titleEm": "Boca de Yuma",
-        "body": "Ubicado en el Malecón de Boca de Yuma, Yuma Bay tiene acceso directo a la Bahía de Yuma y está rodeado por la belleza natural de la costa oriental de la República Dominicana — manglares, aguas cristalinas y siglos de patrimonio caribeño.",
         "distances": [
           {
             "name": "Aeropuerto La Romana",
@@ -906,7 +554,6 @@
           "Club de Playa"
         ],
         "contactCol": "Contacto",
-        "address": "Santa Rosa #117\nLa Romana, RD",
         "email": "info@yumabay.com",
         "phone": "+1 (809) 000-0000",
         "copyright": "© 2025 Yuma Bay Eco Lodge. Todos los derechos reservados.",

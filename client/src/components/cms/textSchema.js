@@ -230,6 +230,8 @@ export const TEXT_SECTIONS = [
       { key: 'villaNote', label: 'Villa count note / discrepancy info', kind: 'textarea' },
       { key: 'ownerLabel', label: 'Owner field label (e.g. "Developer")', kind: 'text' },
       { key: 'developerLabel', label: 'Developer field label (e.g. "Project Director")', kind: 'text' },
+      { key: 'phase1Label', label: 'Phase 1 short label (About fact strip)', kind: 'text' },
+      { key: 'builtLabel', label: 'Built / Construction short label (About fact strip)', kind: 'text' },
     ],
   },
   {
