@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useLang }    from '../../context/LanguageContext.jsx';
 import { useAssets }  from '../../hooks/useAssets.js';
+import SplitText from '../ui/SplitText.jsx';
 
 const PROPERTY_DEFAULTS = [
   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
@@ -36,7 +37,16 @@ export default function Properties() {
       <div className="props-head wrap reveal">
         <div>
           <p className="section-label">{p.label}</p>
-          <h2 className="section-title">{title}</h2>
+          <SplitText
+            text={title}
+            className="section-title"
+            delay={10}
+            duration={0.25}
+            ease="power3.out"
+            splitType="chars"
+            tag="h2"
+            textAlign="left"
+          />
         </div>
         <p className="props-sub">{p.subtitle}</p>
       </div>
@@ -49,17 +59,16 @@ export default function Properties() {
               <span className="prop-view" aria-hidden />
             </div>
             <div className="prop-info">
-              <h3 className="prop-name">{item.name}</h3>
-              <p className="prop-area">{item.area}</p>
+              <div className="prop-header">
+                <h3 className="prop-name">{item.name}</h3>
+                <p className="prop-area">{item.area}</p>
+              </div>
               <p className="prop-price">{priceFor(i, item.price)}</p>
               <div className="prop-feats">
                 {item.feats.map((f, j) => (
                   <span key={j} className="prop-feat">{f}</span>
                 ))}
               </div>
-              <button className="prop-enquire" onClick={() => enquire(item.name)}>
-                {p.enquire}
-              </button>
             </div>
           </article>
         ))}
