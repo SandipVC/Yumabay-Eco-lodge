@@ -1,19 +1,30 @@
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext.jsx';
+import { useAssets } from '../hooks/useAssets.js';
 
 export default function Contact() {
   const { t, lang } = useLang();
   const c = t.contact;
   const { state } = useLocation();
+  const [searchParams] = useSearchParams();
+  const { assets } = useAssets();
 
-  const [form, setForm]       = useState({ name: '', email: '', phone: '', propertyInterest: '', message: '' });
+  const [form, setForm]       = useState({ name: '', email: '', phone: '', propertyInterest: '', message: '', unitCode: '' });
   const [errors, setErrors]   = useState({});
   const [status, setStatus]   = useState('idle'); // idle | sending | success | error
+
+  const unitParam = searchParams.get('unit');
 
   useEffect(() => {
     if (state?.interest) setForm(f => ({ ...f, propertyInterest: state.interest }));
   }, [state]);
+
+  useEffect(() => {
+    if (unitParam) {
+      setForm(f => ({ ...f, unitCode: unitParam.toUpperCase() }));
+    }
+  }, [unitParam]);
 
   // Scroll-reveal is wired globally in Layout (useRevealAll, keyed on route).
 
@@ -45,12 +56,55 @@ export default function Contact() {
       const data = await res.json();
       if (res.ok && data.success) {
         setStatus('success');
-        setForm({ name: '', email: '', phone: '', propertyInterest: '', message: '' });
+        setForm({ name: '', email: '', phone: '', propertyInterest: '', message: '', unitCode: '' });
       } else {
         setStatus('error');
       }
     } catch {
       setStatus('error');
+    }
+  };
+
+  const allUnits = [];
+  if (assets?.inventory) {
+    if (Array.isArray(assets.inventory.buildings)) {
+      assets.inventory.buildings.forEach(b => {
+        if (Array.isArray(b.units)) {
+          b.units.forEach(u => {
+            allUnits.push({
+              code: u.code,
+              status: u.status,
+              price: u.price,
+              buildingName: b.name
+            });
+          });
+        }
+      });
+    }
+    if (Array.isArray(assets.inventory.villas)) {
+      assets.inventory.villas.forEach(v => {
+        allUnits.push({
+          code: v.code,
+          status: v.status,
+          price: v.price,
+          buildingName: lang === 'es' ? 'Villa' : 'Villa'
+        });
+      });
+    }
+  }
+  allUnits.sort((a, b) => a.code.localeCompare(b.code));
+
+  const getStatusText = (status) => {
+    if (lang === 'es') {
+      if (status === 'available') return 'Disponible';
+      if (status === 'sold') return 'Vendido';
+      if (status === 'reserved') return 'Reservado';
+      return 'Bloqueado';
+    } else {
+      if (status === 'available') return 'Available';
+      if (status === 'sold') return 'Sold';
+      if (status === 'reserved') return 'Reserved';
+      return 'Blocked';
     }
   };
 
@@ -87,6 +141,25 @@ export default function Contact() {
                   {t.footer.phone}
                 </a>
               </span>
+            </div>
+            <div className="contact-detail-item" style={{ marginTop: 24 }}>
+              <span className="contact-detail-label">{lang === 'es' ? 'Descargas' : 'Downloads'}</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 8 }}>
+                <a
+                  href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media"
+                  target="_blank" rel="noopener noreferrer" className="btn-ghost"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px', fontSize: 13, textDecoration: 'none' }}
+                >
+                  📄 {lang === 'es' ? 'Descargar Folleto del Proyecto' : 'Download Project Brochure'}
+                </a>
+                <a
+                  href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
+                  target="_blank" rel="noopener noreferrer" className="btn-ghost"
+                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', padding: '10px 16px', fontSize: 13, textDecoration: 'none' }}
+                >
+                  📄 {lang === 'es' ? 'Descargar Guía de Amenidades' : 'Download Amenities Guide'}
+                </a>
+              </div>
             </div>
           </div>
         </div>
@@ -140,6 +213,24 @@ export default function Contact() {
                     ))}
                   </select>
                 </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-field">
+                  <label className="form-label" htmlFor="unitCode">{c.unitLabel || 'Specific Unit (Optional)'}</label>
+                  <select
+                    id="unitCode" name="unitCode" className="form-select"
+                    value={form.unitCode} onChange={handleChange}
+                  >
+                    <option value="">{c.unitPlaceholder || 'Select a unit'}</option>
+                    {allUnits.map((u) => (
+                      <option key={u.code} value={u.code}>
+                        {u.code} — {u.buildingName} ({getStatusText(u.status)}{u.status === 'available' && u.price ? ` · $${u.price.toLocaleString()}` : ''})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-field" />
               </div>
 
               <div className="form-field">

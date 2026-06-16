@@ -18,6 +18,7 @@ const validators = [
   body('phone').optional({ checkFalsy: true }).trim().isLength({ max: 30 }).withMessage('Phone too long'),
   body('message').trim().isLength({ min: 5, max: 2000 }).withMessage('Message must be 5–2000 characters'),
   body('propertyInterest').optional({ checkFalsy: true }).trim().isLength({ max: 100 }),
+  body('unitCode').optional({ checkFalsy: true }).trim().isLength({ max: 50 }),
   body('language').optional().isIn(['en', 'es']),
 ];
 
@@ -63,9 +64,10 @@ function teamEmailHtml(lead) {
       <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;">Email</td><td style="padding:8px;">${lead.email}</td></tr>
       <tr><td style="padding:8px;font-weight:bold;">Phone</td><td style="padding:8px;">${lead.phone || '—'}</td></tr>
       <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;">Interest</td><td style="padding:8px;">${lead.propertyInterest || '—'}</td></tr>
-      <tr><td style="padding:8px;font-weight:bold;">Language</td><td style="padding:8px;">${lead.language || 'en'}</td></tr>
-      <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;">Message</td><td style="padding:8px;">${lead.message}</td></tr>
-      <tr><td style="padding:8px;font-weight:bold;">Received</td><td style="padding:8px;">${new Date(lead.createdAt).toLocaleString()}</td></tr>
+      <tr><td style="padding:8px;font-weight:bold;">Unit Code</td><td style="padding:8px;">${lead.unitCode || '—'}</td></tr>
+      <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;">Language</td><td style="padding:8px;">${lead.language || 'en'}</td></tr>
+      <tr><td style="padding:8px;font-weight:bold;">Message</td><td style="padding:8px;">${lead.message}</td></tr>
+      <tr style="background:#f9f9f9;"><td style="padding:8px;font-weight:bold;">Received</td><td style="padding:8px;">${new Date(lead.createdAt).toLocaleString()}</td></tr>
     </table>
   </div>`;
 }
@@ -76,7 +78,7 @@ router.post('/', validators, async (req, res) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  const { name, email, phone, message, propertyInterest, language } = req.body;
+  const { name, email, phone, message, propertyInterest, language, unitCode } = req.body;
 
   const lead = {
     id: uuidv4(),
@@ -85,6 +87,7 @@ router.post('/', validators, async (req, res) => {
     phone: phone || '',
     message,
     propertyInterest: propertyInterest || '',
+    unitCode: unitCode || '',
     language: language || 'en',
     status: 'new',
     createdAt: new Date().toISOString(),

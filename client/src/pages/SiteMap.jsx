@@ -18,7 +18,7 @@ const brighten = (rgba, mult) =>
 
 // ── Component ─────────────────────────────────────────────────────────────────
 export default function SiteMap() {
-  const { t }          = useLang();
+  const { t, lang }    = useLang();
   const s              = t.sitemap;
   const navigate       = useNavigate();
   const { assets }     = useAssets();
@@ -310,6 +310,18 @@ export default function SiteMap() {
             Villas Floor Plans
           </a>
         )}
+        <a
+          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media"
+          target="_blank" rel="noopener noreferrer" className="btn-ghost"
+        >
+          {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
+        </a>
+        <a
+          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
+          target="_blank" rel="noopener noreferrer" className="btn-ghost"
+        >
+          {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
+        </a>
       </div>
     </div>
   );
