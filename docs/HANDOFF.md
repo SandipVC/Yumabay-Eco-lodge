@@ -2,7 +2,7 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge
 **Local path:** `C:\Yumabay-Eco-lodge`
-**Last touched:** 2026-06-16 by Antigravity (Phase 3 commit `e30d446`)
+**Last touched:** 2026-06-16 by Antigravity (Phase 4 commit `34b1001`)
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -45,14 +45,14 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 | Phase 1: Text fixes | `phase-1-text-fixes` | ✅ Pushed |
 | Phase 2: Inventory data model | `phase-2-inventory` | ✅ Pushed |
 | Phase 3: Properties refactor | `phase-3-properties-refactor` | ✅ Committed |
-| Phase 4: Sitemap interactive UI | — | ⏳ Not started |
+| Phase 4: Sitemap interactive UI | `phase-4-sitemap-ui` | ✅ Committed |
 | Phase 5: CMS inventory editor | — | ⏳ Not started |
 | Phase 6: Contact unit picker | — | ⏳ Not started |
 | Phase 7: PDF brochures + final verify | — | ⏳ Not started |
 
-**Current HEAD branch:** `phase-3-properties-refactor`. PRs to firebase branch not opened yet.
+**Current HEAD branch:** `phase-4-sitemap-ui`. PRs to firebase branch not opened yet.
 
-**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`. Or merge Phase 3 directly (it inherits all previous phases).
+**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`. Or merge Phase 4 directly (it inherits all previous phases).
 
 ---
 
@@ -97,15 +97,12 @@ Transcribed all 88 unit listings (villas + buildings + bungalows) from the PRECI
 ### Phase 3 — Properties section refactor (commit `e30d446`)
 Stripped the manually overridden `propertyPrices` array from Firestore and `assets.json` using `strip-property-prices.mjs`. Updated the public landing page to calculate card starting prices dynamically as the minimum of the available units. Replaced the CMS properties pricing inputs with read-only indicators showing calculated prices.
 
+### Phase 4 — Sitemap interactive UI (commit `34b1001`)
+Upgraded the public sitemap page [SiteMap.jsx](file:///c:/Yumabay-Eco-lodge/client/src/pages/SiteMap.jsx). Linked visual plan zones to specific inventory segments (mapping both `building-a` and `building-b` to the unified `edificio-ab` inventory). Created the [UnitGrid.jsx](file:///c:/Yumabay-Eco-lodge/client/src/components/sitemap/UnitGrid.jsx) component to handle level tabs, responsive unit grids, availability color coding (cyan = available, grey = blocked, red = sold), and selection details. Prefilled unit enquiries dynamically route to the Contact page. Also added an `inventoryId` mapping selector in the CMS visual zone editor [SiteMapZoneEditor.jsx](file:///c:/Yumabay-Eco-lodge/client/src/components/cms/SiteMapZoneEditor.jsx).
+
 ---
 
 ## 4. Remaining work
-
-### Phase 4 — Sitemap interactive UI (1 day, biggest)
-- Click Edificio A-B zone → drill-down per-level tabs with 12-unit grid
-- Color-coded status badges (green/grey/red)
-- Click unit → "Enquire about AB103" with URL param `?unit=AB103`
-- Files: `client/src/pages/SiteMap.jsx`, new `client/src/components/sitemap/UnitGrid.jsx`, `zonesData.js`
 
 ### Phase 5 — CMS inventory editor (1 day)
 New 4th dashboard tab "🏢 Inventory". Per-building tab with sortable unit table. Toggle status. Edit prices. Bulk CSV import (admin pastes updated PRECIOS spreadsheet).
@@ -233,36 +230,38 @@ Dashboard auth = `ADMIN_SECRET` env var on server, sent as `Bearer` token in `se
 
 ## 9. Next recommended task
 
-**Phase 4 — Sitemap interactive UI.**
+**Phase 5 — CMS inventory editor.**
 
 Why next:
-- Now that Phase 3 has successfully removed the hardcoded override prices and wired the frontend properties component to dynamically query `assets.inventory`, the public landing page prices are fully synchronized with the database.
-- Rebuilding the Sitemap page into an interactive UI is the next major step. It will allow visitors to drill down into buildings and view the unit availability matrix based on the coordinate and status structure.
+- Visually, the sitemap now displays detailed grids and allows unit-level inquiry.
+- However, unit availability and pricing are still locked to the static values transcribed in Phase 2.
+- The next step is implementing the CMS Inventory Editor tab in the dashboard. This will allow admins to change unit status (available ↔ blocked ↔ sold) and edit prices directly, automatically updating the landing page prices and interactive sitemap availability.
 
 ---
 
 ## 10. Exact prompt to continue development
 
-Paste verbatim to next AI agent. It assumes git is at `phase-3-properties-refactor` HEAD.
+Paste verbatim to next AI agent. It assumes git is at `phase-4-sitemap-ui` HEAD.
 
 ```
 You are continuing work on the Yuma Bay Eco Lodge website (repo at C:\Yumabay-Eco-lodge,
 GitHub: SandipVC/Yumabay-Eco-lodge). Before touching code, READ docs/HANDOFF.md
 end-to-end — it is your full briefing.
 
-Phases 0, 1, 2, and 3 are complete (the latest commit is on branch phase-3-properties-refactor).
-The current branch is phase-3-properties-refactor which contains all changes up to Phase 3.
+Phases 0 through 4 are complete (latest commit on branch phase-4-sitemap-ui).
+The current branch is phase-4-sitemap-ui.
 
-Your task is PHASE 4: Sitemap Interactive UI.
+Your task is PHASE 5: CMS Inventory Editor.
 
-1. Checkout a new branch off phase-3-properties-refactor named `phase-4-sitemap-ui`.
-2. Rebuild the public SiteMap.jsx sitemap page:
-   - When a user clicks a building zone (e.g. Edificio A-B, Edificio C, etc.), open a detail panel with level tabs (1st level, 2nd level, etc.).
-   - Render a unit availability matrix (using a new UnitGrid component or similar) for the selected level.
-   - Use the status color codes (green = available, grey = blocked, red = sold/reserved).
-   - Add a call-to-action button when clicking an available unit ("Enquire about AB103") which redirects to the Contact page with the unit pre-selected via query params (?unit=AB103).
-3. Update zonesData.js and assets.json sitemapZones if needed to match the new buildings schema (Edificio A-B, Apartamento C, D, E, Villas, Bungalows).
-4. Verify the sitemap is fully responsive on mobile devices (collapsing the grid layout into a scrollable list view below 768px).
+1. Checkout a new branch off phase-4-sitemap-ui named `phase-5-cms-inventory`.
+2. Add a new tab "🏢 Inventory" to the admin CMS dashboard (client/src/pages/Dashboard.jsx).
+3. Under this tab, render an editor (client/src/components/cms/InventorySection.jsx - new component):
+   - Let the admin select a building (Edificio A-B, Apartamento C, D, E, Villas, Bungalows).
+   - Display a list/table of all units in the selected category.
+   - For each unit, allow changing its status (available, blocked, sold, reserved) via a dropdown, and editing its price via a text input.
+   - Allow saving these edits (which calls router.patch('/assets') with the updated inventory block).
+   - Provide an optional "Bulk Paste CSV" input where the admin can paste a comma/tab-separated text copied from the PRECIOS spreadsheet to bulk-update prices/statuses.
+4. Verify the edited unit statuses and prices immediately flow to the public landing page properties card and the public sitemap drill-down picker.
 5. Build (cd client && npm run build) to ensure bundle size remains under 500 kB.
 6. Commit and push.
 

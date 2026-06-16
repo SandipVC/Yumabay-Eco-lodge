@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAssets }  from '../hooks/useAssets.js';
 import SiteMapBackdrop from '../components/sitemap/SiteMapBackdrop.jsx';
 import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
+import UnitGrid from '../components/sitemap/UnitGrid.jsx';
 
 const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
@@ -44,6 +45,34 @@ export default function SiteMap() {
     if (!activeZone) return;
     navigate('/contact', { state: { interest: activeZone.label } });
   };
+
+  const handleUnitEnquire = (unitCode, unitLabel) => {
+    navigate(`/contact?unit=${unitCode}`, { state: { interest: unitLabel } });
+  };
+
+  // Map villas or building units if they exist in inventory
+  let inventoryBuilding = null;
+  if (activeZone && activeZone.inventoryId && assets?.inventory) {
+    if (activeZone.inventoryId === 'villas' && Array.isArray(assets.inventory.villas)) {
+      inventoryBuilding = {
+        name: 'Villas',
+        levels: 1,
+        units: assets.inventory.villas.map(v => ({
+          code: v.code,
+          level: 1,
+          type: 'villa',
+          areaInt: v.areaInt,
+          balcony: +(v.pool + v.jacuzzi).toFixed(2),
+          total: +(v.areaInt + v.pool + v.jacuzzi).toFixed(2),
+          price: v.price,
+          status: v.status,
+          note: v.note || `Includes Private Pool (${v.pool} m²) and Jacuzzi (${v.jacuzzi} m²)`
+        }))
+      };
+    } else if (Array.isArray(assets.inventory.buildings)) {
+      inventoryBuilding = assets.inventory.buildings.find(b => b.id === activeZone.inventoryId) || null;
+    }
+  }
 
   return (
     <div className="sitemap-page">
@@ -197,50 +226,70 @@ export default function SiteMap() {
               <h2 className="sitemap-card-title">{activeZone.icon} {activeZone.label}</h2>
               <p className="sitemap-card-type">{activeZone.type}</p>
 
-              <div className="sitemap-card-meta">
-                <div className="sitemap-meta-row">
-                  <span className="meta-key">Phase</span>
-                  <span className="meta-val">{activeZone.phase}</span>
-                </div>
-                {activeZone.beds && (
-                  <div className="sitemap-meta-row">
-                    <span className="meta-key">Units</span>
-                    <span className="meta-val">{activeZone.beds}</span>
+              {inventoryBuilding ? (
+                <>
+                  <div className="sitemap-card-meta" style={{ marginBottom: 12 }}>
+                    <div className="sitemap-meta-row">
+                      <span className="meta-key">Phase</span>
+                      <span className="meta-val">{activeZone.phase}</span>
+                    </div>
+                    {activeZone.area && (
+                      <div className="sitemap-meta-row">
+                        <span className="meta-key">Area Range</span>
+                        <span className="meta-val">{activeZone.area}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-                {activeZone.area && (
-                  <div className="sitemap-meta-row">
-                    <span className="meta-key">Area</span>
-                    <span className="meta-val">{activeZone.area}</span>
+                  <UnitGrid building={inventoryBuilding} onEnquire={handleUnitEnquire} />
+                </>
+              ) : (
+                <>
+                  <div className="sitemap-card-meta">
+                    <div className="sitemap-meta-row">
+                      <span className="meta-key">Phase</span>
+                      <span className="meta-val">{activeZone.phase}</span>
+                    </div>
+                    {activeZone.beds && (
+                      <div className="sitemap-meta-row">
+                        <span className="meta-key">Units</span>
+                        <span className="meta-val">{activeZone.beds}</span>
+                      </div>
+                    )}
+                    {activeZone.area && (
+                      <div className="sitemap-meta-row">
+                        <span className="meta-key">Area</span>
+                        <span className="meta-val">{activeZone.area}</span>
+                      </div>
+                    )}
+                    {activeZone.units && (
+                      <div className="sitemap-meta-row">
+                        <span className="meta-key">Total Units</span>
+                        <span className="meta-val">{activeZone.units}</span>
+                      </div>
+                    )}
+                    {activeZone.price && (
+                      <div className="sitemap-meta-row">
+                        <span className="meta-key">Starting Price</span>
+                        <span className="meta-val meta-price">{activeZone.price}</span>
+                      </div>
+                    )}
                   </div>
-                )}
-                {activeZone.units && (
-                  <div className="sitemap-meta-row">
-                    <span className="meta-key">Total Units</span>
-                    <span className="meta-val">{activeZone.units}</span>
-                  </div>
-                )}
-                {activeZone.price && (
-                  <div className="sitemap-meta-row">
-                    <span className="meta-key">Starting Price</span>
-                    <span className="meta-val meta-price">{activeZone.price}</span>
-                  </div>
-                )}
-              </div>
 
-              {activeZone.price && (
-                <button
-                  className="btn-primary sitemap-enquire-btn"
-                  onClick={handleEnquire}
-                >
-                  {t.properties?.enquire || 'Enquire Now'}
-                </button>
-              )}
+                  {activeZone.price && (
+                    <button
+                      className="btn-primary sitemap-enquire-btn"
+                      onClick={handleEnquire}
+                    >
+                      {t.properties?.enquire || 'Enquire Now'}
+                    </button>
+                  )}
 
-              {!activeZone.price && (
-                <p className="sitemap-amenity-note">
-                  This is a shared amenity available to all residents.
-                </p>
+                  {!activeZone.price && (
+                    <p className="sitemap-amenity-note">
+                      This is a shared amenity available to all residents.
+                    </p>
+                  )}
+                </>
               )}
 
               <p className="sitemap-card-nav-hint">← Click another zone to compare</p>
