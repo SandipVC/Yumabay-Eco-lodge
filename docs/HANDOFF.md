@@ -48,10 +48,11 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 | Phase 6: Contact unit picker | `phase-6-contact-unit-picker` | ✅ Committed |
 | Phase 7: PDF brochures + final verify | `phase-7-verify` | ✅ Committed |
 | Post-Phase 7: Properties tag bug fix | `bug-text` | ✅ Committed |
+| Post-Phase 7: Global preloader & lazy loading | `feature-loading` | ✅ Committed |
 
-**Current HEAD branch:** `bug-text`. PRs to firebase branch not opened yet.
+**Current HEAD branch:** `feature-loading`. PRs to firebase branch not opened yet.
 
-**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`, then `bug-text → firebase`. Or merge `bug-text` directly (it inherits all previous phases).
+**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`, then `bug-text → firebase`, then `feature-loading → firebase`. Or merge `feature-loading` directly (it inherits all previous phases).
 
 ---
 
@@ -110,6 +111,9 @@ Uploaded official PDFs (amenidades, yuma-bay-brochure, yuma-bay-prices) to Fireb
 
 ### Post-Phase 7 — Properties tag bug fix (commit `e2d3da9`)
 Restored rendering of properties card tags (e.g. `"Edificio A-B"`) by adding `<span className="prop-tag">{item.tag}</span>` in `Properties.jsx` and styling it with luxury gold/tracking conventions in `global.css`. Cleaned fallback assets database translation schema to align with Firestore.
+
+### Post-Phase 7 — Global preloader & lazy loading (commit `8d50667`)
+Created a luxury preloader component (`Preloader.jsx` / `Preloader.css`) in the frontend client. It displays a gold progress bar and branding during the initial asset loading and critical images preloading, using `sessionStorage` to only show on first page open. Added lazy loading (`loading="lazy"`) to all footer images, sitemap plan image, and tilted cards.
 
 ---
 
