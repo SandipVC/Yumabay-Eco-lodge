@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
+import InventoryStatusBadge from '../components/cms/InventoryStatusBadge.jsx';
 import { useLang } from '../context/LanguageContext.jsx';
 
 const safeSessionStorage = {
@@ -172,7 +173,12 @@ export default function Dashboard() {
 
         {/* CMS Panel */}
         {tab === 'cms'  && <CmsPanel token={token} />}
-        {tab === 'text' && <TextContentSection token={token} />}
+        {tab === 'text' && (
+          <>
+            <InventoryStatusBadge />
+            <TextContentSection token={token} />
+          </>
+        )}
 
         {/* Leads tab */}
         {tab === 'leads' && <>

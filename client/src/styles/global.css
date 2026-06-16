@@ -1097,6 +1097,30 @@ a  { color: inherit; }
 .cms-section-body { padding: 0; }
 .cms-content { background: rgba(255,255,255,.02); border: 1px solid rgba(255,255,255,.06); padding: 28px; }
 
+/* Phase 2 inventory status badge — sits above TextContentSection */
+.inventory-badge {
+  margin: 0 0 18px;
+  padding: 12px 16px;
+  background: rgba(201,168,76,.06);
+  border: 1px solid rgba(201,168,76,.2);
+  border-radius: 4px;
+  font-size: 13px; line-height: 1.5;
+  color: rgba(255,255,255,.75);
+  letter-spacing: .01em;
+}
+.inventory-badge strong { color: rgba(255,255,255,.95); font-weight: 600; }
+.inventory-badge code {
+  font-family: 'Courier New', monospace;
+  background: rgba(0,0,0,.3); padding: 1px 6px; border-radius: 3px;
+  color: rgba(201,168,76,.85);
+}
+.inventory-badge .inv-ok { color: #6fb47c; }
+.inventory-badge .inv-blocked { color: rgba(255,255,255,.5); }
+.inventory-badge--missing {
+  background: rgba(220,80,80,.08);
+  border-color: rgba(220,80,80,.3);
+}
+
 .cms-hint { font-size: 12px; color: rgba(255,255,255,.3); margin-bottom: 20px; font-style: italic; }
 .cms-error { font-size: 12px; color: #e07a5f; background: rgba(224,122,95,.1); padding: 10px 14px; margin-bottom: 16px; border-left: 3px solid #e07a5f; }
 
