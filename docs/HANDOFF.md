@@ -47,10 +47,11 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 | Phase 5: CMS inventory editor | `phase-5-cms-inventory` | ✅ Committed |
 | Phase 6: Contact unit picker | `phase-6-contact-unit-picker` | ✅ Committed |
 | Phase 7: PDF brochures + final verify | `phase-7-verify` | ✅ Committed |
+| Post-Phase 7: Properties tag bug fix | `bug-text` | ✅ Committed |
 
-**Current HEAD branch:** `phase-7-verify`. PRs to firebase branch not opened yet.
+**Current HEAD branch:** `bug-text`. PRs to firebase branch not opened yet.
 
-**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`. Or merge Phase 7 directly (it inherits all previous phases).
+**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`, then `phase-4 → firebase`, then `phase-5 → firebase`, then `phase-6 → firebase`, then `phase-7 → firebase`, then `bug-text → firebase`. Or merge `bug-text` directly (it inherits all previous phases).
 
 ---
 
@@ -106,6 +107,9 @@ Added a unit-enquiry dropdown to the contact form, populated dynamically from th
 
 ### Phase 7 — PDF brochures + final verify (commit `52da8b1`)
 Uploaded official PDFs (amenidades, yuma-bay-brochure, yuma-bay-prices) to Firebase Storage using a helper upload script. Added "Download Project Brochure" and "Download Amenities Guide" links on both `/sitemap` and `/contact` pages. Completed final translation sweeps for EN/ES default strings. Ran client build successfully under 500 kB budget.
+
+### Post-Phase 7 — Properties tag bug fix (commit `e2d3da9`)
+Restored rendering of properties card tags (e.g. `"Edificio A-B"`) by adding `<span className="prop-tag">{item.tag}</span>` in `Properties.jsx` and styling it with luxury gold/tracking conventions in `global.css`. Cleaned fallback assets database translation schema to align with Firestore.
 
 ---
 
