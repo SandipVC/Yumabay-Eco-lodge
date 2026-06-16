@@ -1,37 +1,171 @@
 {
   "hero": {
     "video": null,
-    "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2F1781515907879_wallpaper_aerial-photography-of-mountains-Dd_7xDCuuUo.jpg?alt=media"
+    "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2Fhero-dusk.jpg?alt=media"
   },
   "about": {
-    "main": null,
-    "accent": null
+    "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FWhatsApp_Image_2026-04-30_at_14.12.35.jpeg?alt=media",
+    "accent": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FLOCATION_-_GRUND.jpg?alt=media"
   },
   "properties": [
-    null,
-    null,
-    null,
-    null,
-    null
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_1_-_Photo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_2_-_Photo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_3_-_Photo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_4_-_Photo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2FLOCATION_-_GRUND_3.jpg?alt=media"
   ],
-  "propertyPrices": [
-    "$383,230",
-    "$60,332",
-    "$93,798",
-    "$230,014",
-    ""
+  "gallery": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_1.png?alt=media",
+      "label": "Yuma Bay Overview",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_3.png?alt=media",
+      "label": "Aerial View",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_7.png?alt=media",
+      "label": "Villa Exterior",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_9.png?alt=media",
+      "label": "Beach Club",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_11.png?alt=media",
+      "label": "Pool Area",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_13.png?alt=media",
+      "label": "Garden Terrace",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND.jpg?alt=media",
+      "label": "Boca de Yuma Coast",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_3.jpg?alt=media",
+      "label": "Location View",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_-_2.jpg?alt=media",
+      "label": "Bahia de Yuma",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_4.jpg?alt=media",
+      "label": "Eastern Coast",
+      "cat": "Exterior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-01.png?alt=media",
+      "label": "Living Room",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-02.png?alt=media",
+      "label": "Master Bedroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-03.png?alt=media",
+      "label": "Kitchen",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-04.png?alt=media",
+      "label": "Bathroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-05.png?alt=media",
+      "label": "Terrace View",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-06.png?alt=media",
+      "label": "Dining Area",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-07.png?alt=media",
+      "label": "Second Bedroom",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-08.png?alt=media",
+      "label": "Study",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-09.png?alt=media",
+      "label": "Jacuzzi",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-10.png?alt=media",
+      "label": "Corridor",
+      "cat": "Interior"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media",
+      "label": "Club Lounge",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_2.jpg?alt=media",
+      "label": "Lounge Bar",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_3.jpg?alt=media",
+      "label": "Lounge Terrace",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_4.jpg?alt=media",
+      "label": "Pool Deck",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_5.jpg?alt=media",
+      "label": "Beach Club View",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_6.jpg?alt=media",
+      "label": "Club Interior",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_15.png?alt=media",
+      "label": "Swimming Pool",
+      "cat": "Amenities"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_17.png?alt=media",
+      "label": "Gym",
+      "cat": "Amenities"
+    }
   ],
-  "gallery": [],
   "lounge": [
-    null,
-    null,
-    null,
-    null
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Flounge%2FYUMA_BAY_CLUB_LOUNGE_7.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Flounge%2FYUMA_BAY_CLUB_LOUNGE_8.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Flounge%2FYUMA_BAY_CLUB_LOUNGE_9.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Flounge%2FYUMA_BAY_CLUB_LOUNGE_10.jpg?alt=media"
   ],
   "sitemap": {
-    "planImage": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media",
-    "masterPdf": null,
-    "villasPdf": null
+    "planImage": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media",
+    "masterPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FMASTER_PLAN_YUMA_BAY.pdf?alt=media",
+    "villasPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media"
   },
   "sitemapZones": [
     {
@@ -48,7 +182,8 @@
       "x": 52,
       "y": 280,
       "w": 120,
-      "h": 88
+      "h": 88,
+      "inventoryId": "villas"
     },
     {
       "id": "building-a",
@@ -64,7 +199,8 @@
       "x": 200,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-ab"
     },
     {
       "id": "building-b",
@@ -80,7 +216,8 @@
       "x": 304,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-ab"
     },
     {
       "id": "building-c",
@@ -96,7 +233,8 @@
       "x": 408,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-c"
     },
     {
       "id": "building-d",
@@ -112,7 +250,8 @@
       "x": 512,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-d"
     },
     {
       "id": "building-e",
@@ -128,7 +267,8 @@
       "x": 616,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-e"
     },
     {
       "id": "bungalows",
@@ -144,7 +284,8 @@
       "x": 196,
       "y": 290,
       "w": 200,
-      "h": 78
+      "h": 78,
+      "inventoryId": "bungalows"
     },
     {
       "id": "eco-residences",
@@ -601,6 +742,1136 @@
           "btn": "Acceder al Panel"
         }
       }
+    }
+  },
+  "inventory": {
+    "schemaVersion": 1,
+    "updatedAt": "2026-04-07",
+    "currency": "USD",
+    "source": "260407 LISTADO DE PRECIOS YUMA BAY ACTUALIZADA.pdf",
+    "buildings": [
+      {
+        "id": "edificio-ab",
+        "name": "Edificio A-B",
+        "phase": 1,
+        "levels": 4,
+        "unitsPerLevel": 12,
+        "expectedTotal": 3936802,
+        "units": [
+          {
+            "code": "AB101",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB102",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 81.8,
+            "balcony": 11.23,
+            "total": 93.03,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB103",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 27.9,
+            "balcony": 5.34,
+            "total": 33.24,
+            "price": 60332,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB104",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 27.9,
+            "balcony": 5.34,
+            "total": 33.24,
+            "price": 60332,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB105",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 81.8,
+            "balcony": 11.23,
+            "total": 93.03,
+            "price": 167954,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB106",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB107",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 28.53,
+            "balcony": 6.48,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB108",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 54,
+            "balcony": 7.43,
+            "total": 61.43,
+            "price": 123360,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB109",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 53.9,
+            "balcony": 12.82,
+            "total": 66.72,
+            "price": 133940,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB110",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 53.9,
+            "balcony": 12.82,
+            "total": 66.72,
+            "price": 133940,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB111",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 54,
+            "balcony": 7.43,
+            "total": 61.43,
+            "price": 123360,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB112",
+            "type": "suite",
+            "level": 1,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB201",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB202",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 54.1,
+            "balcony": 5.76,
+            "total": 59.86,
+            "price": 108248,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB203",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 55.6,
+            "balcony": 10.65,
+            "total": 66.25,
+            "price": 119750,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB204",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 55.6,
+            "balcony": 10.65,
+            "total": 66.25,
+            "price": 119750,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB205",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 54.1,
+            "balcony": 5.76,
+            "total": 59.86,
+            "price": 108248,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB206",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB207",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB208",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 80.285,
+            "balcony": 14.755,
+            "total": 95.04,
+            "price": 190580,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB209",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5.03,
+            "total": 33.63,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB210",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5.03,
+            "total": 33.63,
+            "price": 67760,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB211",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 80.29,
+            "balcony": 14.76,
+            "total": 95.04,
+            "price": 190580,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB212",
+            "type": "suite",
+            "level": 2,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB301",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": 64340,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB302",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 81.8,
+            "balcony": 11.23,
+            "total": 93.03,
+            "price": 177257,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB303",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 27.6,
+            "balcony": 5.64,
+            "total": 33.24,
+            "price": 63656,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB304",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 27.6,
+            "balcony": 5.64,
+            "total": 33.24,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB305",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 81.8,
+            "balcony": 11.23,
+            "total": 93.03,
+            "price": 177257,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB306",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": 64340,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB307",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB308",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 54,
+            "balcony": 7.43,
+            "total": 61.43,
+            "price": 123360,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB309",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 53.9,
+            "balcony": 12.82,
+            "total": 66.72,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB310",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 53.9,
+            "balcony": 13.82,
+            "total": 67.72,
+            "price": 135940,
+            "status": "available",
+            "note": "13.82 balcony differs from AB309 — verify with source"
+          },
+          {
+            "code": "AB311",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 54,
+            "balcony": 7.43,
+            "total": 61.43,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB312",
+            "type": "suite",
+            "level": 3,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB401",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": 64340,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB402",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 54.1,
+            "balcony": 5.76,
+            "total": 59.86,
+            "price": 114234,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB403",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 55.6,
+            "balcony": 10.65,
+            "total": 66.25,
+            "price": 126375,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB404",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 55.6,
+            "balcony": 10.65,
+            "total": 66.25,
+            "price": 126375,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB405",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 54.1,
+            "balcony": 5.76,
+            "total": 59.86,
+            "price": 114234,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB406",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5,
+            "total": 33.6,
+            "price": 64340,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB407",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB408",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 80.4,
+            "balcony": 11.08,
+            "total": 91.48,
+            "price": 183460,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB409",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5.03,
+            "total": 33.63,
+            "price": 67760,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB410",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 5.03,
+            "total": 33.63,
+            "price": 67760,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "AB411",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 80.4,
+            "balcony": 11.08,
+            "total": 91.48,
+            "price": null,
+            "status": "blocked",
+            "note": "BLOQUEADO in source PDF"
+          },
+          {
+            "code": "AB412",
+            "type": "suite",
+            "level": 4,
+            "beds": 0,
+            "areaInt": 28.6,
+            "balcony": 6.41,
+            "total": 35.01,
+            "price": 70520,
+            "status": "available",
+            "note": null
+          }
+        ]
+      },
+      {
+        "id": "edificio-c",
+        "name": "Apartamento C",
+        "phase": 1,
+        "levels": 4,
+        "unitsPerLevel": 4,
+        "expectedTotal": 2310368,
+        "units": [
+          {
+            "code": "C101",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 76.4,
+            "balcony": 17.26,
+            "total": 93.66,
+            "price": 168588,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C102",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 81.7,
+            "balcony": 13.23,
+            "total": 94.93,
+            "price": 170874,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C103",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 42.2,
+            "balcony": 17.03,
+            "total": 59.23,
+            "price": 106614,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C104",
+            "type": "1br",
+            "level": 1,
+            "beds": 1,
+            "areaInt": 40.6,
+            "balcony": 11.51,
+            "total": 52.11,
+            "price": 93798,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C201",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 76.4,
+            "balcony": 15.56,
+            "total": 91.96,
+            "price": 183920,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C202",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 81.7,
+            "balcony": 14.93,
+            "total": 96.63,
+            "price": 193260,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C203",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 42.2,
+            "balcony": 17.03,
+            "total": 59.23,
+            "price": 106614,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C204",
+            "type": "1br",
+            "level": 2,
+            "beds": 1,
+            "areaInt": 40.6,
+            "balcony": 11.51,
+            "total": 52.11,
+            "price": 93798,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C301",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 76.4,
+            "balcony": 17.26,
+            "total": 93.66,
+            "price": 196686,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C302",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 81.7,
+            "balcony": 13.23,
+            "total": 94.93,
+            "price": 199353,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C303",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 42.2,
+            "balcony": 17.03,
+            "total": 59.23,
+            "price": 106614,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C304",
+            "type": "1br",
+            "level": 3,
+            "beds": 1,
+            "areaInt": 40.6,
+            "balcony": 11.51,
+            "total": 52.11,
+            "price": 93798,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C401",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 76.4,
+            "balcony": 15.56,
+            "total": 91.96,
+            "price": 193116,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C402",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 81.7,
+            "balcony": 14.93,
+            "total": 96.63,
+            "price": 202923,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C403",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 42.2,
+            "balcony": 17.03,
+            "total": 59.23,
+            "price": 106614,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "C404",
+            "type": "1br",
+            "level": 4,
+            "beds": 1,
+            "areaInt": 40.6,
+            "balcony": 11.51,
+            "total": 52.11,
+            "price": 93798,
+            "status": "available",
+            "note": null
+          }
+        ]
+      },
+      {
+        "id": "edificio-d",
+        "name": "Apartamento D",
+        "phase": 1,
+        "levels": 4,
+        "unitsPerLevel": 2,
+        "expectedTotal": 1840112,
+        "units": [
+          {
+            "code": "D101",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D102",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D201",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D202",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D301",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D302",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D401",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "D402",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          }
+        ]
+      },
+      {
+        "id": "edificio-e",
+        "name": "Apartamento E",
+        "phase": 1,
+        "levels": 4,
+        "unitsPerLevel": 2,
+        "expectedTotal": 1851612.7,
+        "units": [
+          {
+            "code": "E101",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E102",
+            "type": "2br",
+            "level": 1,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E201",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E202",
+            "type": "2br",
+            "level": 2,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 241514.7,
+            "status": "available",
+            "note": "Premium-pricing outlier in source PDF"
+          },
+          {
+            "code": "E301",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E302",
+            "type": "2br",
+            "level": 3,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E401",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          },
+          {
+            "code": "E402",
+            "type": "2br",
+            "level": 4,
+            "beds": 2,
+            "areaInt": 93.62,
+            "balcony": 27.44,
+            "total": 121.06,
+            "price": 230014,
+            "status": "available",
+            "note": null
+          }
+        ]
+      }
+    ],
+    "villas": [
+      {
+        "code": "VILLA-1",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 201.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 383230,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-2",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-3",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-4",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-5",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-6",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-7",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 207.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 394630,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": null
+      },
+      {
+        "code": "VILLA-8",
+        "phase": 1,
+        "beds": 3,
+        "areaInt": 201.7,
+        "pool": 27.06,
+        "jacuzzi": 9.88,
+        "price": 383230,
+        "poolJacuzziAddon": 24011,
+        "status": "available",
+        "note": "Inherits VILLA-1 spec/price per Phase 0 decision; pending owner confirmation that an 8th villa exists in inventory"
+      }
+    ],
+    "phase2": {
+      "bungalows": {
+        "count": 5,
+        "beds": 1,
+        "rooms": [
+          "sala-comedor",
+          "master bedroom with bath",
+          "walking closet"
+        ],
+        "status": "phase-2-coming-soon",
+        "prices": null,
+        "note": "Source: RESUMEN. Per-unit pricing not yet released."
+      },
+      "facilities": [
+        "lobby + security gatehouse",
+        "service area",
+        "bar",
+        "water features (espejos de agua)",
+        "pool bar",
+        "adult + kids pools",
+        "play area",
+        "covered terrace (10 people capacity)"
+      ]
     }
   }
 }

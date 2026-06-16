@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
+import InventoryStatusBadge from '../components/cms/InventoryStatusBadge.jsx';
+import InventorySection from '../components/cms/InventorySection.jsx';
+import { useAssets } from '../hooks/useAssets.js';
 import { useLang } from '../context/LanguageContext.jsx';
 
 const safeSessionStorage = {
@@ -81,6 +84,7 @@ function LoginForm({ onLogin }) {
 export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
+  const { assets, refresh } = useAssets();
   const [token, setToken]     = useState(safeSessionStorage.getItem('yb_admin') || '');
   const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
@@ -168,11 +172,23 @@ export default function Dashboard() {
           >
             {d.tabText}
           </button>
+          <button
+            className={`dash-tab-btn${tab === 'inventory' ? ' active' : ''}`}
+            onClick={() => setTab('inventory')}
+          >
+            {d.tabInventory}
+          </button>
         </div>
 
         {/* CMS Panel */}
         {tab === 'cms'  && <CmsPanel token={token} />}
-        {tab === 'text' && <TextContentSection token={token} />}
+        {tab === 'text' && (
+          <>
+            <InventoryStatusBadge />
+            <TextContentSection token={token} />
+          </>
+        )}
+        {tab === 'inventory' && <InventorySection assets={assets} token={token} refresh={refresh} />}
 
         {/* Leads tab */}
         {tab === 'leads' && <>
@@ -207,7 +223,7 @@ export default function Dashboard() {
               <thead>
                 <tr>
                   <th>{d.thDate}</th><th>{d.thName}</th><th>{d.thEmail}</th><th>{d.thPhone}</th>
-                  <th>{d.thInterest}</th><th>{d.thLang}</th><th>{d.thMessage}</th><th>{d.thStatus}</th><th>{d.thActions}</th>
+                  <th>{d.thInterest}</th><th>{d.thUnit}</th><th>{d.thLang}</th><th>{d.thMessage}</th><th>{d.thStatus}</th><th>{d.thActions}</th>
                 </tr>
               </thead>
               <tbody>
@@ -225,6 +241,7 @@ export default function Dashboard() {
                     </td>
                     <td>{lead.phone || '—'}</td>
                     <td>{lead.propertyInterest || '—'}</td>
+                    <td style={{ fontWeight: '600', color: 'var(--gold)' }}>{lead.unitCode || '—'}</td>
                     <td style={{ textTransform: 'uppercase', fontSize: 10 }}>{lead.language}</td>
                     <td style={{ maxWidth: 240, fontSize: 12, lineHeight: 1.5 }}>
                       {lead.message}
