@@ -273,6 +273,19 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
                 <input type="text" placeholder="24" value={selected.units} onChange={e => editField('units', e.target.value)} />
               </label>
 
+              <label className="zone-field">
+                <span>Inventory Mapping (dynamic drill-down)</span>
+                <select value={selected.inventoryId || ''} onChange={e => editField('inventoryId', e.target.value)}>
+                  <option value="">(None / Static card)</option>
+                  <option value="villas">Villas (VILLA-1 to VILLA-8)</option>
+                  <option value="edificio-ab">Edificio A-B (48 units)</option>
+                  <option value="edificio-c">Apartamento C (16 units)</option>
+                  <option value="edificio-d">Apartamento D (8 units)</option>
+                  <option value="edificio-e">Apartamento E (8 units)</option>
+                  <option value="bungalows">Bungalows (5 units)</option>
+                </select>
+              </label>
+
               {/* Fine-tune geometry numerically */}
               <div className="zone-geom">
                 <span className="zone-geom-label">Position & size</span>

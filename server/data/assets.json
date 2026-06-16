@@ -41,7 +41,8 @@
       "x": 52,
       "y": 280,
       "w": 120,
-      "h": 88
+      "h": 88,
+      "inventoryId": "villas"
     },
     {
       "id": "building-a",
@@ -57,7 +58,8 @@
       "x": 200,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-ab"
     },
     {
       "id": "building-b",
@@ -73,7 +75,8 @@
       "x": 304,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-ab"
     },
     {
       "id": "building-c",
@@ -89,7 +92,8 @@
       "x": 408,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-c"
     },
     {
       "id": "building-d",
@@ -105,7 +109,8 @@
       "x": 512,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-d"
     },
     {
       "id": "building-e",
@@ -121,7 +126,8 @@
       "x": 616,
       "y": 160,
       "w": 90,
-      "h": 110
+      "h": 110,
+      "inventoryId": "edificio-e"
     },
     {
       "id": "bungalows",
@@ -137,7 +143,8 @@
       "x": 196,
       "y": 290,
       "w": 200,
-      "h": 78
+      "h": 78,
+      "inventoryId": "bungalows"
     },
     {
       "id": "eco-residences",
