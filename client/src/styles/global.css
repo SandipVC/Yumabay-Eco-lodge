@@ -453,6 +453,16 @@ a  { color: inherit; }
   display: flex; flex-direction: column; gap: 6px;
   align-items: inherit; width: 100%;
 }
+.prop-tag {
+  font-family: 'Aptos Narrow', 'Jost', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 2px;
+}
 .prop-name {
   font-family: 'Merzalina', 'Cormorant Garamond', serif;
   font-size: clamp(32px, 2.2vw, 42px); font-weight: 400; line-height: 1.2;
