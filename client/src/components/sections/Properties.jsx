@@ -20,11 +20,33 @@ export default function Properties() {
   const images = (assets?.properties?.length ? assets.properties : PROPERTY_DEFAULTS)
     .map((src, i) => src || PROPERTY_DEFAULTS[i] || PROPERTY_DEFAULTS[0]);
 
-  // Price override from CMS: stored as the amount only; prefix is localized.
-  const priceOverrides = assets?.propertyPrices || [];
-  const priceFor = (i, fallback) => {
-    const amt = priceOverrides[i];
-    return amt ? `${p.priceFrom} ${amt}` : fallback;
+  const getDynamicPrice = (i, fallback) => {
+    if (!assets?.inventory) return fallback;
+    const inv = assets.inventory;
+    let units = [];
+    if (i === 0) {
+      units = inv.villas || [];
+    } else if (i === 1) {
+      const b = inv.buildings?.find(b => b.id === 'edificio-ab');
+      units = b?.units || [];
+    } else if (i === 2) {
+      const b = inv.buildings?.find(b => b.id === 'edificio-c');
+      units = b?.units || [];
+    } else if (i === 3) {
+      const bD = inv.buildings?.find(b => b.id === 'edificio-d');
+      const bE = inv.buildings?.find(b => b.id === 'edificio-e');
+      units = [...(bD?.units || []), ...(bE?.units || [])];
+    } else {
+      return fallback;
+    }
+
+    if (!units.length) return fallback;
+    const availableUnits = units.filter(u => u.status === 'available' && typeof u.price === 'number');
+    if (!availableUnits.length) {
+      return t.sitemap?.soldOut || 'Sold Out';
+    }
+    const min = Math.min(...availableUnits.map(u => u.price));
+    return `${p.priceFrom} $${min.toLocaleString()}`;
   };
 
   // Figma renders the heading as one flowing line.
@@ -63,7 +85,7 @@ export default function Properties() {
                 <h3 className="prop-name">{item.name}</h3>
                 <p className="prop-area">{item.area}</p>
               </div>
-              <p className="prop-price">{priceFor(i, item.price)}</p>
+              <p className="prop-price">{getDynamicPrice(i, item.price)}</p>
               <div className="prop-feats">
                 {item.feats.map((f, j) => (
                   <span key={j} className="prop-feat">{f}</span>

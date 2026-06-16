@@ -252,21 +252,10 @@ function AboutSection({ assets, token, refresh }) {
   );
 }
 
-/** Properties section — 5 indexed image slots + editable prices */
+/** Properties section — 5 indexed image slots with read-only prices */
 function PropertiesSection({ assets, token, refresh }) {
   const [busy,   setBusy]   = useState({});
   const [err,    setErr]    = useState(null);
-  const [prices, setPrices] = useState(() => Array(PROPERTY_NAMES.length).fill(''));
-  const [dirty,  setDirty]  = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  // Sync prices from the server whenever assets reload — but never clobber unsaved edits.
-  const pricesKey = JSON.stringify(assets?.propertyPrices || []);
-  useEffect(() => {
-    if (dirty) return;
-    setPrices(Array.from({ length: PROPERTY_NAMES.length },
-      (_, i) => assets?.propertyPrices?.[i] || ''));
-  }, [pricesKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   async function handleUpload(idx, file) {
     setBusy(b => ({ ...b, [idx]: true })); setErr(null);
@@ -287,33 +276,35 @@ function PropertiesSection({ assets, token, refresh }) {
     finally { setBusy(b => ({ ...b, [idx]: false })); }
   }
 
-  function setPrice(idx, val) {
-    setPrices(p => p.map((v, i) => i === idx ? val : v));
-    setDirty(true);
-  }
+  const getComputedPrice = (idx) => {
+    const inv = assets?.inventory;
+    if (!inv) return 'Loading...';
+    let units = [];
+    if (idx === 0) {
+      units = inv.villas || [];
+    } else if (idx === 1) {
+      units = inv.buildings?.find(b => b.id === 'edificio-ab')?.units || [];
+    } else if (idx === 2) {
+      units = inv.buildings?.find(b => b.id === 'edificio-c')?.units || [];
+    } else if (idx === 3) {
+      const bD = inv.buildings?.find(b => b.id === 'edificio-d')?.units || [];
+      const bE = inv.buildings?.find(b => b.id === 'edificio-e')?.units || [];
+      units = [...bD, ...bE];
+    } else {
+      return 'Coming Soon (Phase 2)';
+    }
 
-  async function savePrices() {
-    setSaving(true); setErr(null);
-    try {
-      await patchSection({ section: 'propertyPrices', data: prices.map(s => s.trim()), token });
-      setDirty(false);
-      invalidateAssetsCache(); refresh();
-    } catch (e) { setErr(e.message); }
-    finally { setSaving(false); }
-  }
-
-  function resetPrices() {
-    setPrices(Array.from({ length: PROPERTY_NAMES.length },
-      (_, i) => assets?.propertyPrices?.[i] || ''));
-    setDirty(false);
-  }
+    const available = units.filter(u => u.status === 'available' && typeof u.price === 'number');
+    if (!available.length) return 'Sold Out';
+    const min = Math.min(...available.map(u => u.price));
+    return `From $${min.toLocaleString()}`;
+  };
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
       <p className="cms-hint">
-        Replace each property's photo and edit its starting price. Enter the amount only
-        (e.g. <code>$280,000</code>) — the “From / Desde” prefix is added automatically per language.
+        Replace each property's photo. Starting prices are calculated dynamically from the active unit inventory.
       </p>
 
       <div className="cms-slot-grid cms-slot-grid-5">
@@ -332,33 +323,16 @@ function PropertiesSection({ assets, token, refresh }) {
                 onChange={e => { if (e.target.files[0]) handleUpload(idx, e.target.files[0]); }} />
             </label>
 
-            {/* Price field */}
-            <div className="cms-price-field">
-              <span className="cms-price-prefix">Price</span>
-              <input
-                className="cms-price-input"
-                type="text"
-                value={prices[idx]}
-                placeholder="$0,000"
-                onChange={e => setPrice(idx, e.target.value)}
-              />
+            {/* Computed Price field (read-only) */}
+            <div className="cms-price-field cms-price-field--readonly">
+              <span className="cms-price-prefix">Public Price</span>
+              <span className="cms-price-value" style={{ fontWeight: '500', color: '#C9A84C' }}>
+                {getComputedPrice(idx)}
+              </span>
             </div>
           </div>
         ))}
       </div>
-
-      {/* Save bar — appears when prices are edited */}
-      {dirty && (
-        <div className="cms-save-bar">
-          <span className="cms-save-note">Unsaved price changes</span>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="cms-btn-ghost" onClick={resetPrices} disabled={saving}>Reset</button>
-            <button className="cms-btn-gold" onClick={savePrices} disabled={saving}>
-              {saving ? 'Saving…' : 'Save Prices'}
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
