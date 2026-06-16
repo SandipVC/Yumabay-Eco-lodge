@@ -223,7 +223,7 @@ export default function Dashboard() {
               <thead>
                 <tr>
                   <th>{d.thDate}</th><th>{d.thName}</th><th>{d.thEmail}</th><th>{d.thPhone}</th>
-                  <th>{d.thInterest}</th><th>{d.thLang}</th><th>{d.thMessage}</th><th>{d.thStatus}</th><th>{d.thActions}</th>
+                  <th>{d.thInterest}</th><th>{d.thUnit}</th><th>{d.thLang}</th><th>{d.thMessage}</th><th>{d.thStatus}</th><th>{d.thActions}</th>
                 </tr>
               </thead>
               <tbody>
@@ -241,6 +241,7 @@ export default function Dashboard() {
                     </td>
                     <td>{lead.phone || '—'}</td>
                     <td>{lead.propertyInterest || '—'}</td>
+                    <td style={{ fontWeight: '600', color: 'var(--gold)' }}>{lead.unitCode || '—'}</td>
                     <td style={{ textTransform: 'uppercase', fontSize: 10 }}>{lead.language}</td>
                     <td style={{ maxWidth: 240, fontSize: 12, lineHeight: 1.5 }}>
                       {lead.message}
