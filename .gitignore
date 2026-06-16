@@ -41,3 +41,9 @@ req.txt
 *.7z
 
 server/service-account.json
+
+ignoreGitFolder/*
+tmp_extract/
+docs/INTEGRATION_NOTES.md
+upload/
+server/scripts/

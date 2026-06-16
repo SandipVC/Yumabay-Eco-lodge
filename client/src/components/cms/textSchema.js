@@ -214,6 +214,25 @@ export const TEXT_SECTIONS = [
     ],
   },
   {
+    id: 'project',
+    label: 'Project Settings (Phase 0 foundation)',
+    fields: [
+      { key: 'owner', label: 'Owner / legal entity', kind: 'text' },
+      { key: 'developer', label: 'Project director (Ing. ...)', kind: 'text' },
+      { key: 'phase1Area', label: 'Phase 1 land area', kind: 'text' },
+      { key: 'phase2Area', label: 'Phase 2 land area', kind: 'text' },
+      { key: 'totalConstruction', label: 'Total construction area', kind: 'text' },
+      { key: 'pricingDate', label: 'Pricing valid as-of date', kind: 'text' },
+      { key: 'pricingDisplayMode', label: 'Pricing display mode (starting-at | per-unit)', kind: 'text' },
+      { key: 'pricingValidPrefix', label: 'Pricing-valid prefix (e.g. "Pricing valid as of")', kind: 'text' },
+      { key: 'pricingNote', label: 'Pricing disclaimer note (footer / sitemap)', kind: 'textarea' },
+      { key: 'villaCount', label: 'Total villa count', kind: 'text' },
+      { key: 'villaNote', label: 'Villa count note / discrepancy info', kind: 'textarea' },
+      { key: 'ownerLabel', label: 'Owner field label (e.g. "Developer")', kind: 'text' },
+      { key: 'developerLabel', label: 'Developer field label (e.g. "Project Director")', kind: 'text' },
+    ],
+  },
+  {
     id: 'dashboard',
     label: 'Dashboard (admin UI strings)',
     fields: [
