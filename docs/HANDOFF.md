@@ -2,7 +2,7 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge
 **Local path:** `C:\Yumabay-Eco-lodge`
-**Last touched:** 2026-06-16 by Claude Opus 4.7 (Phase 1 commit `951f1bd`)
+**Last touched:** 2026-06-16 by Antigravity (Phase 3 commit `e30d446`)
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -43,16 +43,16 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 |---|---|---|
 | Phase 0: Foundation + decisions | `phase-0-foundation` | ✅ Pushed |
 | Phase 1: Text fixes | `phase-1-text-fixes` | ✅ Pushed |
-| Phase 2: Inventory data model | — | ⏳ Not started |
-| Phase 3: Properties refactor | — | ⏳ Not started |
+| Phase 2: Inventory data model | `phase-2-inventory` | ✅ Pushed |
+| Phase 3: Properties refactor | `phase-3-properties-refactor` | ✅ Committed |
 | Phase 4: Sitemap interactive UI | — | ⏳ Not started |
 | Phase 5: CMS inventory editor | — | ⏳ Not started |
 | Phase 6: Contact unit picker | — | ⏳ Not started |
 | Phase 7: PDF brochures + final verify | — | ⏳ Not started |
 
-**Current HEAD branch:** `phase-1-text-fixes`. PRs to firebase branch not opened yet.
+**Current HEAD branch:** `phase-3-properties-refactor`. PRs to firebase branch not opened yet.
 
-**Both phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`. Or merge Phase 1 directly (it inherits Phase 0).
+**All phase branches are children of `firebase` branch (production target).** Merge order: `phase-0 → firebase`, then `phase-1 → firebase`, then `phase-2 → firebase`, then `phase-3 → firebase`. Or merge Phase 3 directly (it inherits all previous phases).
 
 ---
 
@@ -91,47 +91,15 @@ Plus: **About fact strip** below body — `PHASE 1 · 11,361.64 M² · BUILT · 
 
 **Backend cleanup done:** Stripped stale Firestore CMS overrides for every Phase 1 field (else old values would mask new defaults). Script lives at `server/scripts/strip-stale-overrides.mjs` (gitignored — keep locally).
 
+### Phase 2 — Inventory data model (commit `6dd8b3d`)
+Transcribed all 88 unit listings (villas + buildings + bungalows) from the PRECIOS PDF to `assets.json` and synchronized with Firestore. Added static validators and sync scripts. Integrated read-only inventory status badge in the admin Dashboard.
+
+### Phase 3 — Properties section refactor (commit `e30d446`)
+Stripped the manually overridden `propertyPrices` array from Firestore and `assets.json` using `strip-property-prices.mjs`. Updated the public landing page to calculate card starting prices dynamically as the minimum of the available units. Replaced the CMS properties pricing inputs with read-only indicators showing calculated prices.
+
 ---
 
 ## 4. Remaining work
-
-### Phase 2 — Inventory data model (NEXT — 4h)
-
-**Goal:** Transcribe PRECIOS PDF (~88 units) into structured `inventory` block in `assets.json` + Firestore.
-
-**Shape:**
-```json
-"inventory": {
-  "updatedAt": "2026-04-07",
-  "currency": "USD",
-  "buildings": [
-    {
-      "id": "edificio-ab",
-      "name": "Edificio A-B",
-      "phase": 1,
-      "levels": 4,
-      "units": [
-        { "code": "AB101", "type": "suite", "level": 1, "areaInt": 28.6, "balcony": 5, "total": 33.6, "price": null, "status": "blocked" },
-        { "code": "AB103", "type": "suite", "level": 1, "areaInt": 27.9, "balcony": 5.34, "total": 33.24, "price": 60332, "status": "available" }
-      ]
-    }
-  ],
-  "villas": [...],
-  "phase2": { "bungalows": { ... } }
-}
-```
-
-**Per-building breakdown:**
-- Edificio A-B: 48 units (4 floors × 12). Suite + 1BR + 2BR mix. Total $3,936,802.
-- Apartamento C: 16 units. 1BR + 2BR. Total $2,310,368.
-- Apartamento D: 8 units. Uniform 121.06 m² @ $230,014. Total $1,840,112.
-- Apartamento E: 8 units. Same shape as D, one outlier (E202 = $241,514.70). Total $1,851,612.70.
-- Villas: 8 (VILLA #1 = 201.7 m² $383,230; VILLA #2–#7 = 207.7 m² $394,630; VILLA #8 = same as #1 per Phase 0 decision). Pool/jacuzzi addon = $24,011 each.
-
-**Action:** transcribe manually (or build CSV parser) from `ignoreGitFolder/PRECIOS/260407 LISTADO DE PRECIOS YUMA BAY ACTUALIZADA.pdf`. Validate per-building totals match (Phase 2 will hit subtle mistakes otherwise).
-
-### Phase 3 — Properties section refactor (3h)
-Stop using hardcoded translation prices. Compute "From $X" dynamically from `inventory.buildings[].units[].price` (min of `available`). Drop `propertyPrices[]` array.
 
 ### Phase 4 — Sitemap interactive UI (1 day, biggest)
 - Click Edificio A-B zone → drill-down per-level tabs with 12-unit grid
@@ -265,81 +233,40 @@ Dashboard auth = `ADMIN_SECRET` env var on server, sent as `Bearer` token in `se
 
 ## 9. Next recommended task
 
-**Phase 2 — Inventory data model.** Blocks Phases 3–6.
+**Phase 4 — Sitemap interactive UI.**
 
-Why first:
-- Phase 1 stripped placeholder prices. Properties section now shows real "From $X" via the old `propertyPrices[]` array. That's a stop-gap. Phase 3 needs real inventory to compute prices from.
-- Sitemap (Phase 4) needs unit-level data to do drill-down.
-- Contact form (Phase 6) needs unit picker to populate from inventory.
-
-**Phase 2 scope = transcribe PRECIOS PDF into a structured `inventory` JSON block in `assets.json` + Firestore. Validate per-building totals. Add a small CMS read-only view (optional) confirming inventory loaded.**
-
-**Skip:** any UI changes. Phase 2 is pure data work.
+Why next:
+- Now that Phase 3 has successfully removed the hardcoded override prices and wired the frontend properties component to dynamically query `assets.inventory`, the public landing page prices are fully synchronized with the database.
+- Rebuilding the Sitemap page into an interactive UI is the next major step. It will allow visitors to drill down into buildings and view the unit availability matrix based on the coordinate and status structure.
 
 ---
 
 ## 10. Exact prompt to continue development
 
-Paste verbatim to next AI agent. It assumes git is at `phase-1-text-fixes` HEAD.
+Paste verbatim to next AI agent. It assumes git is at `phase-3-properties-refactor` HEAD.
 
 ```
 You are continuing work on the Yuma Bay Eco Lodge website (repo at C:\Yumabay-Eco-lodge,
 GitHub: SandipVC/Yumabay-Eco-lodge). Before touching code, READ docs/HANDOFF.md
 end-to-end — it is your full briefing.
 
-Phase 0 and Phase 1 are complete (commits 5ae1cf1 and 951f1bd respectively, on branches
-phase-0-foundation and phase-1-text-fixes). The current branch is phase-1-text-fixes
-which contains all Phase 0 + Phase 1 changes.
+Phases 0, 1, 2, and 3 are complete (the latest commit is on branch phase-3-properties-refactor).
+The current branch is phase-3-properties-refactor which contains all changes up to Phase 3.
 
-Your task is PHASE 2: Inventory Data Model.
+Your task is PHASE 4: Sitemap Interactive UI.
 
-1. Checkout a new branch off phase-1-text-fixes named `phase-2-inventory`.
-2. Read ignoreGitFolder/PRECIOS/260407 LISTADO DE PRECIOS YUMA BAY ACTUALIZADA.pdf
-   (use pdftotext or the Read tool — it's a 2-page price spreadsheet, ~88 units).
-3. Transcribe every unit into a new top-level `inventory` block inside
-   server/data/assets.json AND inside the Firestore document assets/global.
-   Schema (verify against docs/HANDOFF.md §4 Phase 2):
-     {
-       "inventory": {
-         "updatedAt": "2026-04-07",
-         "currency": "USD",
-         "buildings": [
-           { "id": "edificio-ab", "name": "Edificio A-B", "phase": 1, "levels": 4, "units": [...] },
-           { "id": "edificio-c",  ... },
-           { "id": "edificio-d",  ... },
-           { "id": "edificio-e",  ... }
-         ],
-         "villas": [...],
-         "phase2": { "bungalows": { "count": 5, "rooms": [...] } }
-       }
-     }
-4. Per Phase 0 decision: villa list contains 8 entries. VILLA #8 inherits VILLA #1
-   spec/price (areaInt 201.7, price 383230).
-5. Validate per-building totals match PDF (Edificio A-B = $3,936,802; C = $2,310,368;
-   D = $1,840,112; E = $1,851,612.70). Write a validator at
-   server/scripts/validate-inventory.mjs that fails if sums mismatch.
-6. Write a sync script server/scripts/sync-inventory.mjs that pushes the inventory
-   block to Firestore (uses the same firebase-admin pattern as
-   server/scripts/strip-stale-overrides.mjs).
-7. NO UI changes. NO new components. This phase is data-only.
-8. Add optional read-only CMS view: extend client/src/pages/Dashboard.jsx to show
-   "Inventory: 88 units loaded · last updated 2026-04-07" as a small status line in
-   the Text Content tab. Skip if too invasive.
-9. Build (cd client && npm run build) — main chunk must stay under 500 kB.
-10. Commit and push as phase-2-inventory. Use conventional-commit style starting with
-    "feat(phase-2):". Include co-author trailer:
-      Co-Authored-By: <your model name> <noreply@anthropic.com>
-11. Report deliverables, total unit count, and per-building totals back to the user.
+1. Checkout a new branch off phase-3-properties-refactor named `phase-4-sitemap-ui`.
+2. Rebuild the public SiteMap.jsx sitemap page:
+   - When a user clicks a building zone (e.g. Edificio A-B, Edificio C, etc.), open a detail panel with level tabs (1st level, 2nd level, etc.).
+   - Render a unit availability matrix (using a new UnitGrid component or similar) for the selected level.
+   - Use the status color codes (green = available, grey = blocked, red = sold/reserved).
+   - Add a call-to-action button when clicking an available unit ("Enquire about AB103") which redirects to the Contact page with the unit pre-selected via query params (?unit=AB103).
+3. Update zonesData.js and assets.json sitemapZones if needed to match the new buildings schema (Edificio A-B, Apartamento C, D, E, Villas, Bungalows).
+4. Verify the sitemap is fully responsive on mobile devices (collapsing the grid layout into a scrollable list view below 768px).
+5. Build (cd client && npm run build) to ensure bundle size remains under 500 kB.
+6. Commit and push.
 
-Rules:
-- Caveman mode may be active (terse responses, drop articles/filler). Code/commits stay normal.
-- Never commit ignoreGitFolder/, server/data/leads.json, server/service-account.json,
-  client/public/images/, or anything matched by .gitignore.
-- Don't push to main or firebase directly. Phase 2 PRs into firebase later.
-- If you hit ambiguity about a unit (missing price, unclear status), preserve the raw
-  PDF value as a comment in the JSON and flag it in your handoff back to the user.
-
-If the user redirects or clarifies, follow their guidance. Otherwise proceed end-to-end.
+If the user redirects or clarifies, follow their guidance. Otherwise proceed.
 ```
 
 ---
