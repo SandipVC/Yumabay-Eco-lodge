@@ -2,7 +2,7 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge
 **Local path:** `C:\Yumabay-Eco-lodge`
-**Last touched:** 2026-06-16 by Antigravity (Sitemap backdrop and inline enquiry integration)
+**Last touched:** 2026-06-17 by Antigravity (Logo replacement with logo 2.svg)
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -50,6 +50,7 @@ Active integration: **PDFs → Website** (3 official Spanish PDFs in `ignoreGitF
 | Post-Phase 7: Properties tag bug fix | `bug-text` | ✅ Committed |
 | Post-Phase 7: Global preloader & lazy loading | `feature-loading` | ✅ Committed |
 | Post-Phase 7: Sitemap backdrop & inline enquiry | `feature-sitemap` | ✅ Committed |
+| Post-Phase 7: Logo replacement | (current) | ✅ Replaced |
 
 **Current HEAD branch:** `feature-sitemap`. PRs to firebase branch not opened yet.
 
@@ -118,6 +119,9 @@ Created a luxury preloader component (`Preloader.jsx` / `Preloader.css`) in the 
 
 ### Post-Phase 7 — Sitemap backdrop & inline enquiry (branch `feature-sitemap`)
 Replaced the visual geometric SVG backdrop layers on `/sitemap` with the master plan layout blueprint image (`Yumabay_Layout.png`), which was uploaded to Firebase Storage. Updated sitemap zone boundaries to be transparent by default, displaying golden/white border highlights on hover and active states. Integrated an inline contact enquiry form directly inside the right-hand details sidebar on sitemap zone/unit selection, sending lead details directly to the `/api/contact` API.
+
+### Post-Phase 7 — Logo replacement (current)
+Replaced the website logo on Firebase Storage at `assets/figma/logo.svg` with the updated SVG design from `ignoreGitFolder/logo 2.svg` using the asset uploader script. Deleted the old logo file `ignoreGitFolder/logo 1.svg` to clean up deprecated resources.
 
 ---
 
