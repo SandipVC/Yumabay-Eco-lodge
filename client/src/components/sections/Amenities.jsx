@@ -1,3 +1,4 @@
+import { motion }    from 'motion/react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import SplitText from '../ui/SplitText.jsx';
@@ -51,9 +52,22 @@ export default function Amenities() {
           </div>
         </div>
       </div>
-      <div className="amenities-list reveal">
+      <motion.div
+        className="amenities-list"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0 }}
+        variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.08 } } }}
+      >
         {a.items.map((item, i) => (
-          <div className="amenity-row" key={i}>
+          <motion.div
+            className="amenity-row"
+            key={i}
+            variants={{
+              hidden:  { opacity: 0, y: 28 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } }
+            }}
+          >
             <div className="wrap amenity-row-inner">
               <div className="amenity-left">
                 <span className={`amenity-icon${(i >= 1 && i <= 4) ? ' icon-sm' : ''}`}>
@@ -65,9 +79,9 @@ export default function Amenities() {
                 <p className="amenity-desc">{item.desc}</p>
               </div>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

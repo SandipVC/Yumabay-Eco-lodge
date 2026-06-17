@@ -21,11 +21,6 @@ export default function Footer() {
         </div>
         <p className="footer-address">{f.address.replace(/\n/g, ' ')}</p>
       </div>
-      {p && (p.pricingDate || p.pricingNote) && (
-        <p className="footer-pricing-note wrap">
-          {p.pricingValidPrefix} {p.pricingDate} · {p.pricingNote}
-        </p>
-      )}
       <div className="footer-bottom wrap">
         <p className="footer-copy">{f.copyright}</p>
         <div className="footer-social">

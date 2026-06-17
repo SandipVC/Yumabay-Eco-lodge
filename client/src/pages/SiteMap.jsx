@@ -172,6 +172,21 @@ export default function SiteMap() {
             xmlns="http://www.w3.org/2000/svg"
             aria-label="Yuma Bay Master Plan"
           >
+            <defs>
+              <filter id="label-bg-filter" x="-20%" y="-40%" width="140%" height="180%">
+                <feFlood floodColor="rgba(0,0,0,0.72)" result="color"/>
+                <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded"/>
+                <feGaussianBlur in="expanded" stdDeviation="2" result="blurred"/>
+                <feComposite in="color" in2="blurred" operator="in" result="bg"/>
+                <feMerge>
+                  <feMergeNode in="bg"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <filter id="rect-shadow-filter" x="-4%" y="-4%" width="108%" height="108%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="rgba(0,0,0,0.9)" floodOpacity="1"/>
+              </filter>
+            </defs>
             <SiteMapBackdrop idPrefix="view" />
 
             {/* ── Clickable Zones ── */}
@@ -195,6 +210,7 @@ export default function SiteMap() {
                     fill={isActive ? 'rgba(201,168,76,.15)' : isHover ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,0)'}
                     stroke={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,0)'}
                     strokeWidth={isActive ? 3 : isHover ? 2 : 0}
+                    filter={(isActive || isHover) ? 'url(#rect-shadow-filter)' : undefined}
                     style={{ transition: 'fill .2s, stroke .2s, stroke-width .15s' }}
                   />
 
@@ -210,11 +226,12 @@ export default function SiteMap() {
                   <text
                     x={cx} y={cy - 7}
                     textAnchor="middle"
-                    fill={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.6)'}
+                    fill={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.85)'}
                     fontSize="8.5"
                     fontFamily="Jost, sans-serif"
-                    fontWeight={isActive || isHover ? '500' : '400'}
+                    fontWeight={isActive || isHover ? '600' : '500'}
                     letterSpacing="0.5"
+                    filter="url(#label-bg-filter)"
                     style={{ pointerEvents: 'none', userSelect: 'none', transition: 'fill .2s' }}
                   >
                     {z.label}
