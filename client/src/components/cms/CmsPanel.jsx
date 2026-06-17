@@ -10,7 +10,7 @@ import SiteMapZoneEditor from './SiteMapZoneEditor.jsx';
 
 // Must match the order of property cards in translations (en.js / es.js → properties.items)
 const PROPERTY_NAMES = [
-  'Villa Tipo 1', 'Apartments', 'Eco Residences', 'Bungalows', 'Penthouse',
+  'Villas', 'Suites & Apartments', 'Apartments', 'Premium 2BR', 'Beachfront Bungalows',
 ];
 
 const GALLERY_CATS = ['Exterior', 'Interior', 'Amenities'];
