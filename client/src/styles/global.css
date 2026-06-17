@@ -1406,6 +1406,14 @@ a  { color: inherit; }
 .cms-slot { display: flex; flex-direction: column; gap: 8px; }
 .cms-slot-label { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.35); margin: 0; }
 
+/* Multi-image property block */
+.cms-prop-block {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 6px;
+  padding: 16px 20px;
+}
+
 /* Thumbnail */
 .cms-thumb {
   position: relative; background: rgba(255,255,255,.04);

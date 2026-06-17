@@ -6,22 +6,8 @@ import { useAssets }  from '../../hooks/useAssets.js';
 import SplitText  from '../ui/SplitText.jsx';
 import Lightbox   from '../ui/Lightbox.jsx';
 
-// Keywords to match against gallery image labels for each property index
-const PROP_KEYWORDS = [
-  ['villa', 'pool', 'exterior', 'aerial'],          // 0: Villas
-  ['suite', 'apartment', 'interior', 'living'],      // 1: Suites & Apartments
-  ['apartment', 'bedroom', 'view', 'balcony'],       // 2: Apartments
-  ['bedroom', 'living', 'kitchen', 'master'],        // 3: Premium 2BR
-  ['beach', 'bungalow', 'coast', 'sea'],             // 4: Beachfront Bungalows
-];
-
-const PROPERTY_DEFAULTS = [
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-];
+// 1×1 transparent GIF — shown while CMS images haven't loaded yet
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export default function Properties() {
   const { t }      = useLang();
@@ -29,8 +15,25 @@ export default function Properties() {
   const navigate   = useNavigate();
   const { assets } = useAssets();
 
-  const images = (assets?.properties?.length ? assets.properties : PROPERTY_DEFAULTS)
-    .map((src, i) => src || PROPERTY_DEFAULTS[i] || PROPERTY_DEFAULTS[0]);
+  // Returns the ordered list of CMS-managed URLs for property i.
+  // Falls back to a single blank placeholder so the card still renders.
+  const getPropertyImageList = (i) => {
+    const list = assets?.propertyImages?.[i];
+    if (Array.isArray(list)) {
+      const valid = list.filter(Boolean);
+      if (valid.length > 0) return valid;
+    }
+    return [BLANK];
+  };
+
+  // Hero thumbnail shown on the card = first image in the list
+  const heroSrc = (i) => getPropertyImageList(i)[0];
+
+  // Images passed to the Lightbox
+  const getLightboxImages = (i) => {
+    const name = p.items[i].name;
+    return getPropertyImageList(i).map(src => ({ src, label: name }));
+  };
 
   const getDynamicPrice = (i, fallback) => {
     if (!assets?.inventory) return fallback;
@@ -61,19 +64,8 @@ export default function Properties() {
     return `${p.priceFrom} $${min.toLocaleString()}`;
   };
 
-  // Figma renders the heading as one flowing line.
   const title = `${p.title.replace(/\n/g, ' ')} ${p.titleEm}`;
-
   const enquire = (name) => navigate('/contact', { state: { interest: name } });
-
-  const getPropertyImages = (i) => {
-    const main = { src: images[i], label: p.items[i].name };
-    const keywords = PROP_KEYWORDS[i] || [];
-    const gallery = (assets?.gallery || []).filter(g =>
-      g?.src && keywords.some(kw => (g.label || '').toLowerCase().includes(kw))
-    ).map(g => ({ src: g.src, label: g.label || p.items[i].name }));
-    return [main, ...gallery].slice(0, 6);
-  };
 
   const [lb, setLb] = useState({ open: false, images: [], index: 0 });
   const openLb  = (imgs, i) => setLb({ open: true, images: imgs, index: i });
@@ -104,13 +96,13 @@ export default function Properties() {
         {p.items.map((item, i) => (
           <article key={i} className={`prop-row reveal${i % 2 === 1 ? ' flip' : ''}`}>
             <div className="prop-media">
-              <img src={images[i]} alt={item.name} loading="lazy" />
+              <img src={heroSrc(i)} alt={item.name} loading="lazy" />
               <span
                 className="prop-view"
                 role="button"
                 aria-label={`View ${item.name}`}
                 style={{ pointerEvents: 'auto', cursor: 'pointer' }}
-                onClick={() => openLb(getPropertyImages(i), 0)}
+                onClick={() => openLb(getLightboxImages(i), 0)}
               />
             </div>
             <motion.div
