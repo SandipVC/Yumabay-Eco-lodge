@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLang }    from '../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useAssets }  from '../hooks/useAssets.js';
-import SiteMapBackdrop from '../components/sitemap/SiteMapBackdrop.jsx';
+import { BACKDROP_URL } from '../components/sitemap/SiteMapBackdrop.jsx';
 import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 import UnitGrid from '../components/sitemap/UnitGrid.jsx';
 
@@ -22,8 +22,9 @@ export default function SiteMap() {
   const s              = t.sitemap;
   const navigate       = useNavigate();
   const { assets }     = useAssets();
-  const [activeId, setActiveId]   = useState(null);
-  const [hoverId,  setHoverId]    = useState(null);
+  const [activeId, setActiveId]       = useState(null);
+  const [hoverId,  setHoverId]        = useState(null);
+  const [isMapHovered, setIsMapHovered] = useState(false);
   const [activeEnquiry, setActiveEnquiry] = useState(null);
   const [inlineForm, setInlineForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [inlineErrors, setInlineErrors] = useState({});
@@ -171,26 +172,50 @@ export default function SiteMap() {
             viewBox="0 0 840 480"
             xmlns="http://www.w3.org/2000/svg"
             aria-label="Yuma Bay Master Plan"
+            onMouseEnter={() => setIsMapHovered(true)}
+            onMouseLeave={() => setIsMapHovered(false)}
           >
             <defs>
-              <filter id="label-bg-filter" x="-20%" y="-40%" width="140%" height="180%">
-                <feFlood floodColor="rgba(0,0,0,0.72)" result="color"/>
-                <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="expanded"/>
-                <feGaussianBlur in="expanded" stdDeviation="2" result="blurred"/>
-                <feComposite in="color" in2="blurred" operator="in" result="bg"/>
+              <clipPath id="sm-zones-clip">
+                {ZONES.map(z => (
+                  <rect key={z.id} x={z.x} y={z.y} width={z.w} height={z.h} />
+                ))}
+              </clipPath>
+              <filter id="sm-glow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="4" result="blur"/>
                 <feMerge>
-                  <feMergeNode in="bg"/>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="blur"/>
                   <feMergeNode in="SourceGraphic"/>
                 </feMerge>
               </filter>
-              <filter id="rect-shadow-filter" x="-4%" y="-4%" width="108%" height="108%">
-                <feDropShadow dx="0" dy="0" stdDeviation="5" floodColor="rgba(0,0,0,0.9)" floodOpacity="1"/>
-              </filter>
             </defs>
-            <SiteMapBackdrop idPrefix="view" />
+
+            {/* Base image — grayscale when map is hovered */}
+            <image
+              href={BACKDROP_URL}
+              x="0" y="0" width="840" height="480"
+              preserveAspectRatio="none"
+              style={{
+                filter: isMapHovered ? 'grayscale(1)' : 'grayscale(0)',
+                transition: 'filter 0.35s ease',
+              }}
+            />
+
+            {/* Color reveal — same image clipped to zone rects, fades in on hover */}
+            <image
+              href={BACKDROP_URL}
+              x="0" y="0" width="840" height="480"
+              preserveAspectRatio="none"
+              clipPath="url(#sm-zones-clip)"
+              style={{
+                opacity: isMapHovered ? 1 : 0,
+                transition: 'opacity 0.35s ease',
+              }}
+            />
 
             {/* ── Clickable Zones ── */}
-            {ZONES.map(z => {
+            {ZONES.map((z, zi) => {
               const isActive = activeId === z.id;
               const isHover  = hoverId  === z.id;
               const col      = AVAIL[z.availability] || AVAIL.available;
@@ -204,13 +229,25 @@ export default function SiteMap() {
                   onMouseLeave={() => setHoverId(null)}
                   style={{ cursor: 'pointer' }}
                 >
+                  {/* Idle breathing pulse */}
+                  {!isHover && !isActive && (
+                    <rect
+                      x={z.x} y={z.y} width={z.w} height={z.h}
+                      fill="none"
+                      stroke={col.stroke}
+                      strokeWidth="1.5"
+                      className="zone-idle-wave"
+                      style={{ pointerEvents: 'none', animationDelay: `${zi * 0.28}s` }}
+                    />
+                  )}
+
                   {/* Zone fill */}
                   <rect
                     x={z.x} y={z.y} width={z.w} height={z.h}
                     fill={isActive ? 'rgba(201,168,76,.15)' : isHover ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,0)'}
                     stroke={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,0)'}
                     strokeWidth={isActive ? 3 : isHover ? 2 : 0}
-                    filter={(isActive || isHover) ? 'url(#rect-shadow-filter)' : undefined}
+                    className={isActive ? 'zone-sel-border' : undefined}
                     style={{ transition: 'fill .2s, stroke .2s, stroke-width .15s' }}
                   />
 
@@ -222,29 +259,59 @@ export default function SiteMap() {
                     />
                   )}
 
+                  {/* Hover glow sweep */}
+                  {isHover && !isActive && (() => {
+                    const perim = 2 * (z.w + z.h);
+                    const arc   = Math.min(70, perim * 0.18);
+                    return (
+                      <rect
+                        x={z.x} y={z.y} width={z.w} height={z.h}
+                        fill="none"
+                        stroke="rgba(255,255,255,0.95)"
+                        strokeWidth="2.5"
+                        strokeDasharray={`${arc} ${perim - arc}`}
+                        strokeLinecap="round"
+                        filter="url(#sm-glow)"
+                        style={{ pointerEvents: 'none' }}
+                      >
+                        <animate
+                          attributeName="stroke-dashoffset"
+                          from="0"
+                          to={`${-perim}`}
+                          dur="1.6s"
+                          repeatCount="indefinite"
+                        />
+                      </rect>
+                    );
+                  })()}
+
                   {/* Zone label */}
                   <text
-                    x={cx} y={cy - 7}
+                    x={cx} y={cy - 4}
                     textAnchor="middle"
-                    fill={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.9)' : 'rgba(255,255,255,.85)'}
-                    fontSize="8.5"
+                    fill={isActive ? '#C9A84C' : 'rgba(255,255,255,.95)'}
+                    fontSize="11"
                     fontFamily="Jost, sans-serif"
                     fontWeight={isActive || isHover ? '600' : '500'}
-                    letterSpacing="0.5"
-                    filter="url(#label-bg-filter)"
-                    style={{ pointerEvents: 'none', userSelect: 'none', transition: 'fill .2s' }}
+                    letterSpacing="0.3"
+                    stroke="rgba(0,0,0,0.75)"
+                    strokeWidth="3"
+                    style={{ pointerEvents: 'none', userSelect: 'none', transition: 'fill .2s', paintOrder: 'stroke' }}
                   >
                     {z.label}
                   </text>
 
                   {/* Phase badge */}
                   <text
-                    x={cx} y={cy + 8}
+                    x={cx} y={cy + 10}
                     textAnchor="middle"
-                    fill="rgba(201,168,76,.45)"
-                    fontSize="6.5"
+                    fill={isActive ? 'rgba(201,168,76,.9)' : 'rgba(201,168,76,.85)'}
+                    fontSize="8.5"
                     fontFamily="Jost, sans-serif"
-                    style={{ pointerEvents: 'none', userSelect: 'none' }}
+                    fontWeight="500"
+                    stroke="rgba(0,0,0,0.7)"
+                    strokeWidth="2.5"
+                    style={{ pointerEvents: 'none', userSelect: 'none', paintOrder: 'stroke' }}
                   >
                     Phase {z.phase}
                   </text>
@@ -254,8 +321,11 @@ export default function SiteMap() {
 
             {/* Click-hint text when nothing selected */}
             {!activeId && (
-              <text x="420" y="24" textAnchor="middle"
-                fill="rgba(201,168,76,.45)" fontSize="8" fontFamily="Jost, sans-serif" letterSpacing="2">
+              <text x="420" y="26" textAnchor="middle"
+                fill="rgba(201,168,76,.95)" fontSize="10" fontFamily="Jost, sans-serif" letterSpacing="2"
+                fontWeight="500"
+                stroke="rgba(0,0,0,0.75)" strokeWidth="3"
+                style={{ paintOrder: 'stroke' }}>
                 CLICK ANY ZONE FOR DETAILS
               </text>
             )}
