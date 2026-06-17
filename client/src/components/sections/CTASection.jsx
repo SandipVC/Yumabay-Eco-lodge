@@ -48,7 +48,7 @@ export default function CTASection() {
                 fill="none"
               />
               <text fill="white" fontSize="11" fontFamily="'Aptos Narrow', 'Jost', sans-serif" className="cta-circle-text-svg">
-                <textPath href="#circlePath" startOffset="0%" textLength="452.39" lengthAdjust="spacing">
+                <textPath href="#circlePath" startOffset="0%" textLength="445.39" lengthAdjust="spacing">
                   {"GET IN TOUCH • GET IN TOUCH • GET IN TOUCH • GET IN TOUCH • "}
                 </textPath>
               </text>
