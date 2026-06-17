@@ -24,6 +24,10 @@ export default function SiteMap() {
   const { assets }     = useAssets();
   const [activeId, setActiveId]   = useState(null);
   const [hoverId,  setHoverId]    = useState(null);
+  const [activeEnquiry, setActiveEnquiry] = useState(null);
+  const [inlineForm, setInlineForm] = useState({ name: '', email: '', phone: '', message: '' });
+  const [inlineErrors, setInlineErrors] = useState({});
+  const [submitStatus, setSubmitStatus] = useState('idle');
 
   const planImage = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
   const masterPdf = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
@@ -39,15 +43,89 @@ export default function SiteMap() {
 
   const activeZone = ZONES.find(z => z.id === activeId);
 
-  const handleClick = (id) => setActiveId(prev => prev === id ? null : id);
+  const handleClick = (id) => {
+    setActiveId(prev => prev === id ? null : id);
+    setActiveEnquiry(null);
+    setSubmitStatus('idle');
+  };
 
   const handleEnquire = () => {
     if (!activeZone) return;
-    navigate('/contact', { state: { interest: activeZone.label } });
+    setInlineForm({
+      name: '',
+      email: '',
+      phone: '',
+      message: lang === 'es'
+        ? `Hola, estoy interesado en la zona ${activeZone.label}. Por favor envíame más información.`
+        : `Hello, I am interested in ${activeZone.label} zone. Please send me more information.`
+    });
+    setInlineErrors({});
+    setSubmitStatus('idle');
+    setActiveEnquiry({
+      unitCode: '',
+      interest: activeZone.label
+    });
   };
 
   const handleUnitEnquire = (unitCode, unitLabel) => {
-    navigate(`/contact?unit=${unitCode}`, { state: { interest: unitLabel } });
+    if (!activeZone) return;
+    setInlineForm({
+      name: '',
+      email: '',
+      phone: '',
+      message: lang === 'es'
+        ? `Hola, estoy interesado en la unidad ${unitCode} de ${activeZone.label}. Por favor envíame más información.`
+        : `Hello, I am interested in unit ${unitCode} of ${activeZone.label}. Please send me more information.`
+    });
+    setInlineErrors({});
+    setSubmitStatus('idle');
+    setActiveEnquiry({
+      unitCode,
+      interest: unitLabel
+    });
+  };
+
+  const handleInlineChange = (e) => {
+    const { name, value } = e.target;
+    setInlineForm(f => ({ ...f, [name]: value }));
+    if (inlineErrors[name]) setInlineErrors(er => ({ ...er, [name]: '' }));
+  };
+
+  const validateInline = () => {
+    const errs = {};
+    if (inlineForm.name.trim().length < 2) errs.name = lang === 'es' ? 'Nombre requerido' : 'Name is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inlineForm.email)) errs.email = lang === 'es' ? 'Correo inválido' : 'Valid email required';
+    if (inlineForm.message.trim().length < 5) errs.message = lang === 'es' ? 'Mensaje demasiado corto' : 'Message must be at least 5 characters';
+    return errs;
+  };
+
+  const handleInlineSubmit = async (e) => {
+    e.preventDefault();
+    const errs = validateInline();
+    if (Object.keys(errs).length > 0) { setInlineErrors(errs); return; }
+    setSubmitStatus('sending');
+    try {
+      const payload = {
+        ...inlineForm,
+        propertyInterest: activeEnquiry.interest,
+        unitCode: activeEnquiry.unitCode,
+        language: lang
+      };
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setSubmitStatus('success');
+        setInlineForm({ name: '', email: '', phone: '', message: '' });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch {
+      setSubmitStatus('error');
+    }
   };
 
   // Map villas or building units if they exist in inventory
@@ -82,18 +160,7 @@ export default function SiteMap() {
       </h1>
       <p className="section-body reveal rd2" style={{ maxWidth: 600 }}>{s.subtitle}</p>
 
-      {/* Official architectural master plan image */}
-      {planImage && (
-        <div className="sitemap-plan-image reveal rd3" style={{ marginTop: 48 }}>
-          <img
-            src={planImage}
-            alt="Yuma Bay Architectural Master Plan"
-            loading="lazy"
-          />
-        </div>
-      )}
-
-      <p className="section-label reveal" style={{ marginTop: 56, marginBottom: 0 }}>
+      <p className="section-label reveal" style={{ marginTop: 24, marginBottom: 0 }}>
         {s.phase === 'Phase' ? 'Interactive Zone Map' : 'Mapa de Zonas Interactivo'}
       </p>
 
@@ -125,17 +192,17 @@ export default function SiteMap() {
                   {/* Zone fill */}
                   <rect
                     x={z.x} y={z.y} width={z.w} height={z.h}
-                    fill={isActive ? brighten(col.fill, 2.2) : isHover ? brighten(col.fill, 1.8) : col.fill}
-                    stroke={col.stroke}
-                    strokeWidth={isActive ? 2.5 : isHover ? 2 : 1.5}
-                    style={{ transition: 'fill .2s, stroke-width .15s' }}
+                    fill={isActive ? 'rgba(201,168,76,.15)' : isHover ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,0)'}
+                    stroke={isActive ? '#C9A84C' : isHover ? 'rgba(255,255,255,.7)' : 'rgba(255,255,255,0)'}
+                    strokeWidth={isActive ? 3 : isHover ? 2 : 0}
+                    style={{ transition: 'fill .2s, stroke .2s, stroke-width .15s' }}
                   />
 
                   {/* Active glow ring */}
                   {isActive && (
                     <rect
                       x={z.x} y={z.y} width={z.w} height={z.h}
-                      fill="none" stroke={col.stroke} strokeWidth="5" opacity="0.25"
+                      fill="none" stroke="#C9A84C" strokeWidth="5" opacity="0.3"
                     />
                   )}
 
@@ -215,6 +282,91 @@ export default function SiteMap() {
                   </button>
                 ))}
               </div>
+            </div>
+          ) : activeEnquiry ? (
+            <div className="sitemap-zone-card sitemap-enquiry-panel">
+              <button className="sitemap-card-close" onClick={() => setActiveEnquiry(null)} aria-label="Close">✕</button>
+
+              <h2 className="sitemap-card-title">{lang === 'es' ? 'Consulta' : 'Enquiry'}</h2>
+              <p className="sitemap-card-type">
+                {activeEnquiry.unitCode ? `${lang === 'es' ? 'Unidad' : 'Unit'} ${activeEnquiry.unitCode}` : activeEnquiry.interest}
+              </p>
+
+              {submitStatus === 'success' ? (
+                <div className="form-success" style={{ padding: '20px 0', border: 'none' }}>
+                  <h3 style={{ color: 'var(--gold)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
+                    {t.contact?.successTitle || 'Enquiry received!'}
+                  </h3>
+                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,.7)', lineHeight: '1.7' }}>
+                    {t.contact?.successBody || "Thank you for reaching out. We'll be in touch within 24–48 hours."}
+                  </p>
+                  <button 
+                    className="btn-primary" 
+                    style={{ marginTop: '24px', padding: '14px 28px', fontSize: '15px', width: 'auto' }}
+                    onClick={() => {
+                      setActiveEnquiry(null);
+                      setSubmitStatus('idle');
+                    }}
+                  >
+                    {lang === 'es' ? 'Volver' : 'Back'}
+                  </button>
+                </div>
+              ) : (
+                <form className="enquiry-form" onSubmit={handleInlineSubmit} noValidate>
+                  {submitStatus === 'error' && (
+                    <p className="form-error" style={{ marginBottom: '12px', color: 'var(--coral)', fontSize: '13px' }}>
+                      {t.contact?.errorMsg || 'Something went wrong. Please try again.'}
+                    </p>
+                  )}
+
+                  <div className="form-field">
+                    <input
+                      name="name" type="text" className="form-input"
+                      placeholder={t.contact?.namePlaceholder || 'Your Name'} 
+                      value={inlineForm.name} onChange={handleInlineChange}
+                      required
+                    />
+                    {inlineErrors.name && <span className="form-error" style={{ color: 'var(--coral)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{inlineErrors.name}</span>}
+                  </div>
+
+                  <div className="form-field">
+                    <input
+                      name="email" type="email" className="form-input"
+                      placeholder={t.contact?.emailPlaceholder || 'Email Address'} 
+                      value={inlineForm.email} onChange={handleInlineChange}
+                      required
+                    />
+                    {inlineErrors.email && <span className="form-error" style={{ color: 'var(--coral)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{inlineErrors.email}</span>}
+                  </div>
+
+                  <div className="form-field">
+                    <input
+                      name="phone" type="tel" className="form-input"
+                      placeholder={t.contact?.phonePlaceholder || 'Phone (optional)'} 
+                      value={inlineForm.phone} onChange={handleInlineChange}
+                    />
+                  </div>
+
+                  <div className="form-field">
+                    <textarea
+                      name="message" className="form-input" rows={4}
+                      placeholder={t.contact?.messagePlaceholder || 'Your message…'} 
+                      value={inlineForm.message} onChange={handleInlineChange}
+                      style={{ height: 'auto', resize: 'vertical', fontFamily: 'inherit' }}
+                      required
+                    />
+                    {inlineErrors.message && <span className="form-error" style={{ color: 'var(--coral)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{inlineErrors.message}</span>}
+                  </div>
+
+                  <button type="submit" className="btn-primary" disabled={submitStatus === 'sending'} style={{ marginTop: '12px' }}>
+                    {submitStatus === 'sending' ? (t.contact?.sending || 'Sending…') : (t.properties?.enquire || 'Enquire Now')}
+                  </button>
+
+                  <button type="button" className="btn-ghost" onClick={() => setActiveEnquiry(null)} style={{ border: 'none', padding: '10px 0', fontSize: '14px', background: 'none', cursor: 'pointer' }}>
+                    {lang === 'es' ? 'Cancelar' : 'Cancel'}
+                  </button>
+                </form>
+              )}
             </div>
           ) : (
             <div className="sitemap-zone-card">
