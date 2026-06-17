@@ -5,8 +5,10 @@
  *
  * `idPrefix` keeps the gradient id unique when two maps are on one page.
  */
+export const BACKDROP_URL = "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2FYumabay_Layout.png?alt=media";
+
 export default function SiteMapBackdrop({ idPrefix = 'sm' }) {
-  const backdropUrl = "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2FYumabay_Layout.png?alt=media";
+  const backdropUrl = BACKDROP_URL;
 
   return (
     <image

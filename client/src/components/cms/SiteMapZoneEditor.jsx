@@ -13,6 +13,14 @@ import {
 } from '../sitemap/zonesData.js';
 
 const DRAG_THRESHOLD = 3; // svg units before a press counts as a drag (not a click)
+const HANDLE_SIZE = 9;   // px (SVG units) for edge-handle squares
+
+function hexToRgba(hex, alpha) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return `rgba(${r},${g},${b},${alpha})`;
+}
 
 export default function SiteMapZoneEditor({ initialZones, onSave }) {
   const [zones,    setZones]    = useState(() => (initialZones || ZONE_DEFAULTS).map(clampZone));
@@ -20,6 +28,9 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
   const [dirty,    setDirty]    = useState(false);
   const [saving,   setSaving]   = useState(false);
   const [err,      setErr]      = useState(null);
+  const [zoom,     setZoom]     = useState(1);
+  const [panX,     setPanX]     = useState(0);
+  const [panY,     setPanY]     = useState(0);
 
   const svgRef  = useRef(null);
   const dragRef = useRef(null); // { mode, id, startPt, startZone, moved }
@@ -36,11 +47,13 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
   // ── Coordinate conversion: client px → SVG units ──
   const toSvg = useCallback((clientX, clientY) => {
     const r = svgRef.current.getBoundingClientRect();
+    const vw = VIEWBOX_W / zoom;
+    const vh = VIEWBOX_H / zoom;
     return {
-      x: (clientX - r.left) * (VIEWBOX_W / r.width),
-      y: (clientY - r.top)  * (VIEWBOX_H / r.height),
+      x: panX + (clientX - r.left) * (vw / r.width),
+      y: panY + (clientY - r.top)  * (vh / r.height),
     };
-  }, []);
+  }, [zoom, panX, panY]);
 
   const patchZone = (id, patch) =>
     setZones(zs => zs.map(z => z.id === id ? clampZone({ ...z, ...patch }) : z));
@@ -51,6 +64,21 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
     function onMove(e) {
       const d = dragRef.current;
       if (!d) return;
+
+      if (d.mode === 'pan') {
+        const px = Math.abs(e.clientX - d.startClientX) + Math.abs(e.clientY - d.startClientY);
+        if (px < 5) return;
+        d.moved = true;
+        const r = svgRef.current.getBoundingClientRect();
+        const vw = VIEWBOX_W / d.zoomSnap;
+        const vh = VIEWBOX_H / d.zoomSnap;
+        const dsx = (e.clientX - d.startClientX) * (vw / r.width);
+        const dsy = (e.clientY - d.startClientY) * (vh / r.height);
+        setPanX(Math.max(0, Math.min(VIEWBOX_W - vw, d.startPanX - dsx)));
+        setPanY(Math.max(0, Math.min(VIEWBOX_H - vh, d.startPanY - dsy)));
+        return;
+      }
+
       const p = toSvg(e.clientX, e.clientY);
       // Click-vs-drag: ignore tiny movement. On the frame the drag activates,
       // rebase the origin to the threshold-crossing point so the box starts
@@ -65,18 +93,24 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
 
       if (d.mode === 'move') {
         patchZone(d.id, { x: d.startZone.x + dx, y: d.startZone.y + dy });
-      } else {
-        // Resize from the bottom-right corner: keep top-left anchored by
-        // capping size against the space remaining toward the edges, so
-        // clampZone never has to slide x/y to preserve the box.
-        patchZone(d.id, {
-          w: Math.max(MIN_W, Math.min(d.startZone.w + dx, VIEWBOX_W - d.startZone.x)),
-          h: Math.max(MIN_H, Math.min(d.startZone.h + dy, VIEWBOX_H - d.startZone.y)),
-        });
+      } else if (d.mode === 'resize-right') {
+        patchZone(d.id, { w: Math.max(MIN_W, Math.min(d.startZone.w + dx, VIEWBOX_W - d.startZone.x)) });
+      } else if (d.mode === 'resize-bottom') {
+        patchZone(d.id, { h: Math.max(MIN_H, Math.min(d.startZone.h + dy, VIEWBOX_H - d.startZone.y)) });
+      } else if (d.mode === 'resize-left') {
+        const newW = Math.max(MIN_W, d.startZone.w - dx);
+        patchZone(d.id, { x: d.startZone.x + d.startZone.w - newW, w: newW });
+      } else if (d.mode === 'resize-top') {
+        const newH = Math.max(MIN_H, d.startZone.h - dy);
+        patchZone(d.id, { y: d.startZone.y + d.startZone.h - newH, h: newH });
       }
       setDirty(true);
     }
-    function onUp() { dragRef.current = null; }
+    function onUp() {
+      const d = dragRef.current;
+      if (d?.mode === 'pan' && !d.moved) setSelId(null);
+      dragRef.current = null;
+    }
     window.addEventListener('pointermove', onMove);
     window.addEventListener('pointerup', onUp);
     return () => {
@@ -138,10 +172,54 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
     setErr(null);
   }
 
+  function startSvgBg(e) {
+    dragRef.current = {
+      mode: 'pan',
+      startClientX: e.clientX,
+      startClientY: e.clientY,
+      startPanX: panX,
+      startPanY: panY,
+      zoomSnap: zoom,
+      moved: false,
+    };
+  }
+
+  function handleWheel(e) {
+    e.preventDefault();
+    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+    const newZoom = Math.max(1, Math.min(6, zoom * factor));
+    if (newZoom === zoom) return;
+    const r = svgRef.current.getBoundingClientRect();
+    const vw = VIEWBOX_W / zoom;
+    const vh = VIEWBOX_H / zoom;
+    const svgCX = panX + (e.clientX - r.left) * (vw / r.width);
+    const svgCY = panY + (e.clientY - r.top)  * (vh / r.height);
+    const newVW = VIEWBOX_W / newZoom;
+    const newVH = VIEWBOX_H / newZoom;
+    setPanX(Math.max(0, Math.min(VIEWBOX_W - newVW, svgCX - (e.clientX - r.left) * (newVW / r.width))));
+    setPanY(Math.max(0, Math.min(VIEWBOX_H - newVH, svgCY - (e.clientY - r.top)  * (newVH / r.height))));
+    setZoom(newZoom);
+  }
+
+  function applyZoom(newZoom) {
+    const vw = VIEWBOX_W / zoom;
+    const vh = VIEWBOX_H / zoom;
+    const cx = panX + vw / 2;
+    const cy = panY + vh / 2;
+    const newVW = VIEWBOX_W / newZoom;
+    const newVH = VIEWBOX_H / newZoom;
+    if (newZoom === 1) { setPanX(0); setPanY(0); }
+    else {
+      setPanX(Math.max(0, Math.min(VIEWBOX_W - newVW, cx - newVW / 2)));
+      setPanY(Math.max(0, Math.min(VIEWBOX_H - newVH, cy - newVH / 2)));
+    }
+    setZoom(newZoom);
+  }
+
   return (
     <div className="zone-editor">
       <p className="cms-hint">
-        Drag a box to move it, drag its corner handle to resize, or click a box to edit its details.
+        Drag a box to move it, drag an edge handle to resize, or click a box to edit its details.
         Use <strong>+ Add Zone</strong> to create a new one. Changes go live after you save.
       </p>
       {err && <p className="cms-error">{err}</p>}
@@ -152,9 +230,11 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
           <svg
             ref={svgRef}
             className="zone-canvas"
-            viewBox="0 0 840 480"
+            viewBox={`${panX} ${panY} ${VIEWBOX_W / zoom} ${VIEWBOX_H / zoom}`}
             xmlns="http://www.w3.org/2000/svg"
-            onPointerDown={() => setSelId(null)}  /* click empty area → deselect */
+            onPointerDown={startSvgBg}
+            onWheel={handleWheel}
+            style={{ cursor: zoom > 1 ? 'grab' : 'default' }}
           >
             <SiteMapBackdrop idPrefix="edit" />
 
@@ -162,14 +242,20 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
               const col = AVAIL[z.availability] || AVAIL.available;
               const isSel = z.id === selId;
               const { cx, cy } = zoneCenter(z);
+              const H = HANDLE_SIZE / 2;
+
+              const strokeCol  = z.borderColor || (isSel ? '#C9A84C' : col.stroke);
+              const fillCol    = z.fillColor ? hexToRgba(z.fillColor, 0.22) : col.fill;
+              const bw         = z.borderWidth != null ? z.borderWidth : (isSel ? 3 : 1.5);
+
               return (
                 <g key={z.id}>
                   <rect
                     x={z.x} y={z.y} width={z.w} height={z.h}
-                    fill={col.fill}
-                    stroke={isSel ? '#C9A84C' : col.stroke}
-                    strokeWidth={isSel ? 3 : 1.5}
-                    strokeDasharray={isSel ? '0' : '0'}
+                    fill={fillCol}
+                    stroke={strokeCol}
+                    strokeWidth={bw}
+                    className={isSel ? 'zone-sel-border' : undefined}
                     style={{ cursor: 'move' }}
                     onPointerDown={(e) => startDrag(e, z.id, 'move')}
                   />
@@ -189,15 +275,25 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
                     Phase {z.phase}
                   </text>
 
-                  {/* Resize handle (only on selected zone) */}
-                  {isSel && (
-                    <rect
-                      x={z.x + z.w - 9} y={z.y + z.h - 9} width="12" height="12"
+                  {/* 4 edge handles — only on selected zone */}
+                  {isSel && <>
+                    <rect x={cx - H} y={z.y - H} width={HANDLE_SIZE} height={HANDLE_SIZE}
                       fill="#C9A84C" stroke="#0A1A22" strokeWidth="1.5"
-                      style={{ cursor: 'nwse-resize' }}
-                      onPointerDown={(e) => startDrag(e, z.id, 'resize')}
-                    />
-                  )}
+                      style={{ cursor: 'ns-resize' }}
+                      onPointerDown={e => startDrag(e, z.id, 'resize-top')} />
+                    <rect x={z.x + z.w - H} y={cy - H} width={HANDLE_SIZE} height={HANDLE_SIZE}
+                      fill="#C9A84C" stroke="#0A1A22" strokeWidth="1.5"
+                      style={{ cursor: 'ew-resize' }}
+                      onPointerDown={e => startDrag(e, z.id, 'resize-right')} />
+                    <rect x={cx - H} y={z.y + z.h - H} width={HANDLE_SIZE} height={HANDLE_SIZE}
+                      fill="#C9A84C" stroke="#0A1A22" strokeWidth="1.5"
+                      style={{ cursor: 'ns-resize' }}
+                      onPointerDown={e => startDrag(e, z.id, 'resize-bottom')} />
+                    <rect x={z.x - H} y={cy - H} width={HANDLE_SIZE} height={HANDLE_SIZE}
+                      fill="#C9A84C" stroke="#0A1A22" strokeWidth="1.5"
+                      style={{ cursor: 'ew-resize' }}
+                      onPointerDown={e => startDrag(e, z.id, 'resize-left')} />
+                  </>}
                 </g>
               );
             })}
@@ -206,6 +302,19 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
           <div className="zone-canvas-toolbar">
             <button className="cms-btn-gold" onClick={addZone}>+ Add Zone</button>
             <span className="zone-count">{zones.length} zones</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 'auto' }}>
+              <button className="cms-btn-ghost" style={{ padding: '4px 10px', fontSize: 16, lineHeight: 1 }}
+                onClick={() => applyZoom(Math.max(1, zoom / 1.4))} disabled={zoom <= 1}>−</button>
+              <span style={{ fontSize: 12, color: 'rgba(255,255,255,.6)', minWidth: 42, textAlign: 'center' }}>
+                {Math.round(zoom * 100)}%
+              </span>
+              <button className="cms-btn-ghost" style={{ padding: '4px 10px', fontSize: 16, lineHeight: 1 }}
+                onClick={() => applyZoom(Math.min(6, zoom * 1.4))} disabled={zoom >= 6}>+</button>
+              {zoom > 1 && (
+                <button className="cms-btn-ghost" style={{ padding: '4px 10px', fontSize: 12 }}
+                  onClick={() => applyZoom(1)}>Reset</button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -254,6 +363,38 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
                   {AVAIL_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
               </label>
+              <div className="zone-field-row">
+                <label className="zone-field">
+                  <span>Border Color</span>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <input type="color"
+                      value={selected.borderColor || '#C9A84C'}
+                      onChange={e => editField('borderColor', e.target.value)}
+                      style={{ width: 40, height: 28, padding: 2, cursor: 'pointer', background: 'none', border: '1px solid rgba(255,255,255,.2)', borderRadius: 4 }}
+                    />
+                    {selected.borderColor && <button className="cms-btn-ghost" style={{ padding: '2px 8px', fontSize: 11 }} onClick={() => editField('borderColor', '')}>Reset</button>}
+                  </div>
+                </label>
+                <label className="zone-field">
+                  <span>Fill Color</span>
+                  <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+                    <input type="color"
+                      value={selected.fillColor || '#1A6B8A'}
+                      onChange={e => editField('fillColor', e.target.value)}
+                      style={{ width: 40, height: 28, padding: 2, cursor: 'pointer', background: 'none', border: '1px solid rgba(255,255,255,.2)', borderRadius: 4 }}
+                    />
+                    {selected.fillColor && <button className="cms-btn-ghost" style={{ padding: '2px 8px', fontSize: 11 }} onClick={() => editField('fillColor', '')}>Reset</button>}
+                  </div>
+                </label>
+                <label className="zone-field">
+                  <span>Border Width</span>
+                  <input type="number" min="0.5" max="10" step="0.5"
+                    value={selected.borderWidth ?? 1.5}
+                    onChange={e => editField('borderWidth', parseFloat(e.target.value) || 1.5)}
+                  />
+                </label>
+              </div>
+
               <label className="zone-field">
                 <span>Price <em>(blank = amenity, no enquiry)</em></span>
                 <input type="text" placeholder="From $000,000" value={selected.price} onChange={e => editField('price', e.target.value)} />

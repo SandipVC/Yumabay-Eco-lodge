@@ -1585,6 +1585,24 @@ a  { color: inherit; }
   background: rgba(13,59,82,.2);
   touch-action: none; user-select: none;
 }
+
+@keyframes zone-march {
+  to { stroke-dashoffset: -16; }
+}
+.zone-sel-border {
+  stroke-dasharray: 10 6;
+  animation: zone-march 0.6s linear infinite;
+  will-change: stroke-dashoffset;
+}
+
+@keyframes zone-idle-wave {
+  0%   { stroke-dasharray: 2 18; stroke-dashoffset: 0;   stroke-opacity: 0.25; }
+  50%  { stroke-dasharray: 13 7; stroke-dashoffset: -10; stroke-opacity: 0.75; }
+  100% { stroke-dasharray: 2 18; stroke-dashoffset: -20; stroke-opacity: 0.25; }
+}
+.zone-idle-wave {
+  animation: zone-idle-wave 2.8s ease-in-out infinite;
+}
 .zone-canvas-toolbar {
   display: flex; align-items: center; justify-content: space-between;
   margin-top: 10px;
