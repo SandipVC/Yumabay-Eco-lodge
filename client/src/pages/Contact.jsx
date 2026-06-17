@@ -215,24 +215,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-field">
-                  <label className="form-label" htmlFor="unitCode">{c.unitLabel || 'Specific Unit (Optional)'}</label>
-                  <select
-                    id="unitCode" name="unitCode" className="form-select"
-                    value={form.unitCode} onChange={handleChange}
-                  >
-                    <option value="">{c.unitPlaceholder || 'Select a unit'}</option>
-                    {allUnits.map((u) => (
-                      <option key={u.code} value={u.code}>
-                        {u.code} — {u.buildingName} ({getStatusText(u.status)}{u.status === 'available' && u.price ? ` · $${u.price.toLocaleString()}` : ''})
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="form-field" />
-              </div>
-
               <div className="form-field">
                 <label className="form-label" htmlFor="message">{c.messagePlaceholder}</label>
                 <textarea
