@@ -815,11 +815,6 @@ a  { color: inherit; }
   font-size: clamp(52px, 5.2vw, 100px); font-weight: 400; line-height: 1.1;
   max-width: 640px;
 }
-.cta-circle {
-  background: none; border: none; cursor: pointer; padding: 0;
-  width: clamp(160px, 11.8vw, 226px); aspect-ratio: 1; flex-shrink: 0;
-  transition: transform .4s;
-}
 .cta-circle-canvas {
   position: relative;
   width: 100%;
@@ -867,6 +862,7 @@ a  { color: inherit; }
 .cta-circle {
   background: none; border: none; cursor: pointer; padding: 0;
   width: clamp(160px, 11.8vw, 226px); aspect-ratio: 1; flex-shrink: 0;
+  border-radius: 50%; overflow: hidden;
   transition: transform .4s cubic-bezier(0.25, 1, 0.5, 1);
 }
 .cta-circle:hover { transform: scale(1.06); }
@@ -1405,6 +1401,14 @@ a  { color: inherit; }
 
 .cms-slot { display: flex; flex-direction: column; gap: 8px; }
 .cms-slot-label { font-size: 10px; letter-spacing: .15em; text-transform: uppercase; color: rgba(255,255,255,.35); margin: 0; }
+
+/* Multi-image property block */
+.cms-prop-block {
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.07);
+  border-radius: 6px;
+  padding: 16px 20px;
+}
 
 /* Thumbnail */
 .cms-thumb {

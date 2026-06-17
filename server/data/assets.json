@@ -1470,5 +1470,22 @@
         "covered terrace (10 people capacity)"
       ]
     }
-  }
+  },
+  "propertyImages": [
+    [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_1_-_Photo.jpg?alt=media"
+    ],
+    [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_2_-_Photo.jpg?alt=media"
+    ],
+    [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_3_-_Photo.jpg?alt=media"
+    ],
+    [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_4_-_Photo.jpg?alt=media"
+    ],
+    [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2FLOCATION_-_GRUND_3.jpg?alt=media"
+    ]
+  ]
 }

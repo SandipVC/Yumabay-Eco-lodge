@@ -140,7 +140,7 @@ export const en = {
     emailPlaceholder: 'Email Address',
     phonePlaceholder: 'Phone (optional)',
     interestLabel: 'Property Interest',
-    interestOptions: ['Select a property', 'Villa Tipo 1', 'Apartments', 'Eco Residences', 'Bungalows', 'Penthouse'],
+    interestOptions: ['Select a property', 'Villas', 'Suites & Apartments', 'Apartments', 'Premium 2BR', 'Beachfront Bungalows'],
     unitLabel: 'Specific Unit (Optional)',
     unitPlaceholder: 'Select a unit',
     messagePlaceholder: 'Your message…',
