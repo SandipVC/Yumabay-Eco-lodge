@@ -4,15 +4,15 @@
     "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2Fhero-dusk.jpg?alt=media"
   },
   "about": {
-    "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FWhatsApp_Image_2026-04-30_at_14.12.35.jpeg?alt=media",
+    "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2F1781701241190_R-16.png?alt=media",
     "accent": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FLOCATION_-_GRUND.jpg?alt=media"
   },
   "properties": [
-    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_1_-_Photo.jpg?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F1781700641224_RENDER_ANLAGE_YUMA_BAY_ECO_LODGE_9.png?alt=media",
     "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_2_-_Photo.jpg?alt=media",
-    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_3_-_Photo.jpg?alt=media",
-    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_4_-_Photo.jpg?alt=media",
-    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2FLOCATION_-_GRUND_3.jpg?alt=media"
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F1781700901798_RENDER_ANLAGE_YUMA_BAY_ECO_LODGE_22.PNG?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F1781701001434_R-05.png?alt=media",
+    "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F1781701047815_WhatsApp_Image_2026-04-30_at_14.12.35_2.jpeg?alt=media"
   ],
   "gallery": [
     {
@@ -179,45 +179,31 @@
       "price": "From $280,000",
       "units": 12,
       "icon": "🏡",
-      "x": 52,
-      "y": 280,
-      "w": 120,
-      "h": 88,
-      "inventoryId": "villas"
+      "x": 127,
+      "y": 272,
+      "w": 639,
+      "h": 145,
+      "inventoryId": "villas",
+      "borderWidth": 1.5
     },
     {
       "id": "building-a",
-      "label": "Building A",
+      "label": "Building A-B",
       "type": "Apartments",
       "phase": 1,
       "availability": "available",
       "beds": "Studio – 3BR",
       "area": "Various",
       "price": "From $95,000",
-      "units": 24,
+      "units": "48",
       "icon": "🏢",
-      "x": 200,
-      "y": 160,
-      "w": 90,
-      "h": 110,
-      "inventoryId": "edificio-ab"
-    },
-    {
-      "id": "building-b",
-      "label": "Building B",
-      "type": "Apartments",
-      "phase": 1,
-      "availability": "available",
-      "beds": "Studio – 3BR",
-      "area": "Various",
-      "price": "From $95,000",
-      "units": 24,
-      "icon": "🏢",
-      "x": 304,
-      "y": 160,
-      "w": 90,
-      "h": 110,
-      "inventoryId": "edificio-ab"
+      "x": 224,
+      "y": 48,
+      "w": 191,
+      "h": 85,
+      "inventoryId": "edificio-ab",
+      "borderWidth": 1.5,
+      "fillColor": "#838b0e"
     },
     {
       "id": "building-c",
@@ -230,11 +216,13 @@
       "price": "From $95,000",
       "units": 20,
       "icon": "🏢",
-      "x": 408,
-      "y": 160,
-      "w": 90,
-      "h": 110,
-      "inventoryId": "edificio-c"
+      "x": 424,
+      "y": 50,
+      "w": 80,
+      "h": 103,
+      "inventoryId": "edificio-c",
+      "borderWidth": 1.5,
+      "fillColor": "#170a7b"
     },
     {
       "id": "building-d",
@@ -247,11 +235,13 @@
       "price": "From $110,000",
       "units": 18,
       "icon": "🏢",
-      "x": 512,
-      "y": 160,
-      "w": 90,
-      "h": 110,
-      "inventoryId": "edificio-d"
+      "x": 545,
+      "y": 69,
+      "w": 80,
+      "h": 75,
+      "inventoryId": "edificio-d",
+      "borderWidth": 1.5,
+      "fillColor": "#9117a1"
     },
     {
       "id": "building-e",
@@ -264,76 +254,13 @@
       "price": "From $95,000",
       "units": 18,
       "icon": "🏢",
-      "x": 616,
-      "y": 160,
-      "w": 90,
-      "h": 110,
-      "inventoryId": "edificio-e"
-    },
-    {
-      "id": "bungalows",
-      "label": "Bungalows",
-      "type": "Beachfront Bungalows",
-      "phase": 2,
-      "availability": "available",
-      "beds": "1–2 Bedrooms",
-      "area": "85–120 m²",
-      "price": "From $150,000",
-      "units": 16,
-      "icon": "🛖",
-      "x": 196,
-      "y": 290,
-      "w": 200,
-      "h": 78,
-      "inventoryId": "bungalows"
-    },
-    {
-      "id": "eco-residences",
-      "label": "Eco Residences",
-      "type": "Eco Lodge",
-      "phase": 1,
-      "availability": "limited",
-      "beds": "1–2 Bedrooms",
-      "area": "100–140 m²",
-      "price": "From $120,000",
-      "units": 8,
-      "icon": "🌿",
-      "x": 412,
-      "y": 290,
-      "w": 140,
-      "h": 78
-    },
-    {
-      "id": "beach-club",
-      "label": "Beach Club",
-      "type": "Club de Playa",
-      "phase": 1,
-      "availability": "available",
-      "beds": "",
-      "area": "",
-      "price": "",
-      "units": "",
-      "icon": "🏖",
-      "x": 568,
-      "y": 290,
-      "w": 220,
-      "h": 110
-    },
-    {
-      "id": "pool-main",
-      "label": "Main Pool",
-      "type": "Amenity",
-      "phase": 1,
-      "availability": "available",
-      "beds": "",
-      "area": "",
-      "price": "",
-      "units": "",
-      "icon": "🏊",
-      "x": 200,
-      "y": 72,
-      "w": 240,
-      "h": 68
+      "x": 644,
+      "y": 76,
+      "w": 79,
+      "h": 70,
+      "inventoryId": "edificio-e",
+      "borderWidth": 1.5,
+      "fillColor": "#b21f1f"
     }
   ],
   "translations": {
@@ -353,7 +280,7 @@
         "phase": 1,
         "levels": 4,
         "unitsPerLevel": 12,
-        "expectedTotal": 3936802,
+        "expectedTotal": 5002584,
         "units": [
           {
             "code": "AB101",
@@ -363,8 +290,8 @@
             "areaInt": 28.6,
             "balcony": 5,
             "total": 33.6,
-            "price": null,
-            "status": "blocked",
+            "price": 60332,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -375,8 +302,8 @@
             "areaInt": 81.8,
             "balcony": 11.23,
             "total": 93.03,
-            "price": null,
-            "status": "blocked",
+            "price": 167954,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -423,8 +350,8 @@
             "areaInt": 28.6,
             "balcony": 5,
             "total": 33.6,
-            "price": null,
-            "status": "blocked",
+            "price": 70520,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -507,7 +434,7 @@
             "areaInt": 28.6,
             "balcony": 5,
             "total": 33.6,
-            "price": null,
+            "price": 70520,
             "status": "blocked",
             "note": "BLOQUEADO in source PDF"
           },
@@ -567,7 +494,7 @@
             "areaInt": 28.6,
             "balcony": 5,
             "total": 33.6,
-            "price": null,
+            "price": 70520,
             "status": "blocked",
             "note": "BLOQUEADO in source PDF"
           },
@@ -603,8 +530,8 @@
             "areaInt": 28.6,
             "balcony": 5.03,
             "total": 33.63,
-            "price": null,
-            "status": "blocked",
+            "price": 67760,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -687,8 +614,8 @@
             "areaInt": 27.6,
             "balcony": 5.64,
             "total": 33.24,
-            "price": null,
-            "status": "blocked",
+            "price": 63656,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -747,8 +674,8 @@
             "areaInt": 53.9,
             "balcony": 12.82,
             "total": 66.72,
-            "price": null,
-            "status": "blocked",
+            "price": 123360,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -771,8 +698,8 @@
             "areaInt": 54,
             "balcony": 7.43,
             "total": 61.43,
-            "price": null,
-            "status": "blocked",
+            "price": 123360,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -783,8 +710,8 @@
             "areaInt": 28.6,
             "balcony": 6.41,
             "total": 35.01,
-            "price": null,
-            "status": "blocked",
+            "price": 64340,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -915,8 +842,8 @@
             "areaInt": 80.4,
             "balcony": 11.08,
             "total": 91.48,
-            "price": null,
-            "status": "blocked",
+            "price": 183460,
+            "status": "available",
             "note": "BLOQUEADO in source PDF"
           },
           {
@@ -1473,19 +1400,11 @@
   },
   "propertyImages": [
     [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_1_-_Photo.jpg?alt=media"
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782125061124_Villa.jpg?alt=media"
     ],
-    [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_2_-_Photo.jpg?alt=media"
-    ],
-    [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_3_-_Photo.jpg?alt=media"
-    ],
-    [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F01_4_-_Photo.jpg?alt=media"
-    ],
-    [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2FLOCATION_-_GRUND_3.jpg?alt=media"
-    ]
+    [],
+    [],
+    [],
+    []
   ]
 }

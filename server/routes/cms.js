@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import busboy from 'busboy';
+import sharp from 'sharp';
 import {
   readFileSync, writeFileSync, unlinkSync,
   existsSync, mkdirSync,
@@ -23,13 +24,45 @@ function auth(req, res, next) {
   next();
 }
 
+// ── Image resize ─────────────────────────────────────────────────────────────
+async function resizeIfNeeded(buffer, mimetype) {
+  if (!/image\//i.test(mimetype)) return buffer;
+  const meta = await sharp(buffer).metadata();
+  if ((meta.width || 0) <= 1920 && (meta.height || 0) <= 1080) return buffer;
+  return sharp(buffer)
+    .resize({ width: 1920, height: 1080, fit: 'inside', withoutEnlargement: true })
+    .toBuffer();
+}
+
+// ── Firestore nested-array serialization ──────────────────────────────────────
+// Firestore forbids nested arrays. propertyImages is [[...],[...]] so we store
+// it as a plain object map keyed by string index and restore on read.
+function toFirestore(data) {
+  const out = { ...data };
+  if (Array.isArray(out.propertyImages)) {
+    const map = {};
+    out.propertyImages.forEach((arr, i) => { map[String(i)] = arr ?? []; });
+    out.propertyImages = map;
+  }
+  return out;
+}
+
+function fromFirestore(data) {
+  const out = { ...data };
+  if (out.propertyImages && !Array.isArray(out.propertyImages)) {
+    const len = Math.max(5, Object.keys(out.propertyImages).length);
+    out.propertyImages = Array.from({ length: len }, (_, i) => out.propertyImages[String(i)] ?? []);
+  }
+  return out;
+}
+
 // ── Asset store ───────────────────────────────────────────────────────────────
 async function readAssets() {
   if (isFirebaseEnabled) {
     try {
       const doc = await db.collection('assets').doc('global').get();
       if (doc.exists) {
-        return doc.data();
+        return fromFirestore(doc.data());
       }
     } catch (err) {
       console.error('Failed to read assets from Firestore:', err.message);
@@ -42,7 +75,7 @@ async function readAssets() {
 async function writeAssets(data) {
   if (isFirebaseEnabled) {
     try {
-      await db.collection('assets').doc('global').set(data);
+      await db.collection('assets').doc('global').set(toFirestore(data));
       return;
     } catch (err) {
       console.error('Failed to write assets to Firestore:', err.message);
@@ -197,7 +230,17 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
   const { section, slot } = req.params;
   const isVideo = isVideoFile(req.file.originalname);
   const isPdf   = isPdfFile(req.file.originalname);
-  
+
+  // Resize images exceeding 1920×1080 before saving
+  if (!isVideo && !isPdf) {
+    try {
+      req.file.buffer = await resizeIfNeeded(req.file.buffer, req.file.mimetype);
+    } catch (err) {
+      console.error('Image resize failed:', err.message);
+      return res.status(400).json({ error: 'Invalid or corrupt image file.' });
+    }
+  }
+
   const ts = Date.now();
   const safe = req.file.originalname.replace(/\s+/g, '_').replace(/[^a-zA-Z0-9._\-]/g, '');
   const filename = `${ts}_${safe}`;
