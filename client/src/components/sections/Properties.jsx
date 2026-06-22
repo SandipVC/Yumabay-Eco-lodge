@@ -36,6 +36,10 @@ export default function Properties() {
   };
 
   const getDynamicPrice = (i, fallback) => {
+    // CMS manual override takes highest priority
+    const override = assets?.propertyPrices?.[i];
+    if (override && override.trim()) return override.trim();
+
     if (!assets?.inventory) return fallback;
     const inv = assets.inventory;
     let units = [];
@@ -117,7 +121,6 @@ export default function Properties() {
                 <h3 className="prop-name">{item.name}</h3>
                 <p className="prop-area">{item.area}</p>
               </div>
-              <p className="prop-price">{getDynamicPrice(i, item.price)}</p>
               <div className="prop-feats">
                 {item.feats.map((f, j) => (
                   <span key={j} className="prop-feat">{f}</span>
