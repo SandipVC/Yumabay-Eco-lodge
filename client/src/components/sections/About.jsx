@@ -22,8 +22,7 @@ export default function About() {
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
-  const mainImg   = assets?.about?.main   || DEFAULTS.main;
-  const accentImg = assets?.about?.accent || DEFAULTS.accent;
+  const mainImg = assets?.about?.main || DEFAULTS.main;
 
   // Figma sets the heading as one flowing line over the image card.
   const title = `${a.title.replace(/\n/g, ' ')} ${a.titleEm}`;
@@ -68,30 +67,25 @@ export default function About() {
             rotateAmplitude={10}
             showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
-            overlayContent={
-              <>
-                <img
-                  src={accentImg}
-                  alt="Boca de Yuma coastline"
-                  className="tilted-card-img-accent"
-                  loading="lazy"
-                />
-                <div className="tilted-card-gradient-overlay" />
-              </>
-            }
+            displayOverlayContent={false}
           />
         </div>
 
         <div className="about-side">
-          <p className="section-body reveal rd2">{a.body}</p>
-          {p && (p.phase1Area || p.totalConstruction) && (
-            <p className="about-fact-strip reveal rd2">
-              {p.phase1Area && <span>{p.phase1Label} · <strong>{p.phase1Area}</strong></span>}
-              {p.phase1Area && p.totalConstruction && <span aria-hidden> · </span>}
-              {p.totalConstruction && <span>{p.builtLabel} · <strong>{p.totalConstruction}</strong></span>}
-            </p>
-          )}
+          <p className="section-body reveal rd2">
+            {(() => {
+              const idx = a.body.lastIndexOf(' — ');
+              if (idx === -1) return a.body;
+              return (
+                <>
+                  {a.body.slice(0, idx)}
+                  <span style={{ fontSize: '0.85em', opacity: 0.8, display: 'block', marginTop: '0.75em' }}>
+                    {'— '}{a.body.slice(idx + 3)}
+                  </span>
+                </>
+              );
+            })()}
+          </p>
         </div>
       </div>
 

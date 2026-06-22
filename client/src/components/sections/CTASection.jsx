@@ -39,7 +39,7 @@ export default function CTASection() {
           <div className="cta-circle-canvas">
             <svg className="cta-svg" viewBox="0 0 200 200" width="100%" height="100%">
               {/* Background Shapes */}
-              <circle cx="100" cy="100" r="98" fill="#000" className="cta-bg-circle" />
+              <circle cx="100" cy="100" r="100" fill="#000" className="cta-bg-circle" />
               
               {/* Spinning Text */}
               <path
@@ -48,7 +48,7 @@ export default function CTASection() {
                 fill="none"
               />
               <text fill="white" fontSize="11" fontFamily="'Aptos Narrow', 'Jost', sans-serif" className="cta-circle-text-svg">
-                <textPath href="#circlePath" startOffset="0%" textLength="452.39" lengthAdjust="spacing">
+                <textPath href="#circlePath" startOffset="0%" textLength="445.39" lengthAdjust="spacing">
                   {"GET IN TOUCH • GET IN TOUCH • GET IN TOUCH • GET IN TOUCH • "}
                 </textPath>
               </text>

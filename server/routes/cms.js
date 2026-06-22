@@ -271,6 +271,32 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       }
       break;
     }
+    case 'propertyImages': {
+      // slot format: "{propIdx}"       → append image to that property's list
+      // slot format: "{propIdx}-{imgIdx}" → replace a specific image in the list
+      if (!Array.isArray(assets.propertyImages)) assets.propertyImages = [[], [], [], [], []];
+      while (assets.propertyImages.length < 5) assets.propertyImages.push([]);
+
+      const parts   = (slot || '').split('-');
+      const propIdx = parseInt(parts[0], 10);
+      const imgIdx  = parts.length > 1 ? parseInt(parts[1], 10) : NaN;
+
+      if (isNaN(propIdx) || propIdx < 0 || propIdx > 4) {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: 'Invalid property index (0–4).' });
+      }
+      if (!Array.isArray(assets.propertyImages[propIdx])) assets.propertyImages[propIdx] = [];
+
+      if (!isNaN(imgIdx) && imgIdx >= 0 && imgIdx < assets.propertyImages[propIdx].length) {
+        // Replace in-place
+        await deletePhysical(assets.propertyImages[propIdx][imgIdx]);
+        assets.propertyImages[propIdx][imgIdx] = filePath;
+      } else {
+        // Append
+        assets.propertyImages[propIdx].push(filePath);
+      }
+      break;
+    }
     case 'gallery': {
       if (!Array.isArray(assets.gallery)) assets.gallery = [];
       assets.gallery.push({ src: filePath, label, cat });
@@ -341,6 +367,20 @@ router.delete('/assets/:section', auth, async (req, res) => {
       if (!isNaN(idx) && assets.properties?.[idx]) {
         await deletePhysical(assets.properties[idx]);
         assets.properties[idx] = null;
+      }
+      break;
+    }
+    case 'propertyImages': {
+      // Body: { propIdx: number, imgIdx: number }
+      const { propIdx, imgIdx } = req.body || {};
+      const pi = parseInt(propIdx, 10);
+      const ii = parseInt(imgIdx,  10);
+      if (!isNaN(pi) && !isNaN(ii) && Array.isArray(assets.propertyImages?.[pi])) {
+        const url = assets.propertyImages[pi][ii];
+        if (url) {
+          await deletePhysical(url);
+          assets.propertyImages[pi].splice(ii, 1);
+        }
       }
       break;
     }

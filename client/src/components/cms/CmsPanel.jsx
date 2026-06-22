@@ -10,7 +10,7 @@ import SiteMapZoneEditor from './SiteMapZoneEditor.jsx';
 
 // Must match the order of property cards in translations (en.js / es.js → properties.items)
 const PROPERTY_NAMES = [
-  'Villa Tipo 1', 'Apartments', 'Eco Residences', 'Bungalows', 'Penthouse',
+  'Villas', 'Suites & Apartments', 'Apartments', 'Premium 2BR', 'Beachfront Bungalows',
 ];
 
 const GALLERY_CATS = ['Exterior', 'Interior', 'Amenities'];
@@ -44,14 +44,17 @@ async function uploadFile({ file, section, slot, label, cat, token }) {
   return res.json();
 }
 
-async function deleteAsset({ section, filePath, slot, token }) {
+async function deleteAsset({ section, filePath, slot, propIdx, imgIdx, token }) {
+  const body = { path: filePath, slot };
+  if (propIdx != null) body.propIdx = propIdx;
+  if (imgIdx  != null) body.imgIdx  = imgIdx;
   const res = await fetch(`/api/cms/assets/${section}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ path: filePath, slot }),
+    body: JSON.stringify(body),
   });
   if (!res.ok) {
     const e = await res.json().catch(() => ({}));
@@ -252,28 +255,43 @@ function AboutSection({ assets, token, refresh }) {
   );
 }
 
-/** Properties section — 5 indexed image slots with read-only prices */
+/** Properties section — multi-image gallery per property, fully CMS-managed */
 function PropertiesSection({ assets, token, refresh }) {
-  const [busy,   setBusy]   = useState({});
-  const [err,    setErr]    = useState(null);
+  // busy key: `${propIdx}` for add-upload, `${propIdx}-${imgIdx}` for replace, `del-${propIdx}-${imgIdx}` for delete
+  const [busy, setBusy] = useState({});
+  const [err,  setErr]  = useState(null);
 
-  async function handleUpload(idx, file) {
-    setBusy(b => ({ ...b, [idx]: true })); setErr(null);
+  const setBusyKey = (key, val) => setBusy(b => ({ ...b, [key]: val }));
+
+  async function handleAdd(propIdx, file) {
+    const key = `${propIdx}`;
+    setBusyKey(key, true); setErr(null);
     try {
-      await uploadFile({ file, section: 'properties', slot: idx, token });
+      await uploadFile({ file, section: 'propertyImages', slot: propIdx, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
-    finally { setBusy(b => ({ ...b, [idx]: false })); }
+    finally { setBusyKey(key, false); }
   }
 
-  async function handleDelete(idx) {
-    if (!confirm(`Remove image for ${PROPERTY_NAMES[idx]}?`)) return;
-    setBusy(b => ({ ...b, [idx]: true })); setErr(null);
+  async function handleReplace(propIdx, imgIdx, file) {
+    const key = `${propIdx}-${imgIdx}`;
+    setBusyKey(key, true); setErr(null);
     try {
-      await deleteAsset({ section: 'properties', slot: idx, token });
+      await uploadFile({ file, section: 'propertyImages', slot: `${propIdx}-${imgIdx}`, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
-    finally { setBusy(b => ({ ...b, [idx]: false })); }
+    finally { setBusyKey(key, false); }
+  }
+
+  async function handleDelete(propIdx, imgIdx, name) {
+    if (!confirm(`Remove image ${imgIdx + 1} from ${name}?`)) return;
+    const key = `del-${propIdx}-${imgIdx}`;
+    setBusyKey(key, true); setErr(null);
+    try {
+      await deleteAsset({ section: 'propertyImages', propIdx, imgIdx, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusyKey(key, false); }
   }
 
   const getComputedPrice = (idx) => {
@@ -293,7 +311,6 @@ function PropertiesSection({ assets, token, refresh }) {
     } else {
       return 'Coming Soon (Phase 2)';
     }
-
     const available = units.filter(u => u.status === 'available' && typeof u.price === 'number');
     if (!available.length) return 'Sold Out';
     const min = Math.min(...available.map(u => u.price));
@@ -304,34 +321,75 @@ function PropertiesSection({ assets, token, refresh }) {
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
       <p className="cms-hint">
-        Replace each property's photo. Starting prices are calculated dynamically from the active unit inventory.
+        Manage all images for each property. The <strong>first image</strong> is used as the card thumbnail.
+        All images appear in the lightbox gallery when a visitor clicks the property photo.
+        Starting prices are calculated dynamically from the active unit inventory.
       </p>
 
-      <div className="cms-slot-grid cms-slot-grid-5">
-        {PROPERTY_NAMES.map((name, idx) => (
-          <div key={idx} className="cms-slot">
-            <p className="cms-slot-label">{name}</p>
-            <AssetThumb
-              src={assets?.properties?.[idx]}
-              replacing={busy[idx]}
-              onReplace={file => handleUpload(idx, file)}
-              onDelete={assets?.properties?.[idx] ? () => handleDelete(idx) : null}
-            />
-            <label className={`cms-upload-btn${busy[idx] ? ' loading' : ''}`}>
-              {busy[idx] ? 'Uploading…' : '+ Replace Image'}
-              <input type="file" accept="image/*" style={{ display: 'none' }}
-                onChange={e => { if (e.target.files[0]) handleUpload(idx, e.target.files[0]); }} />
-            </label>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+        {PROPERTY_NAMES.map((name, propIdx) => {
+          const imgs = (assets?.propertyImages?.[propIdx] || []).filter(Boolean);
+          const addBusy = busy[`${propIdx}`];
 
-            {/* Computed Price field (read-only) */}
-            <div className="cms-price-field cms-price-field--readonly">
-              <span className="cms-price-prefix">Public Price</span>
-              <span className="cms-price-value" style={{ fontWeight: '500', color: '#C9A84C' }}>
-                {getComputedPrice(idx)}
-              </span>
+          return (
+            <div key={propIdx} className="cms-prop-block">
+              {/* Header row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+                <div>
+                  <span className="cms-slot-label" style={{ margin: 0 }}>{name}</span>
+                  <span style={{ marginLeft: 12, fontSize: 11, color: 'rgba(255,255,255,.4)' }}>
+                    {imgs.length} image{imgs.length !== 1 ? 's' : ''}
+                  </span>
+                </div>
+                <span style={{ fontSize: 12, color: '#C9A84C', fontWeight: 500 }}>
+                  {getComputedPrice(propIdx)}
+                </span>
+              </div>
+
+              {/* Image strip */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-start' }}>
+                {imgs.map((src, imgIdx) => (
+                  <div key={imgIdx} style={{ position: 'relative', width: 140 }}>
+                    {imgIdx === 0 && (
+                      <span style={{
+                        position: 'absolute', top: 4, left: 4, zIndex: 2,
+                        background: '#C9A84C', color: '#000', fontSize: 9,
+                        fontWeight: 700, letterSpacing: '.06em', padding: '2px 6px',
+                        borderRadius: 2, textTransform: 'uppercase',
+                      }}>Hero</span>
+                    )}
+                    <AssetThumb
+                      src={src}
+                      replacing={busy[`${propIdx}-${imgIdx}`]}
+                      onReplace={file => handleReplace(propIdx, imgIdx, file)}
+                      onDelete={() => handleDelete(propIdx, imgIdx, name)}
+                    />
+                    {busy[`del-${propIdx}-${imgIdx}`] && (
+                      <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>
+                        Removing…
+                      </div>
+                    )}
+                  </div>
+                ))}
+
+                {/* Add new image slot */}
+                <label style={{
+                  width: 140, height: 100, display: 'flex', flexDirection: 'column',
+                  alignItems: 'center', justifyContent: 'center', gap: 6,
+                  border: '1.5px dashed rgba(201,168,76,.35)', borderRadius: 4,
+                  cursor: addBusy ? 'not-allowed' : 'pointer',
+                  color: addBusy ? 'rgba(255,255,255,.3)' : 'rgba(201,168,76,.7)',
+                  fontSize: 11, background: 'rgba(201,168,76,.04)', transition: 'border-color .2s',
+                }}>
+                  <span style={{ fontSize: 22, lineHeight: 1 }}>{addBusy ? '…' : '+'}</span>
+                  <span>{addBusy ? 'Uploading…' : 'Add Image'}</span>
+                  <input type="file" accept="image/*" style={{ display: 'none' }} disabled={addBusy}
+                    onChange={e => { if (e.target.files[0]) handleAdd(propIdx, e.target.files[0]); }} />
+                </label>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

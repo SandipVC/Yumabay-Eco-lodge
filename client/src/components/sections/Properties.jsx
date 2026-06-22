@@ -1,15 +1,13 @@
+import { useState }    from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion }      from 'motion/react';
 import { useLang }    from '../../context/LanguageContext.jsx';
 import { useAssets }  from '../../hooks/useAssets.js';
-import SplitText from '../ui/SplitText.jsx';
+import SplitText  from '../ui/SplitText.jsx';
+import Lightbox   from '../ui/Lightbox.jsx';
 
-const PROPERTY_DEFAULTS = [
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-];
+// 1×1 transparent GIF — shown while CMS images haven't loaded yet
+const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 
 export default function Properties() {
   const { t }      = useLang();
@@ -17,8 +15,25 @@ export default function Properties() {
   const navigate   = useNavigate();
   const { assets } = useAssets();
 
-  const images = (assets?.properties?.length ? assets.properties : PROPERTY_DEFAULTS)
-    .map((src, i) => src || PROPERTY_DEFAULTS[i] || PROPERTY_DEFAULTS[0]);
+  // Returns the ordered list of CMS-managed URLs for property i.
+  // Falls back to a single blank placeholder so the card still renders.
+  const getPropertyImageList = (i) => {
+    const list = assets?.propertyImages?.[i];
+    if (Array.isArray(list)) {
+      const valid = list.filter(Boolean);
+      if (valid.length > 0) return valid;
+    }
+    return [BLANK];
+  };
+
+  // Hero thumbnail shown on the card = first image in the list
+  const heroSrc = (i) => getPropertyImageList(i)[0];
+
+  // Images passed to the Lightbox
+  const getLightboxImages = (i) => {
+    const name = p.items[i].name;
+    return getPropertyImageList(i).map(src => ({ src, label: name }));
+  };
 
   const getDynamicPrice = (i, fallback) => {
     if (!assets?.inventory) return fallback;
@@ -49,10 +64,14 @@ export default function Properties() {
     return `${p.priceFrom} $${min.toLocaleString()}`;
   };
 
-  // Figma renders the heading as one flowing line.
   const title = `${p.title.replace(/\n/g, ' ')} ${p.titleEm}`;
-
   const enquire = (name) => navigate('/contact', { state: { interest: name } });
+
+  const [lb, setLb] = useState({ open: false, images: [], index: 0 });
+  const openLb  = (imgs, i) => setLb({ open: true, images: imgs, index: i });
+  const closeLb = ()        => setLb(s => ({ ...s, open: false }));
+  const prevLb  = ()        => setLb(s => ({ ...s, index: (s.index - 1 + s.images.length) % s.images.length }));
+  const nextLb  = ()        => setLb(s => ({ ...s, index: (s.index + 1) % s.images.length }));
 
   return (
     <section id="properties">
@@ -76,11 +95,23 @@ export default function Properties() {
       <div className="props-list">
         {p.items.map((item, i) => (
           <article key={i} className={`prop-row reveal${i % 2 === 1 ? ' flip' : ''}`}>
-            <div className="prop-media" onClick={() => enquire(item.name)}>
-              <img src={images[i]} alt={item.name} loading="lazy" />
-              <span className="prop-view" aria-hidden />
+            <div className="prop-media">
+              <img src={heroSrc(i)} alt={item.name} loading="lazy" />
+              <span
+                className="prop-view"
+                role="button"
+                aria-label={`View ${item.name}`}
+                style={{ pointerEvents: 'auto', cursor: 'pointer' }}
+                onClick={() => openLb(getLightboxImages(i), 0)}
+              />
             </div>
-            <div className="prop-info">
+            <motion.div
+              className="prop-info"
+              initial={{ x: i % 2 === 1 ? -80 : 80, opacity: 0 }}
+              whileInView={{ x: 0, opacity: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+            >
               <div className="prop-header">
                 <span className="prop-tag">{item.tag}</span>
                 <h3 className="prop-name">{item.name}</h3>
@@ -92,10 +123,22 @@ export default function Properties() {
                   <span key={j} className="prop-feat">{f}</span>
                 ))}
               </div>
-            </div>
+              <button className="prop-enquire" onClick={() => enquire(item.name)}>
+                {p.enquire}
+              </button>
+            </motion.div>
           </article>
         ))}
       </div>
+      {lb.open && (
+        <Lightbox
+          images={lb.images}
+          index={lb.index}
+          onClose={closeLb}
+          onPrev={prevLb}
+          onNext={nextLb}
+        />
+      )}
     </section>
   );
 }
