@@ -32,7 +32,7 @@ export default function Lounge() {
         </div>
         <div className="lounge-side reveal rd1">
           <p className="section-body">{l.body}</p>
-          <button className="btn-dark" onClick={() => navigate('/contact')}>
+          <button className="btn-dark" onClick={() => navigate('/sitemap')}>
             {l.bookBtn}
           </button>
         </div>
