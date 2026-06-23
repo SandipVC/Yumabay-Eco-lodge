@@ -40,12 +40,15 @@ export default function Hero() {
           <p className="hero-tagline">{h.tagline}</p>
         </div>
         <div className="hero-actions">
-          <button onClick={() => scrollTo('properties')} className="btn-primary">
-            {h.exploreBtn}
-          </button>
-          <button onClick={() => scrollTo('about')} className="btn-ghost">
-            {h.discoverBtn}
-          </button>
+          <p className="hero-subtitle">{h.subtitle}</p>
+          <div className="hero-action-btns">
+            <button onClick={() => scrollTo('properties')} className="btn-primary">
+              {h.exploreBtn}
+            </button>
+            <button onClick={() => scrollTo('about')} className="btn-ghost">
+              {h.discoverBtn}
+            </button>
+          </div>
         </div>
       </div>
     </section>

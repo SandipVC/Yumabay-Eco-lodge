@@ -258,10 +258,32 @@ function AboutSection({ assets, token, refresh }) {
 /** Properties section — multi-image gallery per property, fully CMS-managed */
 function PropertiesSection({ assets, token, refresh }) {
   // busy key: `${propIdx}` for add-upload, `${propIdx}-${imgIdx}` for replace, `del-${propIdx}-${imgIdx}` for delete
-  const [busy, setBusy] = useState({});
-  const [err,  setErr]  = useState(null);
+  const [busy,        setBusy]        = useState({});
+  const [err,         setErr]         = useState(null);
+  const [prices,      setPrices]      = useState(() =>
+    (assets?.propertyPrices || Array(5).fill(''))
+  );
+  const [priceSaving, setPriceSaving] = useState(false);
+  const [priceSaved,  setPriceSaved]  = useState(false);
+
+  // Sync local price state when assets reload from server
+  useEffect(() => {
+    setPrices(assets?.propertyPrices || Array(5).fill(''));
+  }, [assets?.propertyPrices]);
 
   const setBusyKey = (key, val) => setBusy(b => ({ ...b, [key]: val }));
+
+  async function savePrice(propIdx) {
+    setPriceSaving(true); setErr(null);
+    try {
+      const next = [...prices];
+      await patchSection({ section: 'propertyPrices', data: next, token });
+      invalidateAssetsCache(); refresh();
+      setPriceSaved(true);
+      setTimeout(() => setPriceSaved(false), 2000);
+    } catch (e) { setErr(e.message); }
+    finally { setPriceSaving(false); }
+  }
 
   async function handleAdd(propIdx, file) {
     const key = `${propIdx}`;
@@ -334,16 +356,43 @@ function PropertiesSection({ assets, token, refresh }) {
           return (
             <div key={propIdx} className="cms-prop-block">
               {/* Header row */}
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
                 <div>
                   <span className="cms-slot-label" style={{ margin: 0 }}>{name}</span>
                   <span style={{ marginLeft: 12, fontSize: 11, color: 'rgba(255,255,255,.4)' }}>
                     {imgs.length} image{imgs.length !== 1 ? 's' : ''}
                   </span>
                 </div>
-                <span style={{ fontSize: 12, color: '#C9A84C', fontWeight: 500 }}>
-                  {getComputedPrice(propIdx)}
-                </span>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,.4)' }}>Price override:</span>
+                  <input
+                    type="text"
+                    placeholder={getComputedPrice(propIdx)}
+                    value={prices[propIdx] || ''}
+                    onChange={e => {
+                      const next = [...prices];
+                      next[propIdx] = e.target.value;
+                      setPrices(next);
+                    }}
+                    style={{
+                      background: 'rgba(201,168,76,.08)', border: '1px solid rgba(201,168,76,.3)',
+                      borderRadius: 4, color: '#C9A84C', fontSize: 12, padding: '4px 8px',
+                      width: 150, outline: 'none',
+                    }}
+                  />
+                  <button
+                    onClick={() => savePrice(propIdx)}
+                    disabled={priceSaving}
+                    style={{
+                      background: priceSaved ? 'rgba(80,200,80,.15)' : 'rgba(201,168,76,.15)',
+                      border: `1px solid ${priceSaved ? 'rgba(80,200,80,.4)' : 'rgba(201,168,76,.4)'}`,
+                      borderRadius: 4, color: priceSaved ? '#6fdb6f' : '#C9A84C',
+                      fontSize: 11, padding: '4px 10px', cursor: priceSaving ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    {priceSaving ? '…' : priceSaved ? 'Saved ✓' : 'Save'}
+                  </button>
+                </div>
               </div>
 
               {/* Image strip */}

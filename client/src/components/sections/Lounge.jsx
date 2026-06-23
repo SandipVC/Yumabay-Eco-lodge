@@ -18,7 +18,6 @@ export default function Lounge() {
       <div className="lounge-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
       <div className="lounge-inner wrap">
         <div className="lounge-head reveal">
-          <p className="section-label">{l.label}</p>
           <SplitText
             text={title}
             className="section-title"
@@ -32,7 +31,7 @@ export default function Lounge() {
         </div>
         <div className="lounge-side reveal rd1">
           <p className="section-body">{l.body}</p>
-          <button className="btn-dark" onClick={() => navigate('/contact')}>
+          <button className="btn-dark" onClick={() => navigate('/sitemap')}>
             {l.bookBtn}
           </button>
         </div>

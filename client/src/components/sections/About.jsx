@@ -72,20 +72,9 @@ export default function About() {
         </div>
 
         <div className="about-side">
-          <p className="section-body reveal rd2">
-            {(() => {
-              const idx = a.body.lastIndexOf(' — ');
-              if (idx === -1) return a.body;
-              return (
-                <>
-                  {a.body.slice(0, idx)}
-                  <span style={{ fontSize: '0.85em', opacity: 0.8, display: 'block', marginTop: '0.75em' }}>
-                    {'— '}{a.body.slice(idx + 3)}
-                  </span>
-                </>
-              );
-            })()}
-          </p>
+          {a.body.split('\n\n').map((para, i) => (
+            <p key={i} className="section-body reveal rd2">{para}</p>
+          ))}
         </div>
       </div>
 

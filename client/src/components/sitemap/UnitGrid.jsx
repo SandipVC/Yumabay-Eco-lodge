@@ -73,7 +73,7 @@ export default function UnitGrid({ building, onEnquire }) {
               <span className="unit-cell-code">{u.code}</span>
               <span className="unit-cell-type">{formatUnitType(u.type)}</span>
               <span className="unit-cell-price">
-                {u.status === 'available' ? formatPrice(u.price) : getStatusLabel(u.status)}
+                {u.status !== 'available' ? getStatusLabel(u.status) : ''}
               </span>
             </button>
           );
@@ -113,12 +113,6 @@ export default function UnitGrid({ building, onEnquire }) {
               <span className="detail-label">{t.sitemap?.phase === 'Phase' ? 'Total Area' : 'Área Total'}</span>
               <span className="detail-value">{selectedUnit.total} m²</span>
             </div>
-            {selectedUnit.status === 'available' && selectedUnit.price && (
-              <div className="detail-row highlight price">
-                <span className="detail-label">{t.sitemap?.phase === 'Phase' ? 'Price' : 'Precio'}</span>
-                <span className="detail-value">{formatPrice(selectedUnit.price)}</span>
-              </div>
-            )}
             {selectedUnit.note && (
               <p className="unit-note-text">*{selectedUnit.note}</p>
             )}

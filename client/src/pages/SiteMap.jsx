@@ -355,7 +355,7 @@ export default function SiteMap() {
               <div className="sitemap-panel-icon">🗺</div>
               <p className="sitemap-panel-hint-title">Interactive Master Plan</p>
               <p className="sitemap-panel-hint-body">
-                Click any building, villa, or amenity zone on the plan to view unit details, pricing, and availability.
+                Click any building, villa, or amenity zone on the plan to view unit details and availability.
               </p>
               <div className="sitemap-zone-list">
                 {ZONES.filter(z => z.price).map(z => (
@@ -507,24 +507,16 @@ export default function SiteMap() {
                         <span className="meta-val">{activeZone.units}</span>
                       </div>
                     )}
-                    {activeZone.price && (
-                      <div className="sitemap-meta-row">
-                        <span className="meta-key">Starting Price</span>
-                        <span className="meta-val meta-price">{activeZone.price}</span>
-                      </div>
-                    )}
                   </div>
 
-                  {activeZone.price && (
+                  {activeZone.price ? (
                     <button
                       className="btn-primary sitemap-enquire-btn"
                       onClick={handleEnquire}
                     >
                       {t.properties?.enquire || 'Enquire Now'}
                     </button>
-                  )}
-
-                  {!activeZone.price && (
+                  ) : (
                     <p className="sitemap-amenity-note">
                       This is a shared amenity available to all residents.
                     </p>
