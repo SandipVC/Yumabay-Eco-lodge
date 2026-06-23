@@ -31,6 +31,14 @@ const SplitText = ({
     onCompleteRef.current = onLetterAnimationComplete;
   }, [onLetterAnimationComplete]);
 
+  // Re-enable splitting when the text itself changes. CMS content arrives after
+  // first paint (assets load async) and the language toggle swaps copy too — without
+  // this reset the "already completed" guard below keeps the characters captured on
+  // the very first render, so headings never reflect updated/CMS text.
+  useEffect(() => {
+    animationCompletedRef.current = false;
+  }, [text]);
+
   useEffect(() => {
     if (document.fonts.status === 'loaded') {
       setFontsLoaded(true);
@@ -158,7 +166,9 @@ const SplitText = ({
     const Tag = tag || 'p';
 
     return (
-      <Tag ref={ref} style={style} className={classes}>
+      // key={text}: when the copy changes (CMS load / language toggle) remount a
+      // fresh node so GSAP SplitText re-splits clean markup instead of stale spans.
+      <Tag key={text} ref={ref} style={style} className={classes}>
         {text}
       </Tag>
     );

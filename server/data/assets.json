@@ -264,9 +264,8 @@
     }
   ],
   "translations": {
-    "en": {
-      "properties": {}
-    }
+    "es": {},
+    "en": {}
   },
   "inventory": {
     "schemaVersion": 1,
@@ -1406,9 +1405,5 @@
     [],
     [],
     []
-  ],
-  "translations": {
-    "en": {},
-    "es": {}
-  }
+  ]
 }
