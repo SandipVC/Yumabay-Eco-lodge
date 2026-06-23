@@ -19,7 +19,6 @@ export default function CTASection() {
       <div className="cta-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
       <div className="cta-inner wrap">
         <div>
-          <p className="cta-eyebrow reveal">{c.eyebrow}</p>
           <SplitText
             text={title}
             className="cta-title"

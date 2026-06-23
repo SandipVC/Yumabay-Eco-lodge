@@ -35,6 +35,7 @@ export const TEXT_SECTIONS = [
       { key: 'title', label: 'Title', kind: 'text' },
       { key: 'titleEm', label: 'Title (highlighted word)', kind: 'text' },
       { key: 'tagline', label: 'Tagline', kind: 'text' },
+      { key: 'subtitle', label: 'Subtitle (below tagline, above buttons)', kind: 'text' },
       { key: 'exploreBtn', label: 'Explore button', kind: 'text' },
       { key: 'discoverBtn', label: 'Discover button', kind: 'text' },
     ],
