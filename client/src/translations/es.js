@@ -14,7 +14,7 @@ export const es = {
     title: 'YUMA',
     titleEm: 'BAY',
     tagline: 'Eco Lodge & Club Lounge',
-    subtitle: 'Más que un destino — un estilo de vida caribeño.',
+    subtitle: 'Más que un destino — una forma de vida caribeña.',
     exploreBtn: 'Ver Propiedades',
     discoverBtn: 'Descubrir Más',
   },
@@ -29,7 +29,7 @@ export const es = {
     label: 'Sobre el Proyecto',
     title: 'Donde la Bahía\nse encuentra con',
     titleEm: 'el paraíso',
-    body: 'Yuma Bay Eco Lodge & Residences es un proyecto residencial turístico ubicado frente al mar en Boca de Yuma, República Dominicana. Diseñado para armonizar las necesidades residenciales con la recreación, el descanso y la conexión con la naturaleza y el mar — una comunidad privada, cerrada y exclusiva.',
+    body: 'Yuma Bay & Club Lounge combina la libertad de la vida caribeña con estándares europeos de calidad, diseño refinado y una conectividad internacional excepcional.\n\nUbicado en la costa virgen de Boca de Yuma, es un lugar donde el ritmo del mar, la naturaleza tropical y el confort moderno conviven en perfecta armonía. Creado para quienes buscan tranquilidad, belleza y autenticidad, Yuma Bay invita a desconectar, respirar profundamente y dejar que el alma encuentre calma.\n\nMateriales naturales, arquitectura atemporal y espacios cuidadosamente diseñados crean una atmósfera de lujo relajado y vida consciente. Desde residencias inspiradas en el océano hasta la experiencia exclusiva del Club Lounge, cada detalle refleja un estilo de vida definido por la elegancia, la simplicidad y la conexión con la naturaleza.',
     stat1Num: '222',
     stat1Lbl: 'm² Villas',
     stat2Num: '2',
@@ -43,7 +43,7 @@ export const es = {
     label: 'Propiedades',
     title: 'Espacios diseñados\npara',
     titleEm: 'vivir',
-    subtitle: 'Desde apartamentos frente al mar hasta villas con piscina privada, cada residencia en Yuma Bay está diseñada para capturar la belleza de la costa caribeña.',
+    subtitle: 'Al mismo tiempo, Yuma Bay permanece perfectamente conectado con el mundo. Los aeropuertos internacionales de Punta Cana y La Romana se encuentran a menos de 40 minutos, ofreciendo acceso rápido a destinos internacionales mientras se conserva la serenidad auténtica de la costa caribeña.',
     enquire: 'Consultar Ahora',
     priceFrom: 'Desde',
     items: [
@@ -93,9 +93,9 @@ export const es = {
   },
   lounge: {
     label: 'Club Lounge',
-    title: 'Donde el estilo\nse une al',
-    titleEm: 'mar',
-    body: 'Un destino donde el estilo de vida, la calidad, la comunidad y la libertad caribeña se unen de forma natural.',
+    title: 'Más que un lugar para quedarse.',
+    titleEm: 'Más que una inversión.',
+    body: 'Un destino donde lifestyle, calidad, comunidad y libertad caribeña se unen de manera natural.',
     bookBtn: 'Reservar una Visita',
   },
   amenities: {
@@ -129,7 +129,7 @@ export const es = {
   cta: {
     eyebrow: 'Comienza Tu Viaje',
     title: 'Deja que el océano marque el ritmo.',
-    titleEm: 'Deja que la vida se sienta más ligera.',
+    titleEm: 'Deja que la vida vuelva a sentirse ligera.',
     brochureBtn: 'Solicitar Brochure',
     visitBtn: 'Programar una Visita',
   },
