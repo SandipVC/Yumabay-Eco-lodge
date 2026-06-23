@@ -18,7 +18,6 @@ export default function Lounge() {
       <div className="lounge-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
       <div className="lounge-inner wrap">
         <div className="lounge-head reveal">
-          <p className="section-label">{l.label}</p>
           <SplitText
             text={title}
             className="section-title"
