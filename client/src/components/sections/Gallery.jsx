@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import Lightbox from '../ui/Lightbox.jsx';
@@ -12,6 +12,10 @@ const FILTER_MAP = {
   'Todo': 'All', 'Comodidades': 'Amenities',
 };
 
+// One full pass of the 18-tile mosaic pattern fills exactly 3 rows by item 10.
+// Each "Load More" reveals the next chunk.
+const PAGE_SIZE = 10;
+
 export default function Gallery() {
   const { t }      = useLang();
   const g          = t.gallery;
@@ -19,6 +23,7 @@ export default function Gallery() {
 
   const [active, setActive]     = useState(g.filters[0]);
   const [lightbox, setLightbox] = useState(null);
+  const [visible, setVisible]   = useState(PAGE_SIZE);
 
   const ALL_IMAGES = assets?.gallery?.length ? assets.gallery : GALLERY_DEFAULTS;
 
@@ -26,6 +31,13 @@ export default function Gallery() {
     const key = FILTER_MAP[active] || active;
     return key === 'All' ? ALL_IMAGES : ALL_IMAGES.filter(img => img.cat === key);
   }, [active, ALL_IMAGES]);
+
+  // Collapse back to the first 3 rows whenever the filter changes.
+  useEffect(() => { setVisible(PAGE_SIZE); }, [active]);
+
+  const shown      = filtered.slice(0, visible);
+  const hasMore    = filtered.length > visible;
+  const loadMore   = () => setVisible(v => v + PAGE_SIZE);
 
   const open  = (i) => setLightbox(i);
   const close = ()  => setLightbox(null);
@@ -65,7 +77,7 @@ export default function Gallery() {
       </div>
 
       <div className="mosaic">
-        {filtered.map((img, i) => (
+        {shown.map((img, i) => (
           <div
             key={img.src}
             className="mosaic-item"
@@ -78,6 +90,14 @@ export default function Gallery() {
           </div>
         ))}
       </div>
+
+      {hasMore && (
+        <div className="gallery-more reveal">
+          <button className="btn-outline" onClick={loadMore}>
+            {g.loadMore}
+          </button>
+        </div>
+      )}
 
       {lightbox !== null && (
         <Lightbox

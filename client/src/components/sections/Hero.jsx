@@ -1,46 +1,117 @@
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 
-const DEFAULTS = {
-  // No bundled media — the real hero image is served from Firebase Storage via CMS → Hero → Hero Image.
-  image: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  // Last-resort transparent-pixel fallback.
-  fallback: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-};
+gsap.registerPlugin(ScrollTrigger);
+
+// All-keyframe re-encode (every frame is an I-frame) → instant seek on scrub.
+const VIDEO_SRC = '/video/intro-scrub.mp4';
+const POSTER_FALLBACK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+// Scroll runway per second of video. Higher = slower scrub, more scroll required.
+const PX_PER_SECOND = 150;
 
 export default function Hero() {
   const { t }      = useLang();
   const h          = t.hero;
   const { assets } = useAssets();
+  const sectionRef = useRef(null);
+  const videoRef   = useRef(null);
 
-  // Prefer a CMS-managed hero image (poster slot), then the shipped default.
-  const image = assets?.hero?.image || assets?.hero?.poster || DEFAULTS.image;
+  // CMS poster acts as a still while the video buffers / on reduced-data clients.
+  const poster = assets?.hero?.image || assets?.hero?.poster || POSTER_FALLBACK;
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-  // If the configured image 404s, fall back to a render that ships in the repo.
-  const onImgError = (e) => {
-    if (e.currentTarget.src.endsWith(DEFAULTS.fallback)) return;
-    e.currentTarget.src = DEFAULTS.fallback;
-  };
+  useEffect(() => {
+    const section = sectionRef.current;
+    const video   = videoRef.current;
+    if (!section || !video) return;
+
+    let trigger;
+
+    const setup = () => {
+      const duration = video.duration;
+      if (!duration || !isFinite(duration)) return;
+
+      // We drive frames from scroll — stop autoplay.
+      video.pause();
+      video.currentTime = 0;
+
+      const runway = Math.max(window.innerHeight, duration * PX_PER_SECOND);
+
+      // rAF-throttled seek — coalesces many ScrollTrigger updates per frame
+      // into one currentTime write per repaint, which is what the decoder can
+      // actually keep up with on H.264.
+      let targetTime = 0;
+      let pendingFrame = 0;
+      const flush = () => {
+        pendingFrame = 0;
+        if (Math.abs(video.currentTime - targetTime) > 0.02) {
+          try { video.currentTime = targetTime; } catch { /* noop */ }
+        }
+      };
+
+      trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end:   () => `+=${runway}`,
+        pin:   true,
+        pinSpacing: true,
+        scrub: true,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (video.readyState < 1) return;
+          targetTime = self.progress * duration;
+          if (!pendingFrame) {
+            pendingFrame = requestAnimationFrame(flush);
+          }
+        },
+      });
+      ScrollTrigger.refresh();
+    };
+
+    if (video.readyState >= 1) {
+      setup();
+    } else {
+      video.addEventListener('loadedmetadata', setup, { once: true });
+    }
+
+    // Respect reduced-motion: skip scrub, leave normal autoplay loop.
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mq.matches) {
+      trigger?.kill();
+      video.play().catch(() => {});
+    }
+
+    return () => {
+      trigger?.kill();
+      video.removeEventListener('loadedmetadata', setup);
+    };
+  }, []);
 
   return (
-    <section id="hero">
+    <section id="hero" ref={sectionRef}>
       <div className="hero-bg" />
-      <img
-        className="hero-img"
-        src={image}
-        alt="Yuma Bay Eco Lodge at dusk"
-        onError={onImgError}
+      <video
+        ref={videoRef}
+        className="hero-video"
+        src={VIDEO_SRC}
+        poster={poster}
+        muted
+        playsInline
+        preload="auto"
+        aria-label="Yuma Bay Eco Lodge intro"
       />
       <div className="hero-overlay" />
+      <div className="hero-fade" />
       <div className="hero-content">
         <div className="hero-heading">
           <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
           <p className="hero-tagline">{h.tagline}</p>
         </div>
         <div className="hero-actions">
-          <p className="hero-subtitle">{h.subtitle}</p>
           <div className="hero-action-btns">
             <button onClick={() => scrollTo('properties')} className="btn-primary">
               {h.exploreBtn}

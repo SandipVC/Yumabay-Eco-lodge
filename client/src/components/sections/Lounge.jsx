@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import assetsUrls from '../../assetsUrls.json';
 import SplitText from '../ui/SplitText.jsx';
 
-const patternUrl = assetsUrls['palm-band-lounge.png'];
+const patternUrl = assetsUrls['palm-band-cta.png'];
 
 export default function Lounge() {
   const { t }    = useLang();

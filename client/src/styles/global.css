@@ -121,7 +121,7 @@ a  { color: inherit; }
 #nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 34px clamp(24px, 13.3vw, 255px) 0;
+  padding: 20px clamp(24px, 13.3vw, 255px);
   transition: background .4s, padding .4s, backdrop-filter .4s;
 }
 #nav.scrolled {
@@ -365,7 +365,7 @@ a  { color: inherit; }
 /* Stats strip */
 .about-stats {
   position: relative; z-index: 2;
-  margin: 90px 30px 0;
+  margin: 90px 0px 0;
   display: flex; justify-content: center;
   border-bottom: 2px solid rgba(255,255,255,.3);
 }
@@ -378,7 +378,7 @@ a  { color: inherit; }
 .stat + .stat { border-left: 1px solid rgba(255,255,255,.1); }
 .stat-num {
   font-family: 'Merzalina', 'Cormorant Garamond', serif;
-  font-size: clamp(36px, 2.9vw, 56px); font-weight: 400;
+  font-size: clamp(36px, 2.9vw, 36px); font-weight: 200;
   color: var(--gold); line-height: 1;
 }
 .stat-lbl {
@@ -489,7 +489,7 @@ a  { color: inherit; }
   color: var(--white); margin-top: 34px;
 }
 .prop-feats {
-  display: flex; flex-wrap: wrap; gap: 10px; margin-top: -2px;
+  display: flex; flex-wrap: wrap; gap: 14px; margin-top: -2px;
 }
 .prop-row.flip .prop-feats { justify-content: flex-end; }
 .prop-feat {
@@ -590,6 +590,10 @@ a  { color: inherit; }
 .mosaic-item:hover .mosaic-label::before {
   transform: scaleY(1);
 }
+.gallery-more {
+  display: flex; justify-content: center;
+  margin-top: clamp(28px, 3vw, 48px);
+}
 
 /* ── Lightbox ── */
 .lightbox-overlay {
@@ -622,8 +626,6 @@ a  { color: inherit; }
   position: static; transform: none;
 }
 .lightbox-nav:hover { background: rgba(202,147,82,.2); }
-.lightbox-prev { }
-.lightbox-next { }
 .lightbox-caption {
   position: absolute; bottom: -32px; left: 0; right: 0;
   text-align: center;
@@ -634,7 +636,7 @@ a  { color: inherit; }
 /* ── Club Lounge (Figma: bronze contour band) ── */
 #lounge {
   position: relative;
-  background: var(--bronze) url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2FFrame%201948756645.png?alt=media') no-repeat center;
+    background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat, var(--bronze);
   background-size: cover;
   padding: 100px 0; overflow: hidden;
 }
@@ -787,7 +789,7 @@ a  { color: inherit; }
 }
 .location-card iframe {
   width: 100%; height: 100%; border: 0;
-  filter: grayscale(1) contrast(.9); display: block;
+  display: block;
 }
 .location-chip {
   position: absolute; right: 30px; bottom: 30px;
@@ -808,7 +810,7 @@ a  { color: inherit; }
 /* ── CTA (Figma: bronze contour band + Get In Touch dial) ── */
 #cta {
   position: relative;
-  background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2FFrame%201948756645.png?alt=media') center/cover no-repeat, var(--bronze);
+  background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat, var(--bronze);
   padding: 80px 0; overflow: hidden;
 }
 .cta-inner {
@@ -2170,13 +2172,385 @@ footer { background: var(--dark); padding: 80px 0 50px; }
     max-width: none;
     padding: 20px;
   }
-  
+
   .cookie-consent-actions {
     width: 100%;
   }
-  
+
   .btn-cookie-decline, .btn-cookie-accept {
     flex: 1;
     text-align: center;
   }
 }
+
+/* ============================================================
+   YUMA BAY — drishti-new-design THEME OVERRIDE
+   Light theme palette per Home Page 17.jpg reference.
+   Targets PUBLIC marketing sections only (Hero, About, Properties,
+   Lounge, Amenities, Gallery, Location, CTA, Footer).
+   Dashboard / CMS keep their dark surface treatment.
+   ============================================================ */
+
+:root {
+  /* New semantic tokens */
+  --bg:          #FFFFFF;
+  --bg-soft:     #F7F4EE;        /* warm cream surface (stats band, amenity icon disc) */
+  --teal:        #0A4C58;        /* primary accent — wordmark, headings, footer */
+  --teal-dark:   #073D47;
+  --teal-soft:   rgba(10,76,88,.7);
+  --olive:       #AAB78A;        /* lounge + CTA band (lighter sage) */
+  --olive-dark:  #7B8F5C;
+  --ink:         #0A2229;        /* primary text on light */
+  --ink-soft:    rgba(10,34,41,.72);
+  --ink-mute:    rgba(10,34,41,.55);
+  --rule:        rgba(10,34,41,.12);
+}
+
+/* ── Body baseline ───────────────────────────────────────────── */
+body { background: var(--bg); color: var(--ink); }
+
+/* ── Navbar (always visible, white 20% bg, dark icons + tinted logo) ── */
+#nav {
+  background: rgba(255,255,255,.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(10,76,88,.08);
+}
+/* Lock scrolled state to identical look — no swap on scroll */
+#nav.scrolled {
+  background: rgba(255,255,255,.2);
+  border-bottom-color: rgba(10,76,88,.08);
+  padding: 16px clamp(24px, 13.3vw, 255px);
+}
+.nav-overlay { background: rgba(255,255,255,.97); }
+.nav-overlay-link { color: var(--ink); border-bottom-color: rgba(10,34,41,.08); }
+.nav-overlay-link:hover { color: var(--teal); }
+
+/* ── Hero (full-bleed image, content overlays bottom on white fade) ── */
+#hero {
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--bg);
+}
+/* GPU-composite the video so scroll-scrub repaints stay on its own layer */
+.hero-video {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.hero-overlay {
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.18) 0%, rgba(0,0,0,0) 22%);
+}
+/* White-to-transparent fade at bottom of image — bleeds into About */
+.hero-fade {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 46%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(255,255,255,0)    0%,
+    rgba(255,255,255,.55) 38%,
+    rgba(255,255,255,.92) 72%,
+    rgba(255,255,255,1)  100%);
+}
+#hero .hero-content {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: clamp(40px, 6vh, 88px);
+  z-index: 2;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: clamp(32px, 6vw, 96px);
+  flex-wrap: wrap;
+  padding: 0 clamp(24px, 13.3vw, 255px);
+}
+#hero .hero-heading { gap: 6px; }
+.hero-title {
+  background-image: linear-gradient(90deg, #0A4C58 0%, #0A4C58 45%, #1B6973 75%, #2C8995 100%);
+  font-size: clamp(64px, 8.3vw, 160px);
+  line-height: .82;
+  white-space: nowrap;
+}
+.hero-tagline {
+  color: var(--ink-soft);
+  font-size: clamp(14px, 1.1vw, 20px);
+  letter-spacing: .04em;
+  text-align: right;
+  margin-top: 4px;
+}
+#hero .hero-actions {
+  align-items: flex-end;
+  gap: 0;
+}
+
+@media (max-width: 768px) {
+  .hero-fade { height: 55%; }
+  #hero .hero-content { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .hero-title { white-space: normal; }
+}
+
+/* ── Shared section primitives ───────────────────────────────── */
+.section-label { color: var(--olive-dark); opacity: 1; }
+.section-title { color: var(--ink); }
+.section-title em { color: var(--teal); }
+.section-body  { color: var(--ink-soft); }
+
+/* ── About ───────────────────────────────────────────────────── */
+#about { background: var(--bg); }
+.about-fact-strip { color: var(--ink-mute); }
+.about-fact-strip strong { color: var(--ink); }
+.about-stats { border-bottom-color: var(--rule); background: #F4F4F4; }
+.stat { background: transparent; height: 180px; }
+.stat + .stat { border-left-color: var(--rule); }
+.stat-num { color: var(--olive); font-size: clamp(56px, 6vw, 56px); }
+.stat-lbl { color: var(--ink-soft); }
+/* Light-theme overlay on the about photo so heading text reads over it */
+.about-card { background: var(--bg-soft); }
+.about-card::after {
+  background: linear-gradient(to bottom,
+    rgba(255,255,255,.85) 0%,
+    rgba(255,255,255,.3)  45%,
+    rgba(255,255,255,0)   70%);
+}
+
+/* ── Properties ──────────────────────────────────────────────── */
+#properties { background: var(--bg); }
+.props-sub { color: var(--ink-soft); }
+.prop-row { border-bottom-color: var(--rule); }
+.prop-tag { color: var(--olive-dark); }
+.prop-name { color: var(--teal); }
+.prop-area { color: var(--ink-soft); }
+.prop-price { color: var(--ink); }
+.prop-feat {
+  color: var(--ink-soft);
+  background: linear-gradient(180deg, #F8F7F5 0%, #EAEAE6 100%);
+  border: 1px solid rgba(0,0,0,.06);
+  padding: 8px 30px;
+  font-size: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -1px 0 rgba(0,0,0,.06),
+    0 4px 10px rgba(0,0,0,.10),
+    0 1px 2px rgba(0,0,0,.06);
+}
+.prop-enquire {
+  color: var(--teal);
+  border-bottom-color: rgba(10,76,88,.5);
+}
+.prop-enquire:hover { color: var(--teal-dark); border-color: var(--teal-dark); }
+
+/* ── Lounge band (lighter sage olive, white text) ────────────── */
+
+#lounge::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat, var(--bronze);
+  opacity: .18;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+#lounge > * { position: relative; z-index: 1; }
+#lounge .section-label { color: rgba(255,255,255,.85); }
+#lounge .section-title,
+#lounge .lounge-head .section-title { color: var(--white); }
+#lounge .section-body { color: rgba(255,255,255,.88); }
+
+/* ── Gallery (white bg, soft borders, olive active chip) ────── */
+#gallery { background: var(--bg); }
+.filter-btn {
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  background: transparent;
+}
+.filter-btn:hover { border-color: var(--olive-dark); color: var(--olive-dark); }
+.filter-btn.active {
+  background: var(--olive); border-color: var(--olive); color: var(--white);
+}
+.mosaic-item { border-color: var(--bg); background: var(--bg-soft); }
+
+/* ── Location ────────────────────────────────────────────────── */
+#location { background: var(--bg); }
+.location-watermark { color: var(--teal); }
+.marquee-track span:nth-child(odd)  { opacity: .08; }
+.marquee-track span:nth-child(even) { opacity: .04; }
+.location-chip { background: var(--teal); }
+.location-chip:hover { background: var(--teal-dark); }
+.location-chip-sub { color: rgba(255,255,255,.75); }
+
+/* ── CTA band (lighter sage olive, white text + teal dial) ──── */
+
+#cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat;
+  opacity: .18;
+  mix-blend-mode: luminosity;
+  pointer-events: none;
+}
+#cta > * { position: relative; z-index: 1; }
+#cta .cta-title { color: var(--white); }
+#cta .cta-eyebrow { color: rgba(255,255,255,.85); opacity: 1; }
+.cta-bg-circle { fill: var(--teal); }
+
+/* ── Footer (deep teal base) ─────────────────────────────────── */
+footer { background: var(--teal); color: var(--white); }
+.footer-main { border-bottom-color: rgba(255,255,255,.18); }
+.footer-contact a { color: rgba(255,255,255,.85); }
+.footer-contact a:hover { color: var(--white); }
+.footer-address { color: rgba(255,255,255,.8); }
+.footer-pricing-note {
+  color: rgba(255,255,255,.6);
+  border-top-color: rgba(255,255,255,.14);
+}
+.footer-copy { color: rgba(255,255,255,.75); }
+
+/* ── Buttons re-skinned for light theme ──────────────────────── */
+.btn-primary {
+  background: var(--teal);
+  color: var(--white);
+}
+.btn-primary:hover { box-shadow: 0 8px 28px rgba(10,76,88,.35); background: var(--teal-dark); }
+.btn-ghost {
+  color: var(--teal); border-color: var(--teal);
+}
+.btn-ghost:hover { background: var(--teal); color: var(--white); border-color: var(--teal); }
+/* Hero ghost sits on white panel — teal outline */
+#hero .btn-ghost { color: var(--teal); border-color: var(--teal); }
+#hero .btn-ghost:hover { background: var(--teal); color: var(--white); border-color: var(--teal); }
+/* Was black — now solid teal for lounge "Book A Visit" etc. */
+.btn-dark { background: var(--teal); color: var(--white); }
+.btn-dark:hover { background: var(--teal-dark); }
+/* Gallery "Load More" — teal outline on white */
+.btn-outline { color: var(--teal); border-color: var(--teal); }
+.btn-outline:hover { background: var(--teal); color: var(--white); border-color: var(--teal); }
+
+/* ── Nav logo: always tinted dark teal (white-art over light bg) ── */
+.nav-logo img {
+  filter: brightness(0) saturate(100%) invert(20%) sepia(48%) saturate(593%) hue-rotate(150deg) brightness(94%) contrast(92%);
+}
+
+/* ── Nav burger (3 staggered lines per Figma menu-lines.svg) ── */
+.nav-menu-btn {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.nav-menu-btn img {
+  width: 40px; height: 28px; display: block;
+  /* Tint icon to dark ink (matches reference's near-black stroke) */
+  filter: brightness(0) saturate(100%) invert(11%) sepia(13%) saturate(1800%) hue-rotate(170deg) brightness(95%) contrast(94%);
+  transition: opacity .3s;
+}
+.nav-menu-btn:hover img { opacity: .7; }
+.nav-close {
+  font-size: 26px; line-height: 1; color: var(--ink);
+}
+
+/* ── Language box (square outline, plain text) ───────────────── */
+.lang-box {
+  font-family: 'Aptos Narrow', 'Jost', sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: none;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  padding: 10px 14px;
+  min-width: 50px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.lang-box:hover {
+  background: var(--ink);
+  color: var(--white);
+}
+/* Hide the older toggle if any markup still ships it */
+.lang-toggle { display: none !important; }
+
+/* ── Amenities re-layout: 2-col grid on white ────────────────── */
+#amenities {
+  background: var(--bg);
+  padding: 120px 0;
+}
+.amenities-bg { display: none; }
+.amenities-header { margin-bottom: 64px; }
+.amenities-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: clamp(40px, 6vw, 120px);
+  row-gap: 40px;
+  max-width: 1530px;
+  margin-inline: auto;
+  padding-inline: clamp(24px, 3.5vw, 60px);
+  border-top: none;
+}
+.amenity-row { border: none; }
+.amenity-row-inner {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 0;
+  border-top: none;
+  max-width: none;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+.amenity-row:first-child .amenity-row-inner { border-top: none; }
+.amenity-left {
+  flex: none;
+  display: block;
+  grid-column: 1;
+}
+.amenity-right {
+  width: auto;
+  grid-column: 2;
+}
+.amenity-icon {
+  width: 56px; height: 56px;
+  background: var(--bg-soft);
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+}
+.amenity-icon img {
+  width: 30px; height: 30px;
+  filter: none;
+  /* Reference uses dark teal mono icons on cream disc */
+  filter: brightness(0) saturate(100%) invert(20%) sepia(48%) saturate(593%) hue-rotate(150deg) brightness(94%) contrast(92%);
+}
+.amenity-icon.icon-sm img { width: 24px; height: 24px; }
+.amenity-name {
+  color: var(--teal);
+  font-weight: 600;
+  font-size: clamp(16px, 1.1vw, 19px);
+  letter-spacing: .01em;
+  margin-bottom: 4px;
+}
+.amenity-desc {
+  color: var(--ink-mute);
+  font-size: clamp(13px, 0.85vw, 15px);
+  line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+  .amenities-list { grid-template-columns: 1fr; row-gap: 28px; }
+}
+
+/* ── Mobile/responsive parity for new theme ──────────────────── */
+@media (max-width: 768px) {
+  .stat + .stat { border-top-color: var(--rule); }
+}
+

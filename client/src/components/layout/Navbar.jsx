@@ -52,10 +52,10 @@ export default function Navbar() {
             aria-expanded={menuOpen}
           >
             {menuOpen
-              ? <span style={{ color: '#fff', fontSize: 26, lineHeight: 1 }}>✕</span>
+              ? <span className="nav-close">✕</span>
               : <img src={menuIcon} alt="" />}
           </button>
-          <button onClick={toggle} className="lang-toggle" aria-label="Toggle language">
+          <button onClick={toggle} className="lang-box" aria-label="Toggle language">
             {lang === 'en' ? 'EN' : 'ES'}
           </button>
         </div>

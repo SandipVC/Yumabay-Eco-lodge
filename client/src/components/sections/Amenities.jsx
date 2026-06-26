@@ -73,9 +73,9 @@ export default function Amenities() {
                 <span className={`amenity-icon${(i >= 1 && i <= 4) ? ' icon-sm' : ''}`}>
                   <img src={ICONS[i] || ICONS[0]} alt="" loading="lazy" />
                 </span>
-                <h3 className="amenity-name">{item.name}</h3>
               </div>
               <div className="amenity-right">
+                <h3 className="amenity-name">{item.name}</h3>
                 <p className="amenity-desc">{item.desc}</p>
               </div>
             </div>
