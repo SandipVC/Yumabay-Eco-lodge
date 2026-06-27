@@ -1,14 +1,16 @@
 import { useLang } from '../../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
+import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 import SplitText from '../ui/SplitText.jsx';
 
-const patternUrl = assetsUrls['palm-band-cta.png'];
-
 export default function Lounge() {
-  const { t }    = useLang();
-  const l        = t.lounge;
-  const navigate = useNavigate();
+  const { t }      = useLang();
+  const l          = t.lounge;
+  const navigate   = useNavigate();
+  const { assets } = useAssets();
+
+  const patternUrl = assets?.decor?.loungePattern || assetsUrls['palm-band-cta.png'];
 
   // Figma renders the heading as one flowing block (wraps naturally).
   const title = `${l.title.replace(/\n/g, ' ')} ${l.titleEm}`;

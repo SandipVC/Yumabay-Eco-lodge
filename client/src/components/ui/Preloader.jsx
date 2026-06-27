@@ -22,7 +22,6 @@ export default function Preloader() {
 
     // Identify critical images to preload
     const criticalImages = [];
-    if (assets.hero?.image) criticalImages.push(assets.hero.image);
     if (assets.hero?.poster) criticalImages.push(assets.hero.poster);
     if (assets.about?.main) criticalImages.push(assets.about.main);
     if (assets.about?.accent) criticalImages.push(assets.about.accent);

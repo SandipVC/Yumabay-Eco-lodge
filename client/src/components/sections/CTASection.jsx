@@ -1,15 +1,18 @@
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 import SplitText from '../ui/SplitText.jsx';
 
-const patternUrl = assetsUrls['palm-band-cta.png'];
-const arrowUrl   = assetsUrls['arrow.svg'];
+const arrowUrl = assetsUrls['arrow.svg'];
 
 export default function CTASection() {
   const { t } = useLang();
   const c = t.cta;
   const navigate = useNavigate();
+  const { assets } = useAssets();
+
+  const patternUrl = assets?.decor?.ctaPattern || assetsUrls['palm-band-cta.png'];
 
   // Figma renders the heading as one flowing block.
   const title = `${c.title.replace(/\n/g, ' ')} ${c.titleEm}`;

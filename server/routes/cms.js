@@ -303,17 +303,6 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.about[key] = filePath;
       break;
     }
-    case 'properties': {
-      if (!Array.isArray(assets.properties)) assets.properties = [];
-      const idx = parseInt(slot, 10);
-      if (!isNaN(idx) && idx >= 0 && idx <= 9) {
-        await deletePhysical(assets.properties[idx]);
-        assets.properties[idx] = filePath;
-      } else {
-        assets.properties.push(filePath);
-      }
-      break;
-    }
     case 'propertyImages': {
       // slot format: "{propIdx}"       → append image to that property's list
       // slot format: "{propIdx}-{imgIdx}" → replace a specific image in the list
@@ -358,19 +347,34 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     }
     case 'sitemap': {
       if (!assets.sitemap) assets.sitemap = {};
-      const wantsPdf = slot === 'masterPdf' || slot === 'villasPdf';
+      const PDF_SLOTS = ['masterPdf', 'villasPdf', 'brochurePdf', 'amenitiesPdf'];
+      const IMG_SLOTS = ['planImage', 'backdrop'];
+      const wantsPdf = PDF_SLOTS.includes(slot);
+      const wantsImg = IMG_SLOTS.includes(slot);
       // Validate file type matches the slot
       if (wantsPdf && !isPdf) {
         await deletePhysical(filePath); // remove the just-saved wrong-type file
         return res.status(400).json({ error: 'This slot requires a PDF file.' });
       }
-      if (slot === 'planImage' && isPdf) {
+      if (wantsImg && isPdf) {
         await deletePhysical(filePath);
-        return res.status(400).json({ error: 'The plan image slot requires an image file.' });
+        return res.status(400).json({ error: 'This slot requires an image file.' });
       }
-      const key = wantsPdf ? slot : 'planImage';
+      const key = (wantsPdf || wantsImg) ? slot : 'planImage';
       await deletePhysical(assets.sitemap[key]);
       assets.sitemap[key] = filePath;
+      break;
+    }
+    case 'decor': {
+      // Decorative band patterns / overlays shown across sections.
+      if (!assets.decor) assets.decor = {};
+      const allowed = ['aboutPalms', 'loungePattern', 'ctaPattern'];
+      if (!allowed.includes(slot)) {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: `Invalid decor slot: ${slot}` });
+      }
+      await deletePhysical(assets.decor[slot]);
+      assets.decor[slot] = filePath;
       break;
     }
     default:
@@ -405,14 +409,6 @@ router.delete('/assets/:section', auth, async (req, res) => {
       if (assets.about) assets.about[key] = null;
       break;
     }
-    case 'properties': {
-      const idx = parseInt(slot, 10);
-      if (!isNaN(idx) && assets.properties?.[idx]) {
-        await deletePhysical(assets.properties[idx]);
-        assets.properties[idx] = null;
-      }
-      break;
-    }
     case 'propertyImages': {
       // Body: { propIdx: number, imgIdx: number }
       const { propIdx, imgIdx } = req.body || {};
@@ -444,9 +440,18 @@ router.delete('/assets/:section', auth, async (req, res) => {
       break;
     }
     case 'sitemap': {
-      const key = slot === 'masterPdf' || slot === 'villasPdf' ? slot : 'planImage';
+      const KNOWN = ['masterPdf', 'villasPdf', 'brochurePdf', 'amenitiesPdf', 'planImage', 'backdrop'];
+      const key = KNOWN.includes(slot) ? slot : 'planImage';
       await deletePhysical(assets.sitemap?.[key]);
       if (assets.sitemap) assets.sitemap[key] = null;
+      break;
+    }
+    case 'decor': {
+      const allowed = ['aboutPalms', 'loungePattern', 'ctaPattern'];
+      if (allowed.includes(slot)) {
+        await deletePhysical(assets.decor?.[slot]);
+        if (assets.decor) assets.decor[slot] = null;
+      }
       break;
     }
     default:

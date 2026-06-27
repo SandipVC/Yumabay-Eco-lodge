@@ -2549,6 +2549,82 @@ footer { background: var(--teal); color: var(--white); }
   .amenities-list { grid-template-columns: 1fr; row-gap: 28px; }
 }
 
+/* ── Contact page + enquiry form (light theme) ───────────────── */
+.contact-page .section-label { color: var(--olive-dark); }
+.contact-detail-label,
+.form-label { color: var(--olive-dark); }
+.contact-detail-value { color: var(--ink-soft); }
+.form-input, .form-select, .form-textarea {
+  background: var(--bg-soft);
+  border-color: var(--rule);
+  color: var(--ink);
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--teal); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--ink-mute); }
+.form-select option { background: var(--bg); color: var(--ink); }
+/* Teal dropdown chevron (was gold) to match the light theme */
+.form-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A4C58' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+.form-success { background: rgba(10,76,88,.06); border-color: rgba(10,76,88,.25); }
+.form-success h3 { color: var(--teal); }
+.form-success p { color: var(--ink-soft); }
+
+/* ── Site Map page (light theme) ─────────────────────────────── */
+/* The whole page was authored dark; re-skin every surface/text for light. */
+.sitemap-svg-wrap svg { border-color: var(--rule); }
+.sitemap-plan-image img { border-color: var(--rule); }
+.legend-item { color: var(--ink-soft); }
+
+.sitemap-info-panel { background: var(--bg-soft); border-color: var(--rule); }
+.sitemap-info-panel.has-zone { border-color: rgba(10,76,88,.35); }
+
+.sitemap-panel-hint-title { color: var(--teal); }
+.sitemap-panel-hint-body  { color: var(--ink-soft); }
+
+.sitemap-zone-pill { border-color: var(--rule); color: var(--ink-soft); }
+.sitemap-zone-pill:hover {
+  background: rgba(10,76,88,.06);
+  border-color: rgba(10,76,88,.35);
+  color: var(--teal);
+}
+
+.sitemap-card-close { color: var(--ink-mute); }
+.sitemap-card-close:hover { color: var(--ink); }
+.sitemap-card-title { color: var(--teal); }
+.sitemap-card-type  { color: var(--olive-dark); }
+.sitemap-card-meta  { border-top-color: var(--rule); }
+.meta-key { color: var(--ink-mute); }
+.meta-val { color: var(--ink); }
+.meta-price { color: var(--teal); }
+.sitemap-amenity-note { color: var(--ink-mute); }
+.sitemap-card-nav-hint { color: var(--ink-mute); }
+
+/* Unit drilldown + grid */
+.building-unit-drilldown { border-top-color: var(--rule); }
+.sitemap-level-tabs { border-bottom-color: var(--rule); }
+.sitemap-level-tab { border-color: var(--rule); color: var(--ink-soft); }
+.sitemap-level-tab:hover { color: var(--ink); border-color: rgba(10,76,88,.35); }
+.sitemap-level-tab.active { background: var(--teal); border-color: var(--teal); color: var(--white); }
+
+.unit-cell { background: var(--bg-soft); border-color: var(--rule); }
+.unit-cell-code  { color: var(--ink); }
+.unit-cell-type  { color: var(--ink-mute); }
+.unit-cell-price { color: var(--ink-soft); }
+.unit-cell.selected { outline-color: var(--teal); border-color: var(--teal) !important; }
+
+/* Selected-unit card */
+.selected-unit-card { background: var(--bg-soft); border-color: var(--rule); }
+.selected-unit-header { border-bottom-color: var(--rule); }
+.selected-unit-title { color: var(--ink); }
+.status-badge.unit-cell--blocked {
+  background: rgba(10,34,41,.05); border-color: var(--rule); color: var(--ink-mute);
+}
+.selected-unit-details .detail-row .detail-label { color: var(--ink-mute); }
+.selected-unit-details .detail-row .detail-value { color: var(--ink); }
+.selected-unit-details .detail-row.highlight.price .detail-value { color: var(--teal); }
+.unit-note-text { color: var(--ink-mute); }
+
 /* ── Mobile/responsive parity for new theme ──────────────────── */
 @media (max-width: 768px) {
   .stat + .stat { border-top-color: var(--rule); }

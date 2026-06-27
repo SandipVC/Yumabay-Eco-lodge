@@ -8,9 +8,14 @@
  * {
  *   hero:       { video, poster },
  *   about:      { main, accent },
- *   properties: [ "/images/...", ... ],   // 5 slots indexed 0-4
+ *   properties: [ "/images/...", ... ],   // 5 slots indexed 0-4 (preload hints)
+ *   propertyImages: [ [ "/images/..." ], ... ],  // per-property galleries (5 lists)
  *   gallery:    [ { src, label, cat }, ... ],
  *   lounge:     [ "/images/...", ... ],   // 4 slots indexed 0-3
+ *   decor:      { aboutPalms, loungePattern, ctaPattern },
+ *   sitemap:    { backdrop, planImage, masterPdf, villasPdf, brochurePdf, amenitiesPdf },
+ *   sitemapZones: [ { id, label, x, y, w, h, ... }, ... ],
+ *   translations: { en: {...}, es: {...} },  // deep-merged over static i18n defaults
  * }
  */
 import { useState, useEffect } from 'react';

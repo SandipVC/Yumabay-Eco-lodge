@@ -10,6 +10,8 @@ const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
   masterPdf: '/pdf/MASTER PLAN YUMA BAY.pdf',
   villasPdf: '/pdf/PARCELAS VILLAS  YUMA BAY.pdf',
+  brochurePdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media',
+  amenitiesPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media',
 };
 
 // Brighten an rgba() fill by multiplying its alpha (clamped to 1)
@@ -30,9 +32,11 @@ export default function SiteMap() {
   const [inlineErrors, setInlineErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState('idle');
 
-  const planImage = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
-  const masterPdf = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
-  const villasPdf = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
+  const planImage    = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
+  const masterPdf    = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
+  const villasPdf    = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
+  const brochurePdf  = assets?.sitemap?.brochurePdf || SITEMAP_DEFAULTS.brochurePdf;
+  const amenitiesPdf = assets?.sitemap?.amenitiesPdf || SITEMAP_DEFAULTS.amenitiesPdf;
 
   // Zones are CMS-configurable (assets.sitemapZones). An explicit saved array
   // is authoritative — even an empty one — so the public view always matches
@@ -381,10 +385,10 @@ export default function SiteMap() {
 
               {submitStatus === 'success' ? (
                 <div className="form-success" style={{ padding: '20px 0', border: 'none' }}>
-                  <h3 style={{ color: 'var(--gold)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
+                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
                     {t.contact?.successTitle || 'Enquiry received!'}
                   </h3>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,.7)', lineHeight: '1.7' }}>
+                  <p style={{ fontSize: '15px', color: 'var(--ink-soft)', lineHeight: '1.7' }}>
                     {t.contact?.successBody || "Thank you for reaching out. We'll be in touch within 24–48 hours."}
                   </p>
                   <button 
@@ -542,18 +546,22 @@ export default function SiteMap() {
             Villas Floor Plans
           </a>
         )}
-        <a
-          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media"
-          target="_blank" rel="noopener noreferrer" className="btn-ghost"
-        >
-          {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
-        </a>
-        <a
-          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
-          target="_blank" rel="noopener noreferrer" className="btn-ghost"
-        >
-          {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
-        </a>
+        {brochurePdf && (
+          <a
+            href={brochurePdf}
+            target="_blank" rel="noopener noreferrer" className="btn-ghost"
+          >
+            {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
+          </a>
+        )}
+        {amenitiesPdf && (
+          <a
+            href={amenitiesPdf}
+            target="_blank" rel="noopener noreferrer" className="btn-ghost"
+          >
+            {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
+          </a>
+        )}
       </div>
     </div>
   );

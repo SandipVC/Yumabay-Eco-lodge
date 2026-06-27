@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
@@ -7,6 +7,7 @@ import { useAssets } from '../../hooks/useAssets.js';
 gsap.registerPlugin(ScrollTrigger);
 
 // All-keyframe re-encode (every frame is an I-frame) → instant seek on scrub.
+// Used as the fallback when no CMS video is set (assets.hero.video).
 const VIDEO_SRC = '/video/intro-scrub.mp4';
 const POSTER_FALLBACK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 // Scroll runway per second of video. Higher = slower scrub, more scroll required.
@@ -20,11 +21,17 @@ export default function Hero() {
   const videoRef   = useRef(null);
 
   // CMS poster acts as a still while the video buffers / on reduced-data clients.
-  const poster = assets?.hero?.image || assets?.hero?.poster || POSTER_FALLBACK;
+  const poster = assets?.hero?.poster || POSTER_FALLBACK;
+  // CMS-uploaded video wins; falls back to the bundled scroll-scrub encode.
+  const videoSrc = assets?.hero?.video || VIDEO_SRC;
 
   const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-  useEffect(() => {
+  // useLayoutEffect (not useEffect): its cleanup runs during React's mutation
+  // phase, BEFORE React removes #hero on unmount. That lets trigger.kill(true)
+  // revert the ScrollTrigger pin (un-reparent #hero from the pin-spacer) in time,
+  // so React's removeChild(#hero) doesn't throw NotFoundError.
+  useLayoutEffect(() => {
     const section = sectionRef.current;
     const video   = videoRef.current;
     if (!section || !video) return;
@@ -86,10 +93,13 @@ export default function Hero() {
     }
 
     return () => {
-      trigger?.kill();
+      // kill(true) reverts the pin: removes the generated pin-spacer and moves
+      // #hero back into its original React parent BEFORE React unmounts the tree.
+      // Without revert, React's removeChild(#hero) fails (node lives in pin-spacer).
+      trigger?.kill(true);
       video.removeEventListener('loadedmetadata', setup);
     };
-  }, []);
+  }, [videoSrc]);
 
   return (
     <section id="hero" ref={sectionRef}>
@@ -97,7 +107,7 @@ export default function Hero() {
       <video
         ref={videoRef}
         className="hero-video"
-        src={VIDEO_SRC}
+        src={videoSrc}
         poster={poster}
         muted
         playsInline

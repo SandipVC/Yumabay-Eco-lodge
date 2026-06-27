@@ -21,7 +21,8 @@ const SECTIONS = [
   { id: 'properties', label: '🏗 Properties', desc: 'Images & prices' },
   { id: 'gallery',    label: '🖼 Gallery',    desc: 'Add / remove gallery photos' },
   { id: 'lounge',     label: '🍹 Lounge',     desc: 'Club lounge 2×2 grid' },
-  { id: 'sitemap',    label: '🗺 Site Map',   desc: 'Plan image & PDF downloads' },
+  { id: 'decor',      label: '🎨 Decor',      desc: 'Section band patterns & palms' },
+  { id: 'sitemap',    label: '🗺 Site Map',   desc: 'Backdrop, plan image & PDFs' },
 ];
 
 // ── Shared upload helper ──────────────────────────────────────────────────────
@@ -171,13 +172,19 @@ function HeroSection({ assets, token, refresh }) {
   }
 
   const slots = [
-    { key: 'poster', label: 'Hero Image', accept: 'image/*' },
-    { key: 'video',  label: 'Background Video (legacy / unused)', accept: 'video/mp4,video/webm' },
+    { key: 'poster', label: 'Hero Image (poster)', accept: 'image/*' },
+    { key: 'video',  label: 'Hero Video (scroll-scrub)', accept: 'video/mp4,video/webm' },
   ];
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
+      <p className="cms-hint">
+        The hero video scroll-scrubs as visitors scroll down. For smooth scrubbing, upload a short
+        MP4 encoded with all keyframes (all-I-frame); other encodes still play but may stutter while
+        scrubbing. Leave empty to use the bundled scroll-optimized clip. The poster shows while the
+        video buffers.
+      </p>
       <div className="cms-slot-grid">
         {slots.map(({ key, label, accept }) => (
           <div key={key} className="cms-slot">
@@ -825,7 +832,66 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
   );
 }
 
-/** Site Map section — plan image + two downloadable PDFs */
+/** Decor section — decorative band patterns & palm overlays */
+function DecorSection({ assets, token, refresh }) {
+  const [busy, setBusy] = useState({});
+  const [err,  setErr]  = useState(null);
+
+  async function handleUpload(slot, file) {
+    setBusy(b => ({ ...b, [slot]: true })); setErr(null);
+    try {
+      await uploadFile({ file, section: 'decor', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [slot]: false })); }
+  }
+
+  async function handleDelete(slot) {
+    if (!confirm('Remove this image?')) return;
+    setBusy(b => ({ ...b, [slot]: true })); setErr(null);
+    try {
+      await deleteAsset({ section: 'decor', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [slot]: false })); }
+  }
+
+  const slots = [
+    { key: 'aboutPalms',    label: 'About — Palm Overlay' },
+    { key: 'loungePattern', label: 'Lounge — Band Pattern' },
+    { key: 'ctaPattern',    label: 'CTA — Band Pattern' },
+  ];
+
+  return (
+    <div className="cms-section-body">
+      {err && <p className="cms-error">{err}</p>}
+      <p className="cms-hint">
+        Decorative imagery: the palm overlay behind the About section, and the contour band
+        patterns behind the Lounge and CTA sections. Transparent PNGs work best.
+      </p>
+      <div className="cms-slot-grid">
+        {slots.map(({ key, label }) => (
+          <div key={key} className="cms-slot">
+            <p className="cms-slot-label">{label}</p>
+            <AssetThumb
+              src={assets?.decor?.[key]}
+              replacing={busy[key]}
+              onReplace={file => handleUpload(key, file)}
+              onDelete={assets?.decor?.[key] ? () => handleDelete(key) : null}
+            />
+            <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
+              {busy[key] ? 'Uploading…' : `+ Upload ${label}`}
+              <input type="file" accept="image/*" style={{ display: 'none' }}
+                onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }} />
+            </label>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/** Site Map section — backdrop, plan image + downloadable PDFs */
 function SiteMapSection({ assets, token, refresh }) {
   const [busy, setBusy] = useState({});
   const [err,  setErr]  = useState(null);
@@ -855,12 +921,27 @@ function SiteMapSection({ assets, token, refresh }) {
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
       <p className="cms-hint">
-        Configure the Site Map page: the architectural plan image shown at the top, and the
-        two downloadable PDF documents (master plan & villa floor plans).
+        Configure the Site Map page: the interactive zone-map backdrop, the architectural plan
+        image, and the downloadable PDF documents (master plan, villa floor plans, brochure &
+        amenities).
       </p>
 
-      {/* Plan image */}
+      {/* Images: zone-map backdrop + plan image */}
       <div className="cms-slot-grid" style={{ marginBottom: 28 }}>
+        <div className="cms-slot" style={{ maxWidth: 360 }}>
+          <p className="cms-slot-label">Zone-Map Backdrop</p>
+          <AssetThumb
+            src={sm.backdrop}
+            replacing={busy.backdrop}
+            onReplace={file => handleUpload('backdrop', file)}
+            onDelete={sm.backdrop ? () => handleDelete('backdrop', 'backdrop image') : null}
+          />
+          <label className={`cms-upload-btn${busy.backdrop ? ' loading' : ''}`}>
+            {busy.backdrop ? 'Uploading…' : '↺ Replace Backdrop'}
+            <input type="file" accept="image/*" style={{ display: 'none' }}
+              onChange={e => { if (e.target.files[0]) handleUpload('backdrop', e.target.files[0]); }} />
+          </label>
+        </div>
         <div className="cms-slot" style={{ maxWidth: 360 }}>
           <p className="cms-slot-label">Architectural Plan Image</p>
           <AssetThumb
@@ -894,6 +975,22 @@ function SiteMapSection({ assets, token, refresh }) {
           busy={busy.villasPdf}
           onReplace={file => handleUpload('villasPdf', file)}
           onDelete={() => handleDelete('villasPdf', 'villas floor plans PDF')}
+        />
+        <PdfSlot
+          label="Brochure PDF"
+          hint="Linked from the “Download Brochure” button."
+          src={sm.brochurePdf}
+          busy={busy.brochurePdf}
+          onReplace={file => handleUpload('brochurePdf', file)}
+          onDelete={() => handleDelete('brochurePdf', 'brochure PDF')}
+        />
+        <PdfSlot
+          label="Amenities PDF"
+          hint="Linked from the “Download Amenities” button."
+          src={sm.amenitiesPdf}
+          busy={busy.amenitiesPdf}
+          onReplace={file => handleUpload('amenitiesPdf', file)}
+          onDelete={() => handleDelete('amenitiesPdf', 'amenities PDF')}
         />
       </div>
 
@@ -949,6 +1046,7 @@ export default function CmsPanel({ token }) {
             {activeSection === 'properties' && <PropertiesSection {...sectionProps} />}
             {activeSection === 'gallery'    && <GallerySection    {...sectionProps} />}
             {activeSection === 'lounge'     && <LoungeSection     {...sectionProps} />}
+            {activeSection === 'decor'      && <DecorSection      {...sectionProps} />}
             {activeSection === 'sitemap'    && <SiteMapSection    {...sectionProps} />}
           </>
         )}

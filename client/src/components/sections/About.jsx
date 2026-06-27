@@ -7,8 +7,6 @@ import TiltedCard from '../ui/TiltedCard.jsx';
 import CountUp from '../ui/CountUp.jsx';
 import SplitText from '../ui/SplitText.jsx';
 
-const palmsUrl = assetsUrls['palms-about.png'];
-
 const DEFAULTS = {
   main:   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
   accent: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
@@ -22,7 +20,8 @@ export default function About() {
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
-  const mainImg = assets?.about?.main || DEFAULTS.main;
+  const mainImg  = assets?.about?.main || DEFAULTS.main;
+  const palmsUrl = assets?.decor?.aboutPalms || assetsUrls['palms-about.png'];
 
   // Figma sets the heading as one flowing line over the image card.
   const title = `${a.title.replace(/\n/g, ' ')} ${a.titleEm}`;

@@ -164,8 +164,16 @@
   ],
   "sitemap": {
     "planImage": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media",
+    "backdrop": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2FYumabay_Layout.png?alt=media",
     "masterPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FMASTER_PLAN_YUMA_BAY.pdf?alt=media",
-    "villasPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media"
+    "villasPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media",
+    "brochurePdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media",
+    "amenitiesPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
+  },
+  "decor": {
+    "aboutPalms": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalms-about.png?alt=media",
+    "loungePattern": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalm-band-cta.png?alt=media",
+    "ctaPattern": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalm-band-cta.png?alt=media"
   },
   "sitemapZones": [
     {
@@ -263,11 +271,6 @@
       "fillColor": "#b21f1f"
     }
   ],
-  "translations": {
-    "en": {
-      "properties": {}
-    }
-  },
   "inventory": {
     "schemaVersion": 1,
     "updatedAt": "2026-04-07",
