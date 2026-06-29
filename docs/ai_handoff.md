@@ -36,15 +36,16 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Sitemap: AVAILABLE/LIMITED badge removed from panel | `SiteMap.jsx` |
 | Sitemap: gold scrollbar on level-tabs strip | `global.css` |
 
-### What landed on `text-changes-client` (commit `f8d5cbb`)
+### What landed on `text-changes-client` (latest commit `1d1634e`)
 
 | Change | Files |
 |---|---|
-| Hero subtitle: 4-pillar identity line (Eco-Lodge · Residences · Hospitality · Investment) | `en.js`, `es.js`, `Hero.jsx` |
+| Hero subtitle: 4-pillar identity line (Eco-Lodge · Residences · Hospitality · Investment) | `en.js`, `es.js`, `Hero.jsx`, `global.css` |
 | Strip: identity-first messaging | `en.js`, `es.js` |
 | Gallery filters renamed: Villas / Apartments / Beach Club & Amenities / Boca de Yuma | `en.js`, `es.js`, `Gallery.jsx` |
 | Contact form: Bungalows removed from sales interest options | `en.js`, `es.js` |
 | Properties: visual For Sale / Hospitality & Rental split with divider | `Properties.jsx`, `en.js`, `es.js`, `global.css` |
+| Props divider label: matched section-label size (22px, `(` `)` parens, sage color) | `global.css` |
 
 ### What's next
 

@@ -5,7 +5,7 @@ _Updated: 2026-06-29_
 ## Current branch: `text-changes-client`
 
 Branched from `drishti-new-design` on 2026-06-29.  
-Purpose: client feedback implementation — Tiers A (text) + B (structural) complete on commit `f8d5cbb`.
+Purpose: client feedback implementation — Tiers A (text) + B (structural) complete; latest commit `1d1634e`.
 
 ---
 
@@ -32,11 +32,24 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) comp
 
 ---
 
+## Recently completed (on `text-changes-client`)
+
+| Task | Files | Done |
+|---|---|---|
+| Hero subtitle: 4-pillar identity line | `en.js`, `es.js`, `Hero.jsx`, `global.css` | ✅ |
+| Strip: identity-first messaging | `en.js`, `es.js` | ✅ |
+| Gallery filters renamed (Villas / Apartments / Beach Club & Amenities / Boca de Yuma) | `en.js`, `es.js`, `Gallery.jsx` | ✅ |
+| Contact form: Bungalows removed from sales interest options | `en.js`, `es.js` | ✅ |
+| Properties: For Sale / Hospitality & Rental split with divider | `Properties.jsx`, `en.js`, `es.js`, `global.css` | ✅ |
+| Props divider label: match section-label size (22px + parens) | `global.css` | ✅ |
+
+---
+
 ## Pending / upcoming
 
 | Task | Priority | Notes |
 |---|---|---|
-| Tier C: CSS/spacing tweaks (client feedback) | Medium | More whitespace, location section maritime feel, larger amenity images — awaiting review of A+B first |
+| Tier C: CSS/spacing tweaks (client feedback) | Medium | More whitespace, location section maritime feel, larger amenity images — awaiting sign-off on A+B |
 | Merge `text-changes-client` → `drishti-new-design` → `firebase` | Medium | When sign-off received |
 
 ---
