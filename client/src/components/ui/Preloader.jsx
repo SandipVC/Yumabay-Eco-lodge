@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAssets } from '../../hooks/useAssets.js';
-import assetsUrls from '../../assetsUrls.json';
 import './Preloader.css';
 
-const logoUrl = assetsUrls['logo.png'];
+// Local bundled logo — CMS can override via assets.branding.logo
+const DEFAULT_LOGO = '/logo-yb.svg';
 
 export default function Preloader() {
   const { assets, loading } = useAssets();
+  const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
   const [percent, setPercent] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);

@@ -3,7 +3,7 @@
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge  
 **Local path:** `C:\Yumabay-Eco-lodge`  
 **Last updated:** 2026-06-29  
-**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · commit `f8d5cbb`  
+**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · latest commit `c73d2e9`  
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -36,7 +36,7 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Sitemap: AVAILABLE/LIMITED badge removed from panel | `SiteMap.jsx` |
 | Sitemap: gold scrollbar on level-tabs strip | `global.css` |
 
-### What landed on `text-changes-client` (latest commit `1d1634e`)
+### What landed on `text-changes-client` (latest commit `c73d2e9`)
 
 | Change | Files |
 |---|---|
@@ -53,13 +53,25 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Sitemap: removed AVAILABLE status badge from selected-unit-header (still shows blocked/sold) | `UnitGrid.jsx` |
 | Sitemap: removed page subtitle + "Interactive Zone Map" label + colour legend | `SiteMap.jsx` |
 | Sitemap: replaced emoji icons with inline SVG line-art (villa / building / bungalow / eco / beach / pool / map); panel-icon now gold + visible on dark bg | `ZoneIcon.jsx` (new), `SiteMap.jsx`, `global.css` |
-| CMS Zone Editor: emoji text input → icon dropdown (Villa/Building/Bungalow/Eco/Beach/Pool/Map) with live SVG preview; SVG canvas label drops emoji prefix; pill + header swapped to ZoneIcon | `SiteMapZoneEditor.jsx` |
-| CMS / Dashboard: typography + colour sweep — Jost body, Cormorant headings, font sizes bumped (16px base, 22–38px headings, 12–15px labels), palette switched to public-site tokens (--teal / --gold / --ink / --rule / --bg-soft). Scoped under `.dash-light` so public site untouched | `global.css` |
-| CMS panel only: gold text → dark teal (`var(--teal)`); all font sizes inside `.cms-panel` bumped 20% (19.2px base, 14.4–26.4px labels/heads). Leads + login unchanged | `global.css` |
+| CMS Zone Editor: emoji text input → icon dropdown with live SVG preview; backward-compat with legacy emoji values | `SiteMapZoneEditor.jsx` |
+| CMS / Dashboard: typography + colour sweep — Jost body, Cormorant headings, bumped sizes, teal/gold/ink tokens. Scoped under `.dash-light` | `global.css` |
+| CMS panel only: gold text → dark teal; font sizes +20% inside `.cms-panel` | `global.css` |
+| Tier C padding rhythm across all public sections | `global.css` |
+| Location: watermark centered on map card height (not whole section) | `Location.jsx`, `global.css` |
+| Location: distance stat cards (LA Romana / Punta Cana / Santo Domingo / Beach Access) | `Location.jsx`, `en.js`, `es.js`, `global.css` |
+| Leads table: all font sizes +20% (th/td/status/btn); ink-on-cream color overrides for readability | `global.css`, `Dashboard.jsx` |
+| Gallery thumbnail grid: cat tag + legacy tag + queue label readable on cream bg | `global.css`, `CmsPanel.jsx` |
+| CMS Zone Editor: wheel-scroll on map no longer also scrolls page (non-passive listener) | `SiteMapZoneEditor.jsx` |
+| Gallery: per-thumbnail category `<select>` to reassign untagged images; change saved via existing Save Labels flow | `CmsPanel.jsx` |
+| CMS readability fix: Text Content inputs were white-on-grey (~2.3:1, dark-theme leftover). Added `.cms-text-input` to `.dash-light` input group (ink/white/15px), EN/ES tags + list heads → teal. See ADR-6.7 | `global.css` |
+| CMS panel gold→teal: gold reads poorly on cream. Remapped all gold to teal inside `.cms-panel` only (upload-btn, save-note, primary btn fill→teal, thumb selection, price focus). Leads/login keep gold. See ADR-6.8 | `global.css` |
+| Preloader dark→light: `Preloader` renders globally (public site + `/dashboard`), so one fix covers both loading screens. Light cream bg, ink title, teal accents. See ADR-6.9 | `Preloader.css` |
+| New logo wired everywhere + CMS-managed: bundled `/logo-yb.svg` default; header/footer/preloader read `assets.branding?.logo \|\| '/logo-yb.svg'`; favicon = `/logo-yb.svg` synced from CMS via `FaviconSync` in `App.jsx`. New Media Manager → Branding section (section `branding`, slot `logo`); server now accepts SVG (skips sharp resize). See ADR-7.1 | `public/logo-yb.svg`, `Navbar.jsx`, `Footer.jsx`, `Preloader.jsx`, `App.jsx`, `index.html`, `CmsPanel.jsx`, `server/routes/cms.js`, `server/data/assets.json` |
+| CMS Media Manager fully i18n'd: every hardcoded English string in `CmsPanel.jsx` now reads `t.dashboard.cms*` via `useLang()` (each sub-component calls it). Panel follows the dashboard EN/ES toggle. ~95 keys added to en.js + es.js and exposed in Text Content → Dashboard section (editable). See ADR-7.2. NOT translated (intentional): `GALLERY_CATS`/`PROPERTY_NAMES` (data identifiers mirroring public filters) and the `SiteMapZoneEditor` sub-tool strings | `CmsPanel.jsx`, `translations/en.js`, `translations/es.js`, `textSchema.js` |
 
 ### What's next
 
-Tier C (CSS / spacing tweaks per client feedback) — pending client review of A+B first.
+Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
 
 ---
 
@@ -92,8 +104,13 @@ Firestore overrides persist forever. After changing `en.js` default, strip old F
 `.dash-light` class wraps entire dashboard. `Dashboard.jsx` `useEffect` sets `document.body.style.background = '#F0EDE8'` to prevent global dark CSS bleed.
 
 ### Sitemap panel dark scope
-`.sitemap-info-panel.has-zone` = dark. `.sitemap-info-panel` (no class) = light theme.  
-All dark overrides in `global.css` scoped to `.sitemap-info-panel.has-zone .xxx`.
+Info panel always dark (both empty and selected states). `.has-zone` qualifier was dropped.  
+All dark overrides in `global.css` scoped to `.sitemap-info-panel .xxx` (no `.has-zone`).
+
+### Gallery category assignment
+Each thumbnail in CMS gallery grid has a `<select>` bound to `labelEdits[src].cat`.  
+Changing it marks the gallery dirty → "Save Labels" PATCH persists. Same flow as label edits.  
+Images with no `cat` show `— uncategorized —` option.
 
 ---
 

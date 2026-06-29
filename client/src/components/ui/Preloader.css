@@ -1,7 +1,7 @@
 .preloader-overlay {
   position: fixed;
   inset: 0;
-  background: #060609; /* same as var(--dark) */
+  background: #F0EDE8; /* warm light — matches dashboard bg */
   z-index: 99999;
   display: flex;
   align-items: center;
@@ -43,7 +43,7 @@
   font-size: 40px;
   font-weight: 400;
   letter-spacing: 0.25em;
-  color: #FFFFFF;
+  color: #0A2229; /* ink */
   margin: 0;
   padding-left: 0.25em; /* offset for letter-spacing centering */
 }
@@ -53,16 +53,16 @@
   font-size: 14px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #CA9352; /* var(--gold) */
+  color: #0A4C58; /* teal — readable on light */
   margin: 0;
   padding-left: 0.3em;
-  opacity: 0.8;
+  opacity: 1;
 }
 
 .preloader-progress-container {
   width: 100%;
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(10, 34, 41, 0.12);
   border-radius: 100px;
   margin-top: 32px;
   overflow: hidden;
@@ -71,7 +71,7 @@
 
 .preloader-progress-bar {
   height: 100%;
-  background: #CA9352; /* var(--gold) */
+  background: #0A4C58; /* teal */
   width: 0%;
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -80,7 +80,7 @@
   font-family: 'Aptos Narrow', 'Jost', sans-serif;
   font-size: 12px;
   letter-spacing: 0.15em;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(10, 34, 41, 0.55);
   margin-top: 8px;
 }
 

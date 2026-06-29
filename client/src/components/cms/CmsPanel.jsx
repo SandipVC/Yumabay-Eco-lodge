@@ -4,6 +4,7 @@
  */
 import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAssets, invalidateAssetsCache } from '../../hooks/useAssets.js';
+import { useLang } from '../../context/LanguageContext.jsx';
 import SiteMapZoneEditor from './SiteMapZoneEditor.jsx';
 
 // ── Constants ─────────────────────────────────────────────────────────────────
@@ -22,14 +23,17 @@ const GALLERY_CATS = [
   { key: 'Boca de Yuma', label: 'Boca de Yuma' },
 ];
 
+// Tab labels/descriptions come from translations (t.dashboard.cms*) so the
+// whole Media Manager switches with the dashboard EN/ES toggle.
 const SECTIONS = [
-  { id: 'hero',       label: '🎬 Hero',       desc: 'Hero background image' },
-  { id: 'about',      label: '🏠 About',      desc: 'Main & accent images' },
-  { id: 'properties', label: '🏗 Properties', desc: 'Images & prices' },
-  { id: 'gallery',    label: '🖼 Gallery',    desc: 'Add / remove gallery photos' },
-  { id: 'lounge',     label: '🍹 Lounge',     desc: 'Club lounge 2×2 grid' },
-  { id: 'decor',      label: '🎨 Decor',      desc: 'Section band patterns & palms' },
-  { id: 'sitemap',    label: '🗺 Site Map',   desc: 'Backdrop, plan image & PDFs' },
+  { id: 'branding',   labelKey: 'cmsTabBranding',   descKey: 'cmsTabBrandingDesc' },
+  { id: 'hero',       labelKey: 'cmsTabHero',       descKey: 'cmsTabHeroDesc' },
+  { id: 'about',      labelKey: 'cmsTabAbout',      descKey: 'cmsTabAboutDesc' },
+  { id: 'properties', labelKey: 'cmsTabProperties', descKey: 'cmsTabPropertiesDesc' },
+  { id: 'gallery',    labelKey: 'cmsTabGallery',    descKey: 'cmsTabGalleryDesc' },
+  { id: 'lounge',     labelKey: 'cmsTabLounge',     descKey: 'cmsTabLoungeDesc' },
+  { id: 'decor',      labelKey: 'cmsTabDecor',      descKey: 'cmsTabDecorDesc' },
+  { id: 'sitemap',    labelKey: 'cmsTabSitemap',    descKey: 'cmsTabSitemapDesc' },
 ];
 
 // ── Shared upload helper ──────────────────────────────────────────────────────
@@ -94,6 +98,8 @@ async function patchSection({ section, data, token }) {
 /** Single asset thumbnail with overlay delete / replace button */
 function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
   const fileRef = useRef();
+  const { t } = useLang();
+  const c = t.dashboard;
   const isVideo = src && /\.(mp4|webm|mov)$/i.test(src);
 
   return (
@@ -106,13 +112,13 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
         )
       ) : (
         <div className="cms-thumb-empty">
-          <span>No image</span>
+          <span>{c.cmsNoImage}</span>
         </div>
       )}
 
       {replacing && (
         <div className="cms-thumb-uploading">
-          <span>Uploading</span>
+          <span>{c.cmsUploading}</span>
           <div className="cms-wave-container">
             <div className="cms-wave-progress" />
           </div>
@@ -130,9 +136,9 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
               className="cms-thumb-btn"
               onClick={() => fileRef.current?.click()}
               disabled={replacing}
-              title="Replace"
+              title={c.cmsReplace}
             >
-              {replacing ? '…' : '↺ Replace'}
+              {replacing ? '…' : c.cmsReplace}
             </button>
             <input ref={fileRef} type="file" accept="image/*,video/mp4,video/webm"
               style={{ display: 'none' }}
@@ -140,8 +146,8 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
           </>
         )}
         {onDelete && (
-          <button className="cms-thumb-btn cms-thumb-del" onClick={onDelete} title="Remove">
-            ✕ Remove
+          <button className="cms-thumb-btn cms-thumb-del" onClick={onDelete} title={c.cmsRemove}>
+            {c.cmsRemoveBtn}
           </button>
         )}
       </div>
@@ -152,6 +158,8 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
 
 /** Hero section — video + poster slots */
 function HeroSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [busy, setBusy]   = useState({});
   const [err,  setErr]    = useState(null);
   const fileRef           = useRef({});
@@ -168,7 +176,7 @@ function HeroSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(slot) {
-    if (!confirm('Remove this asset?')) return;
+    if (!confirm(c.cmsHeroRemoveConfirm)) return;
     setBusy(b => ({ ...b, [slot]: true }));
     setErr(null);
     try {
@@ -180,32 +188,27 @@ function HeroSection({ assets, token, refresh }) {
   }
 
   const slots = [
-    { key: 'poster', label: 'Hero Image (poster)', accept: 'image/*' },
-    { key: 'video',  label: 'Hero Video (scroll-scrub)', accept: 'video/mp4,video/webm' },
+    { key: 'poster', label: c.cmsHeroPoster, accept: 'image/*' },
+    { key: 'video',  label: c.cmsHeroVideo,  accept: 'video/mp4,video/webm' },
   ];
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
-      <p className="cms-hint">
-        The hero video scroll-scrubs as visitors scroll down. For smooth scrubbing, upload a short
-        MP4 encoded with all keyframes (all-I-frame); other encodes still play but may stutter while
-        scrubbing. Leave empty to use the bundled scroll-optimized clip. The poster shows while the
-        video buffers.
-      </p>
+      <p className="cms-hint">{c.cmsHeroHint}</p>
       <div className="cms-slot-grid">
         {slots.map(({ key, label, accept }) => (
           <div key={key} className="cms-slot">
             <p className="cms-slot-label">{label}</p>
             <AssetThumb
               src={assets?.hero?.[key]}
-              label={key === 'video' ? assets?.hero?.video || 'No video set' : ''}
+              label={key === 'video' ? assets?.hero?.video || c.cmsHeroNoVideo : ''}
               replacing={busy[key]}
               onReplace={file => handleUpload(key, file)}
               onDelete={assets?.hero?.[key] ? () => handleDelete(key) : null}
             />
             <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
-              {busy[key] ? 'Uploading…' : `+ Upload ${label}`}
+              {busy[key] ? c.cmsUploadingDots : `${c.cmsUpload} ${label}`}
               <input type="file" accept={accept} style={{ display: 'none' }}
                 onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }} />
             </label>
@@ -216,8 +219,63 @@ function HeroSection({ assets, token, refresh }) {
   );
 }
 
+/** Branding section — single site logo (header / footer / preloader / favicon) */
+function BrandingSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
+  const [busy, setBusy] = useState(false);
+  const [err,  setErr]  = useState(null);
+
+  async function handleUpload(file) {
+    setBusy(true); setErr(null);
+    try {
+      await uploadFile({ file, section: 'branding', slot: 'logo', token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function handleDelete() {
+    if (!confirm(c.cmsBrandingRemoveConfirm)) return;
+    setBusy(true); setErr(null);
+    try {
+      await deleteAsset({ section: 'branding', slot: 'logo', token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(false); }
+  }
+
+  const logo = assets?.branding?.logo;
+
+  return (
+    <div className="cms-section-body">
+      {err && <p className="cms-error">{err}</p>}
+      <p className="cms-hint">{c.cmsBrandingHint}</p>
+      <div className="cms-slot-grid">
+        <div className="cms-slot">
+          <p className="cms-slot-label">{c.cmsBrandingLogo}</p>
+          <AssetThumb
+            src={logo || '/logo-yb.svg'}
+            label={logo ? '' : c.cmsBrandingDefault}
+            replacing={busy}
+            onReplace={file => handleUpload(file)}
+            onDelete={logo ? () => handleDelete() : null}
+          />
+          <label className={`cms-upload-btn${busy ? ' loading' : ''}`}>
+            {busy ? c.cmsUploadingDots : c.cmsBrandingUpload}
+            <input type="file" accept="image/svg+xml,image/png,image/*" style={{ display: 'none' }}
+              onChange={e => { if (e.target.files[0]) handleUpload(e.target.files[0]); }} />
+          </label>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /** About section — main + accent image slots */
 function AboutSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [busy, setBusy] = useState({});
   const [err,  setErr]  = useState(null);
 
@@ -231,7 +289,7 @@ function AboutSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(slot) {
-    if (!confirm('Remove this image?')) return;
+    if (!confirm(c.cmsRemoveImageConfirm)) return;
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await deleteAsset({ section: 'about', slot, token });
@@ -241,8 +299,8 @@ function AboutSection({ assets, token, refresh }) {
   }
 
   const slots = [
-    { key: 'main',   label: 'Main Image (large)' },
-    { key: 'accent', label: 'Accent Image (small overlay)' },
+    { key: 'main',   label: c.cmsAboutMain },
+    { key: 'accent', label: c.cmsAboutAccent },
   ];
 
   return (
@@ -259,7 +317,7 @@ function AboutSection({ assets, token, refresh }) {
               onDelete={assets?.about?.[key] ? () => handleDelete(key) : null}
             />
             <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
-              {busy[key] ? 'Uploading…' : `+ Upload ${label}`}
+              {busy[key] ? c.cmsUploadingDots : `${c.cmsUpload} ${label}`}
               <input type="file" accept="image/*" style={{ display: 'none' }}
                 onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }} />
             </label>
@@ -272,6 +330,8 @@ function AboutSection({ assets, token, refresh }) {
 
 /** Properties section — multi-image gallery per property, fully CMS-managed */
 function PropertiesSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   // busy key: `${propIdx}` for add-upload, `${propIdx}-${imgIdx}` for replace, `del-${propIdx}-${imgIdx}` for delete
   const [busy,        setBusy]        = useState({});
   const [err,         setErr]         = useState(null);
@@ -321,7 +381,7 @@ function PropertiesSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(propIdx, imgIdx, name) {
-    if (!confirm(`Remove image ${imgIdx + 1} from ${name}?`)) return;
+    if (!confirm(c.cmsPropRemoveConfirm.replace('{n}', imgIdx + 1).replace('{name}', name))) return;
     const key = `del-${propIdx}-${imgIdx}`;
     setBusyKey(key, true); setErr(null);
     try {
@@ -333,7 +393,7 @@ function PropertiesSection({ assets, token, refresh }) {
 
   const getComputedPrice = (idx) => {
     const inv = assets?.inventory;
-    if (!inv) return 'Loading...';
+    if (!inv) return c.cmsPropComputedLoading;
     let units = [];
     if (idx === 0) {
       units = inv.villas || [];
@@ -346,22 +406,18 @@ function PropertiesSection({ assets, token, refresh }) {
       const bE = inv.buildings?.find(b => b.id === 'edificio-e')?.units || [];
       units = [...bD, ...bE];
     } else {
-      return 'Coming Soon (Phase 2)';
+      return c.cmsPropComingSoon;
     }
     const available = units.filter(u => u.status === 'available' && typeof u.price === 'number');
-    if (!available.length) return 'Sold Out';
+    if (!available.length) return c.cmsPropSoldOut;
     const min = Math.min(...available.map(u => u.price));
-    return `From $${min.toLocaleString()}`;
+    return `${c.cmsFrom} $${min.toLocaleString()}`;
   };
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
-      <p className="cms-hint">
-        Manage all images for each property. The <strong>first image</strong> is used as the card thumbnail.
-        All images appear in the lightbox gallery when a visitor clicks the property photo.
-        Starting prices are calculated dynamically from the active unit inventory.
-      </p>
+      <p className="cms-hint">{c.cmsPropHint}</p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
         {PROPERTY_NAMES.map((name, propIdx) => {
@@ -375,11 +431,11 @@ function PropertiesSection({ assets, token, refresh }) {
                 <div>
                   <span className="cms-slot-label" style={{ margin: 0 }}>{name}</span>
                   <span style={{ marginLeft: 12, fontSize: 11, color: 'rgba(255,255,255,.4)' }}>
-                    {imgs.length} image{imgs.length !== 1 ? 's' : ''}
+                    {imgs.length} {imgs.length !== 1 ? c.cmsImages : c.cmsImage}
                   </span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,.4)' }}>Price override:</span>
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,.4)' }}>{c.cmsPropPriceOverride}</span>
                   <input
                     type="text"
                     placeholder={getComputedPrice(propIdx)}
@@ -405,7 +461,7 @@ function PropertiesSection({ assets, token, refresh }) {
                       fontSize: 11, padding: '4px 10px', cursor: priceSaving ? 'not-allowed' : 'pointer',
                     }}
                   >
-                    {priceSaving ? '…' : priceSaved ? 'Saved ✓' : 'Save'}
+                    {priceSaving ? '…' : priceSaved ? c.cmsSaved : c.cmsSave}
                   </button>
                 </div>
               </div>
@@ -420,7 +476,7 @@ function PropertiesSection({ assets, token, refresh }) {
                         background: '#C9A84C', color: '#000', fontSize: 9,
                         fontWeight: 700, letterSpacing: '.06em', padding: '2px 6px',
                         borderRadius: 2, textTransform: 'uppercase',
-                      }}>Hero</span>
+                      }}>{c.cmsPropHero}</span>
                     )}
                     <AssetThumb
                       src={src}
@@ -430,7 +486,7 @@ function PropertiesSection({ assets, token, refresh }) {
                     />
                     {busy[`del-${propIdx}-${imgIdx}`] && (
                       <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12 }}>
-                        Removing…
+                        {c.cmsRemoving}
                       </div>
                     )}
                   </div>
@@ -446,7 +502,7 @@ function PropertiesSection({ assets, token, refresh }) {
                   fontSize: 11, background: 'rgba(201,168,76,.04)', transition: 'border-color .2s',
                 }}>
                   <span style={{ fontSize: 22, lineHeight: 1 }}>{addBusy ? '…' : '+'}</span>
-                  <span>{addBusy ? 'Uploading…' : 'Add Image'}</span>
+                  <span>{addBusy ? c.cmsUploadingDots : c.cmsPropAddImage}</span>
                   <input type="file" accept="image/*" style={{ display: 'none' }} disabled={addBusy}
                     onChange={e => { if (e.target.files[0]) handleAdd(propIdx, e.target.files[0]); }} />
                 </label>
@@ -463,6 +519,8 @@ function PropertiesSection({ assets, token, refresh }) {
 let _queueId = 0;
 
 function GallerySection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [queue,      setQueue]      = useState([]);   // pending files awaiting upload
   const [uploading,  setUploading]  = useState(false);
   const [delBusy,    setDelBusy]     = useState({});
@@ -546,7 +604,7 @@ function GallerySection({ assets, token, refresh }) {
       clearQueue();
       invalidateAssetsCache(); refresh();
     } catch (ex) {
-      setErr(`Upload failed: ${ex.message}`);
+      setErr(`${c.cmsGalUploadError} ${ex.message}`);
     } finally {
       setUploading(false);
     }
@@ -575,7 +633,7 @@ function GallerySection({ assets, token, refresh }) {
       setSelectMode(false);
       invalidateAssetsCache(); refresh();
     } catch (e) {
-      setErr(`Bulk delete failed: ${e.message}`);
+      setErr(`${c.cmsGalBulkDeleteError} ${e.message}`);
     } finally {
       setDelBusy(b => { const n = { ...b }; srcs.forEach(s => delete n[s]); return n; });
     }
@@ -634,11 +692,11 @@ function GallerySection({ assets, token, refresh }) {
           onChange={e => { addFiles(e.target.files); e.target.value = ''; }} />
         <div className="cms-dropzone-icon">⬆</div>
         <p className="cms-dropzone-title">
-          {dragOver ? 'Drop images to add' : 'Drag & drop images here'}
+          {dragOver ? c.cmsGalDrop : c.cmsGalDragDrop}
         </p>
-        <p className="cms-dropzone-sub">or click to browse · JPG, PNG, WebP, GIF · multiple allowed</p>
+        <p className="cms-dropzone-sub">{c.cmsGalDropSub}</p>
         <div className="cms-dropzone-cat" onClick={e => e.stopPropagation()}>
-          <span>New images go to:</span>
+          <span>{c.cmsGalNewTo}</span>
           {GALLERY_CATS.map(c => (
             <button key={c.key}
               className={`cms-catpick${defaultCat === c.key ? ' active' : ''}`}
@@ -655,11 +713,11 @@ function GallerySection({ assets, token, refresh }) {
       {queue.length > 0 && (
         <div className="cms-queue">
           <div className="cms-queue-head">
-            <span className="cms-queue-title">{queue.length} image{queue.length > 1 ? 's' : ''} ready to upload</span>
+            <span className="cms-queue-title">{queue.length} {queue.length > 1 ? c.cmsImages : c.cmsImage} {c.cmsGalReady}</span>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="cms-btn-ghost" onClick={clearQueue} disabled={uploading}>Clear</button>
+              <button className="cms-btn-ghost" onClick={clearQueue} disabled={uploading}>{c.cmsClear}</button>
               <button className="cms-btn-gold" onClick={uploadQueue} disabled={uploading}>
-                {uploading ? 'Uploading…' : `Upload ${queue.length} image${queue.length > 1 ? 's' : ''}`}
+                {uploading ? c.cmsUploadingDots : `${c.cmsGalUploadBtn} ${queue.length} ${queue.length > 1 ? c.cmsImages : c.cmsImage}`}
               </button>
             </div>
           </div>
@@ -684,14 +742,14 @@ function GallerySection({ assets, token, refresh }) {
                 <input
                   className="cms-queue-label"
                   type="text" value={item.labelEn}
-                  placeholder="EN label"
+                  placeholder={c.cmsGalEnLabel}
                   disabled={uploading}
                   onChange={e => updateQueueItem(item.id, { labelEn: e.target.value })}
                 />
                 <input
                   className="cms-queue-label"
                   type="text" value={item.labelEs}
-                  placeholder="ES etiqueta"
+                  placeholder={c.cmsGalEsLabel}
                   disabled={uploading}
                   onChange={e => updateQueueItem(item.id, { labelEs: e.target.value })}
                 />
@@ -711,7 +769,7 @@ function GallerySection({ assets, token, refresh }) {
       {/* ── Toolbar: filters + select mode ── */}
       <div className="cms-gallery-toolbar">
         <div className="cms-filter-row">
-          {[{ key: 'All', label: 'All' }, ...GALLERY_CATS].map(f => (
+          {[{ key: 'All', label: c.cmsGalAll }, ...GALLERY_CATS].map(f => (
             <button key={f.key}
               className={`cms-filter-btn${filter === f.key ? ' active' : ''}`}
               onClick={() => setFilter(f.key)}>
@@ -726,20 +784,20 @@ function GallerySection({ assets, token, refresh }) {
               className={showLabels ? 'cms-btn-gold' : 'cms-btn-ghost'}
               onClick={toggleShowLabels}
               disabled={labelToggleBusy}
-              title="Toggle whether labels are shown on the public gallery"
+              title={c.cmsGalLabelsTitle}
               style={{ minWidth: 110 }}
             >
-              {labelToggleBusy ? '…' : showLabels ? '🏷 Labels ON' : '🏷 Labels OFF'}
+              {labelToggleBusy ? '…' : showLabels ? c.cmsGalLabelsOn : c.cmsGalLabelsOff}
             </button>
             {!selectMode ? (
-              <button className="cms-btn-ghost" onClick={() => setSelectMode(true)}>Select</button>
+              <button className="cms-btn-ghost" onClick={() => setSelectMode(true)}>{c.cmsGalSelect}</button>
             ) : (
               <>
-                <span className="cms-select-count">{selected.size} selected</span>
-                <button className="cms-btn-ghost" onClick={selectAllVisible}>All</button>
-                <button className="cms-btn-ghost" onClick={() => { setSelectMode(false); setSelected(new Set()); }}>Cancel</button>
+                <span className="cms-select-count">{selected.size} {c.cmsGalSelected}</span>
+                <button className="cms-btn-ghost" onClick={selectAllVisible}>{c.cmsGalAll}</button>
+                <button className="cms-btn-ghost" onClick={() => { setSelectMode(false); setSelected(new Set()); }}>{c.cmsCancel}</button>
                 <button className="cms-btn-danger" disabled={!selected.size} onClick={doBulkDelete}>
-                  Delete {selected.size || ''}
+                  {c.cmsGalDelete} {selected.size || ''}
                 </button>
               </>
             )}
@@ -758,6 +816,7 @@ function GallerySection({ assets, token, refresh }) {
           const curEn  = edits.labelEn !== undefined ? edits.labelEn : (img.labelEn ?? img.label ?? '');
           const curEs  = edits.labelEs !== undefined ? edits.labelEs : (img.labelEs ?? '');
           const isLegacy = !('labelEn' in img);
+          const curCat = edits.cat !== undefined ? edits.cat : (img.cat ?? '');
           return (
             <div key={img.src} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <div
@@ -783,10 +842,10 @@ function GallerySection({ assets, token, refresh }) {
 
                 {askDel && (
                   <div className="cms-thumb-confirm" onClick={e => e.stopPropagation()}>
-                    <p>Remove this image?</p>
+                    <p>{c.cmsRemoveImageConfirm}</p>
                     <div>
-                      <button className="cms-btn-ghost" onClick={() => setConfirmDel(null)}>No</button>
-                      <button className="cms-btn-danger" onClick={() => doDelete(img.src)}>Remove</button>
+                      <button className="cms-btn-ghost" onClick={() => setConfirmDel(null)}>{c.cmsNo}</button>
+                      <button className="cms-btn-danger" onClick={() => doDelete(img.src)}>{c.cmsRemove}</button>
                     </div>
                   </div>
                 )}
@@ -797,7 +856,7 @@ function GallerySection({ assets, token, refresh }) {
                 className="cms-queue-label"
                 type="text"
                 value={curEn}
-                placeholder="EN label"
+                placeholder={c.cmsGalEnLabel}
                 onChange={e => setLabelEdit(img.src, 'labelEn', e.target.value)}
                 style={{ fontSize: 14 }}
               />
@@ -805,18 +864,29 @@ function GallerySection({ assets, token, refresh }) {
                 className="cms-queue-label"
                 type="text"
                 value={curEs}
-                placeholder="ES etiqueta"
+                placeholder={c.cmsGalEsLabel}
                 onChange={e => setLabelEdit(img.src, 'labelEs', e.target.value)}
                 style={{ fontSize: 14 }}
               />
-              <span className="cms-cat-tag" style={{ alignSelf: 'flex-start' }}>{img.cat}</span>
-              {isLegacy && <span style={{ fontSize: 9, color: 'rgba(201,168,76,.7)', letterSpacing: '.08em' }}>legacy — save to migrate</span>}
+              <select
+                className="cms-queue-cat cms-thumb-cat"
+                value={curCat}
+                onChange={e => setLabelEdit(img.src, 'cat', e.target.value)}
+                style={{ fontSize: 13 }}
+                title={c.cmsGalLabelsTitle}
+              >
+                <option value="">{c.cmsGalUncat}</option>
+                {GALLERY_CATS.map(cat => (
+                  <option key={cat.key} value={cat.key}>{cat.label}</option>
+                ))}
+              </select>
+              {isLegacy && <span className="cms-legacy-tag">{c.cmsGalLegacy}</span>}
             </div>
           );
         })}
         {visible.length === 0 && (
           <p style={{ color: 'rgba(255,255,255,.3)', fontSize: 13, gridColumn: '1/-1' }}>
-            No images in this category yet. Drag photos into the box above to add them.
+            {c.cmsGalEmpty}
           </p>
         )}
       </div>
@@ -824,9 +894,9 @@ function GallerySection({ assets, token, refresh }) {
       {/* Save bar for label edits */}
       {hasLabelEdits && (
         <div className="cms-save-bar">
-          <span className="cms-save-note">Unsaved label changes</span>
+          <span className="cms-save-note">{c.cmsGalUnsaved}</span>
           <button className="cms-btn-gold" onClick={saveLabels} disabled={labelSaving}>
-            {labelSaving ? 'Saving…' : labelSaved ? 'Saved ✓' : 'Save Labels'}
+            {labelSaving ? c.cmsSavingDots : labelSaved ? c.cmsSaved : c.cmsGalSaveLabels}
           </button>
         </div>
       )}
@@ -836,6 +906,8 @@ function GallerySection({ assets, token, refresh }) {
 
 /** Lounge section — 4 indexed slots */
 function LoungeSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [busy, setBusy] = useState({});
   const [err,  setErr]  = useState(null);
 
@@ -849,7 +921,7 @@ function LoungeSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(idx) {
-    if (!confirm('Remove this lounge image?')) return;
+    if (!confirm(c.cmsLoungeRemoveConfirm)) return;
     setBusy(b => ({ ...b, [idx]: true })); setErr(null);
     try {
       await deleteAsset({ section: 'lounge', slot: idx, token });
@@ -861,11 +933,11 @@ function LoungeSection({ assets, token, refresh }) {
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
-      <p className="cms-hint">These 4 images fill the 2×2 grid in the Club Lounge section.</p>
+      <p className="cms-hint">{c.cmsLoungeHint}</p>
       <div className="cms-slot-grid cms-slot-grid-4">
         {[0, 1, 2, 3].map(idx => (
           <div key={idx} className="cms-slot">
-            <p className="cms-slot-label">Image {idx + 1}</p>
+            <p className="cms-slot-label">{c.cmsLoungeImage} {idx + 1}</p>
             <AssetThumb
               src={assets?.lounge?.[idx]}
               replacing={busy[idx]}
@@ -873,7 +945,7 @@ function LoungeSection({ assets, token, refresh }) {
               onDelete={assets?.lounge?.[idx] ? () => handleDelete(idx) : null}
             />
             <label className={`cms-upload-btn${busy[idx] ? ' loading' : ''}`}>
-              {busy[idx] ? 'Uploading…' : '+ Replace Image'}
+              {busy[idx] ? c.cmsUploadingDots : c.cmsReplaceImage}
               <input type="file" accept="image/*" style={{ display: 'none' }}
                 onChange={e => { if (e.target.files[0]) handleUpload(idx, e.target.files[0]); }} />
             </label>
@@ -887,6 +959,8 @@ function LoungeSection({ assets, token, refresh }) {
 /** A single PDF document slot — view current file, replace, or remove */
 function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
   const fileRef = useRef();
+  const { t } = useLang();
+  const c = t.dashboard;
   const fileName = src ? decodeURIComponent(src.split('/').pop()) : null;
 
   return (
@@ -895,7 +969,7 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
       <div className="cms-pdf-card">
         {busy && (
           <div className="cms-thumb-uploading mini">
-            <span>Uploading</span>
+            <span>{c.cmsUploading}</span>
             <div className="cms-wave-container">
               <div className="cms-wave-progress" />
             </div>
@@ -911,22 +985,22 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
               <a href={src} target="_blank" rel="noopener noreferrer" className="cms-pdf-name" title={fileName}>
                 {fileName}
               </a>
-              <a href={src} target="_blank" rel="noopener noreferrer" className="cms-pdf-view">View PDF ↗</a>
+              <a href={src} target="_blank" rel="noopener noreferrer" className="cms-pdf-view">{c.cmsSmViewPdf}</a>
             </>
           ) : (
-            <span className="cms-pdf-empty">No PDF set</span>
+            <span className="cms-pdf-empty">{c.cmsSmNoPdf}</span>
           )}
         </div>
       </div>
       {hint && <p className="cms-pdf-hint">{hint}</p>}
       <div className="cms-pdf-actions">
         <label className={`cms-upload-btn${busy ? ' loading' : ''}`}>
-          {busy ? 'Uploading…' : (src ? '↺ Replace PDF' : '+ Upload PDF')}
+          {busy ? c.cmsUploadingDots : (src ? c.cmsSmReplacePdf : c.cmsSmUploadPdf)}
           <input type="file" accept="application/pdf,.pdf" style={{ display: 'none' }}
             onChange={e => { if (e.target.files[0]) onReplace(e.target.files[0]); }} />
         </label>
         {src && onDelete && (
-          <button className="cms-btn-danger" onClick={onDelete} disabled={busy}>Remove</button>
+          <button className="cms-btn-danger" onClick={onDelete} disabled={busy}>{c.cmsRemove}</button>
         )}
       </div>
     </div>
@@ -935,6 +1009,8 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
 
 /** Decor section — decorative band patterns & palm overlays */
 function DecorSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [busy, setBusy] = useState({});
   const [err,  setErr]  = useState(null);
 
@@ -948,7 +1024,7 @@ function DecorSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(slot) {
-    if (!confirm('Remove this image?')) return;
+    if (!confirm(c.cmsRemoveImageConfirm)) return;
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await deleteAsset({ section: 'decor', slot, token });
@@ -958,18 +1034,15 @@ function DecorSection({ assets, token, refresh }) {
   }
 
   const slots = [
-    { key: 'aboutPalms',    label: 'About — Palm Overlay' },
-    { key: 'loungePattern', label: 'Lounge — Band Pattern' },
-    { key: 'ctaPattern',    label: 'CTA — Band Pattern' },
+    { key: 'aboutPalms',    label: c.cmsDecorAbout },
+    { key: 'loungePattern', label: c.cmsDecorLounge },
+    { key: 'ctaPattern',    label: c.cmsDecorCta },
   ];
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
-      <p className="cms-hint">
-        Decorative imagery: the palm overlay behind the About section, and the contour band
-        patterns behind the Lounge and CTA sections. Transparent PNGs work best.
-      </p>
+      <p className="cms-hint">{c.cmsDecorHint}</p>
       <div className="cms-slot-grid">
         {slots.map(({ key, label }) => (
           <div key={key} className="cms-slot">
@@ -981,7 +1054,7 @@ function DecorSection({ assets, token, refresh }) {
               onDelete={assets?.decor?.[key] ? () => handleDelete(key) : null}
             />
             <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
-              {busy[key] ? 'Uploading…' : `+ Upload ${label}`}
+              {busy[key] ? c.cmsUploadingDots : `${c.cmsUpload} ${label}`}
               <input type="file" accept="image/*" style={{ display: 'none' }}
                 onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }} />
             </label>
@@ -994,6 +1067,8 @@ function DecorSection({ assets, token, refresh }) {
 
 /** Site Map section — backdrop, plan image + downloadable PDFs */
 function SiteMapSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [busy, setBusy] = useState({});
   const [err,  setErr]  = useState(null);
 
@@ -1007,7 +1082,7 @@ function SiteMapSection({ assets, token, refresh }) {
   }
 
   async function handleDelete(slot, kind) {
-    if (!confirm(`Remove this ${kind}?`)) return;
+    if (!confirm(c.cmsHeroRemoveConfirm)) return;
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await deleteAsset({ section: 'sitemap', slot, token });
@@ -1021,16 +1096,12 @@ function SiteMapSection({ assets, token, refresh }) {
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
-      <p className="cms-hint">
-        Configure the Site Map page: the interactive zone-map backdrop, the architectural plan
-        image, and the downloadable PDF documents (master plan, villa floor plans, brochure &
-        amenities).
-      </p>
+      <p className="cms-hint">{c.cmsSmHint}</p>
 
       {/* Images: zone-map backdrop + plan image */}
       <div className="cms-slot-grid" style={{ marginBottom: 28 }}>
         <div className="cms-slot" style={{ maxWidth: 360 }}>
-          <p className="cms-slot-label">Zone-Map Backdrop</p>
+          <p className="cms-slot-label">{c.cmsSmBackdrop}</p>
           <AssetThumb
             src={sm.backdrop}
             replacing={busy.backdrop}
@@ -1038,13 +1109,13 @@ function SiteMapSection({ assets, token, refresh }) {
             onDelete={sm.backdrop ? () => handleDelete('backdrop', 'backdrop image') : null}
           />
           <label className={`cms-upload-btn${busy.backdrop ? ' loading' : ''}`}>
-            {busy.backdrop ? 'Uploading…' : '↺ Replace Backdrop'}
+            {busy.backdrop ? c.cmsUploadingDots : c.cmsSmReplaceBackdrop}
             <input type="file" accept="image/*" style={{ display: 'none' }}
               onChange={e => { if (e.target.files[0]) handleUpload('backdrop', e.target.files[0]); }} />
           </label>
         </div>
         <div className="cms-slot" style={{ maxWidth: 360 }}>
-          <p className="cms-slot-label">Architectural Plan Image</p>
+          <p className="cms-slot-label">{c.cmsSmPlan}</p>
           <AssetThumb
             src={sm.planImage}
             replacing={busy.planImage}
@@ -1052,7 +1123,7 @@ function SiteMapSection({ assets, token, refresh }) {
             onDelete={sm.planImage ? () => handleDelete('planImage', 'plan image') : null}
           />
           <label className={`cms-upload-btn${busy.planImage ? ' loading' : ''}`}>
-            {busy.planImage ? 'Uploading…' : '↺ Replace Plan Image'}
+            {busy.planImage ? c.cmsUploadingDots : c.cmsSmReplacePlan}
             <input type="file" accept="image/*" style={{ display: 'none' }}
               onChange={e => { if (e.target.files[0]) handleUpload('planImage', e.target.files[0]); }} />
           </label>
@@ -1062,32 +1133,32 @@ function SiteMapSection({ assets, token, refresh }) {
       {/* PDF documents */}
       <div className="cms-pdf-grid">
         <PdfSlot
-          label="Master Plan PDF"
-          hint="Linked from the “Download Master Plan” button."
+          label={c.cmsSmMasterPdf}
+          hint={c.cmsSmMasterHint}
           src={sm.masterPdf}
           busy={busy.masterPdf}
           onReplace={file => handleUpload('masterPdf', file)}
           onDelete={() => handleDelete('masterPdf', 'master plan PDF')}
         />
         <PdfSlot
-          label="Villas Floor Plans PDF"
-          hint="Linked from the “Villas Floor Plans” button."
+          label={c.cmsSmVillasPdf}
+          hint={c.cmsSmVillasHint}
           src={sm.villasPdf}
           busy={busy.villasPdf}
           onReplace={file => handleUpload('villasPdf', file)}
           onDelete={() => handleDelete('villasPdf', 'villas floor plans PDF')}
         />
         <PdfSlot
-          label="Brochure PDF"
-          hint="Linked from the “Download Brochure” button."
+          label={c.cmsSmBrochurePdf}
+          hint={c.cmsSmBrochureHint}
           src={sm.brochurePdf}
           busy={busy.brochurePdf}
           onReplace={file => handleUpload('brochurePdf', file)}
           onDelete={() => handleDelete('brochurePdf', 'brochure PDF')}
         />
         <PdfSlot
-          label="Amenities PDF"
-          hint="Linked from the “Download Amenities” button."
+          label={c.cmsSmAmenitiesPdf}
+          hint={c.cmsSmAmenitiesHint}
           src={sm.amenitiesPdf}
           busy={busy.amenitiesPdf}
           onReplace={file => handleUpload('amenitiesPdf', file)}
@@ -1097,7 +1168,7 @@ function SiteMapSection({ assets, token, refresh }) {
 
       {/* Interactive zone map editor */}
       <div className="zone-editor-section">
-        <p className="cms-slot-label" style={{ marginBottom: 12 }}>Interactive Zone Map</p>
+        <p className="cms-slot-label" style={{ marginBottom: 12 }}>{c.cmsSmZoneMap}</p>
         <SiteMapZoneEditor
           initialZones={assets?.sitemapZones}
           onSave={async (zones) => {
@@ -1116,6 +1187,8 @@ function SiteMapSection({ assets, token, refresh }) {
 export default function CmsPanel({ token }) {
   const [activeSection, setActiveSection] = useState('gallery');
   const { assets, loading, error, refresh } = useAssets();
+  const { t } = useLang();
+  const c = t.dashboard;
 
   const sectionProps = { assets, token, refresh };
 
@@ -1129,19 +1202,20 @@ export default function CmsPanel({ token }) {
             className={`cms-tab${activeSection === s.id ? ' active' : ''}`}
             onClick={() => setActiveSection(s.id)}
           >
-            <span>{s.label}</span>
-            <small>{s.desc}</small>
+            <span>{c[s.labelKey]}</span>
+            <small>{c[s.descKey]}</small>
           </button>
         ))}
       </div>
 
       {/* Content */}
       <div className="cms-content">
-        {loading && <p className="cms-hint">Loading assets…</p>}
-        {error   && <p className="cms-error">Could not load assets: {error}</p>}
+        {loading && <p className="cms-hint">{c.cmsLoading}</p>}
+        {error   && <p className="cms-error">{c.cmsLoadError} {error}</p>}
 
         {!loading && (
           <>
+            {activeSection === 'branding'   && <BrandingSection   {...sectionProps} />}
             {activeSection === 'hero'       && <HeroSection       {...sectionProps} />}
             {activeSection === 'about'      && <AboutSection      {...sectionProps} />}
             {activeSection === 'properties' && <PropertiesSection {...sectionProps} />}

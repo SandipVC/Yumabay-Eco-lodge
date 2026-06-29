@@ -1,13 +1,17 @@
 import { useLang } from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 
 const igIcon  = assetsUrls['social-instagram.png'];
 const fbIcon  = assetsUrls['social-facebook.png'];
 const twIcon  = assetsUrls['social-twitter.png'];
-const logoUrl = assetsUrls['logo.png'];
+// Local bundled logo — CMS can override via assets.branding.logo
+const DEFAULT_LOGO = '/logo-yb.svg';
 
 export default function Footer() {
   const { t } = useLang();
+  const { assets } = useAssets();
+  const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
   const f = t.footer;
   const p = t.project;
 

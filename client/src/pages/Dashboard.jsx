@@ -231,21 +231,22 @@ export default function Dashboard() {
               <tbody>
                 {leads.map(lead => (
                   <tr key={lead.id}>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: 11 }}>
+                    <td style={{ whiteSpace: 'nowrap', fontSize: 14 }}>
                       {new Date(lead.createdAt).toLocaleDateString()}
                     </td>
-                    <td style={{ fontWeight: 400, color: 'var(--white)' }}>{lead.name}</td>
+                    <td style={{ fontWeight: 500 }} className="lead-name">{lead.name}</td>
                     <td>
                       <a href={`mailto:${lead.email}`}
-                        style={{ color: 'var(--gold)', textDecoration: 'none', fontSize: 12 }}>
+                        className="lead-email"
+                        style={{ textDecoration: 'none', fontSize: 14 }}>
                         {lead.email}
                       </a>
                     </td>
                     <td>{lead.phone || '—'}</td>
                     <td>{lead.propertyInterest || '—'}</td>
                     <td style={{ fontWeight: '600', color: 'var(--gold)' }}>{lead.unitCode || '—'}</td>
-                    <td style={{ textTransform: 'uppercase', fontSize: 10 }}>{lead.language}</td>
-                    <td style={{ maxWidth: 240, fontSize: 12, lineHeight: 1.5 }}>
+                    <td style={{ textTransform: 'uppercase', fontSize: 13 }}>{lead.language}</td>
+                    <td style={{ maxWidth: 240, fontSize: 14, lineHeight: 1.5 }}>
                       {lead.message}
                     </td>
                     <td>
@@ -265,7 +266,7 @@ export default function Dashboard() {
                       <div style={{ marginTop: 8, display: 'flex', gap: 6 }}>
                         <input
                           type="text" className="form-input"
-                          style={{ padding: '4px 8px', fontSize: 11, width: 140 }}
+                          style={{ padding: '4px 8px', fontSize: 13, width: 140 }}
                           placeholder={d.notePlaceholder}
                           value={noteMap[lead.id] || ''}
                           onChange={e => setNoteMap(m => ({ ...m, [lead.id]: e.target.value }))}
@@ -278,7 +279,7 @@ export default function Dashboard() {
                         </button>
                       </div>
                       {lead.notes && (
-                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,.35)', marginTop: 4 }}>
+                        <p className="lead-note-line" style={{ fontSize: 12, marginTop: 4 }}>
                           {d.notePrefix}: {lead.notes}
                         </p>
                       )}

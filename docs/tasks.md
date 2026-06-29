@@ -52,6 +52,20 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) comp
 | CMS Zone Editor: replace emoji input with icon dropdown + live SVG preview; backward-compat with legacy emoji values | `SiteMapZoneEditor.jsx` | ✅ |
 | CMS / Dashboard: align typography + colour with public site (Jost / Cormorant, bumped sizes, teal/gold/ink tokens) | `global.css` | ✅ |
 | CMS panel only: gold text → dark teal; font sizes +20% inside `.cms-panel` | `global.css` | ✅ |
+| Tier C: padding rhythm across all sections | `global.css` | ✅ |
+| Location section: watermark centered on map card (not whole section) | `Location.jsx`, `global.css` | ✅ |
+| Location section: distance stat cards added below map | `Location.jsx`, `en.js`, `es.js`, `global.css` | ✅ |
+| Leads table: all font sizes +20% (th 9→11px, td 13→16px, status/btn 9→11px) | `global.css` | ✅ |
+| Leads table: color overrides for dash-light readability (ink on cream, teal badge variants) | `global.css`, `Dashboard.jsx` | ✅ |
+| Gallery thumbnail grid: cat tag 8→11px, legacy tag 9→12px, queue label 10→14px, readable on cream | `global.css`, `CmsPanel.jsx` | ✅ |
+| CMS Zone Editor: fix page scroll while wheel-zooming map (passive→non-passive listener) | `SiteMapZoneEditor.jsx` | ✅ |
+| Gallery: per-image category `<select>` in thumbnail grid — reassign untagged images without re-uploading | `CmsPanel.jsx` | ✅ |
+| CMS readability audit: verified Leads, Media (7 sub-tabs), Text Content for contrast | — | ✅ |
+| Fix Text Content inputs: white-on-grey (2.3:1) → ink-on-white 15px; EN/ES tags → teal | `global.css` | ✅ |
+| CMS panel gold→teal sweep (upload-btn, save-note, primary btn fill, thumb selection, price focus) — gold unreadable on cream | `global.css` | ✅ |
+| Preloader dark→light theme (public site + dashboard loading screen) | `Preloader.css` | ✅ |
+| New logo: bundled `/logo-yb.svg` in header, footer, preloader, favicon; CMS-overridable via new Branding section (server allows SVG) | `public/logo-yb.svg`, `Navbar.jsx`, `Footer.jsx`, `Preloader.jsx`, `App.jsx`, `index.html`, `CmsPanel.jsx`, `server/routes/cms.js`, `assets.json` | ✅ |
+| CMS Media Manager i18n: all hardcoded English strings → `t.dashboard.cms*` (EN+ES); panel now follows dashboard EN/ES toggle; ~95 strings exposed in Text Content → Dashboard section | `CmsPanel.jsx`, `translations/en.js`, `translations/es.js`, `textSchema.js` | ✅ |
 
 ---
 
@@ -59,8 +73,8 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) comp
 
 | Task | Priority | Notes |
 |---|---|---|
-| Tier C: CSS/spacing tweaks (client feedback) | Medium | More whitespace, location section maritime feel, larger amenity images — awaiting sign-off on A+B |
 | Merge `text-changes-client` → `drishti-new-design` → `firebase` | Medium | When sign-off received |
+| Tag untagged gallery images via the new per-thumb category select | Low | Admin task, no code needed |
 
 ---
 

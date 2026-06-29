@@ -58,7 +58,63 @@ Distinction: `'labelEn' in img` key-existence check. One CMS save migrates legac
 ### ADR-6.3 — Dashboard uses light theme (#F0EDE8)
 `.dash-light` wrapper class scopes all overrides. `useEffect` sets `document.body.style.background` to prevent global dark CSS from bleeding through.
 
-### ADR-6.4 — Sitemap info panel: dark only when zone selected
-Empty/loading state (no zone selected): uses light theme (matches sitemap page).  
-`has-zone` state (zone clicked): dark `rgba(6,6,9,.92)` with gold border.  
-Scoping: all dark overrides under `.sitemap-info-panel.has-zone`.
+### ADR-6.4 — Sitemap info panel: always dark
+Both empty/loading and selected states use dark theme (simplified from earlier has-zone approach).  
+All dark overrides scoped under `.sitemap-info-panel` (no `.has-zone` qualifier).
+
+### ADR-6.5 — Zone editor wheel zoom uses non-passive listener
+React `onWheel` attaches a passive listener; `e.preventDefault()` is silently ignored.  
+Fix: native `svg.addEventListener('wheel', handler, { passive: false })` via `useEffect`.  
+Ensures wheel zooming the canvas doesn't also scroll the page.
+
+### ADR-6.6 — Gallery category edits share Save Labels flow
+Per-thumbnail cat `<select>` writes to `labelEdits[src].cat` (same state as EN/ES label edits).  
+No separate save path needed — existing PATCH `/api/cms/assets` with full gallery array handles it.
+
+### ADR-6.7 — CMS Text Content inputs must opt into `.dash-light`
+`.cms-text-input` shipped with the original dark CMS theme (white text on `rgba(0,0,0,.35)`).
+When the dashboard went light (`.dash-light`), this class was omitted from the light input
+override group, leaving white-on-grey (~2.3:1, fails WCAG AA) on the Text Content tab.
+Fix: add `.cms-text-input` to the `.dash-light` input group (ink on white, 15px).
+**Rule:** any new CMS input class must be added to the `.dash-light` override group in `global.css`.
+
+### ADR-6.8 — CMS panel uses teal, not gold (readability)
+Gold (`#CA9352`) reads poorly as text/accent on the cream dashboard (`#F0EDE8`).
+**Inside `.cms-panel` only**, all gold is remapped to teal (`--teal #0A4C58`):
+upload-btn text/border, save-note, pdf hovers, primary button fill (gold→teal, white text ~8:1),
+thumbnail selection border + checkbox, price-field focus. Leads + login views keep gold (out of scope).
+Override block lives at the end of the `.dash-light .cms-panel` section in `global.css`.
+Supersedes the dark-on-gold button from ADR-6.7 — `.dash-light .cms-panel .cms-btn-gold` is teal-filled.
+
+### ADR-6.9 — Preloader is light theme
+`Preloader` (`components/ui/Preloader.jsx`) renders globally in `App.jsx`, so it shows on the
+public site **and** `/dashboard`. Was dark (`#060609`); switched to light (`#F0EDE8` bg, ink title,
+teal subtitle + progress bar, ink-alpha percentage) to match the rest of the app. One component =
+both "loading screens". Shown once per session via `sessionStorage['yb_preloader_shown']`.
+
+### ADR-7.1 — Site logo is CMS-managed with a bundled fallback
+The brand logo is a single source of truth across header, footer, preloader **and favicon**.
+- **Default:** `client/public/logo-yb.svg` (served at `/logo-yb.svg`), referenced directly in
+  `index.html` for the favicon and as the fallback in components.
+- **Override:** Media Manager → **Branding** (section `branding`, slot `logo`). Stored at
+  `assets.branding.logo`. Components read `assets.branding?.logo || '/logo-yb.svg'` via `useAssets`.
+- **Favicon sync:** `FaviconSync` in `App.jsx` rewrites `<link rel="icon">` when a CMS logo is set.
+- **Server:** `cms.js` now accepts `.svg` (added to both multer + busboy filters) and
+  `resizeIfNeeded` early-returns for SVG so sharp never rasterizes vector logos.
+**Rule:** logo changes should flow through the CMS Branding slot, not by editing components.
+
+### ADR-7.2 — CMS Media Manager strings live under `t.dashboard.cms*`
+`CmsPanel.jsx` shipped with hardcoded English, so the Media Manager never followed the
+dashboard EN/ES toggle. Fixed by routing **all** visible strings through translations:
+- Keys are **flat** under `t.dashboard` with a `cms` prefix (e.g. `cmsHeroHint`, `cmsTabGallery`,
+  `cmsGalEmpty`). Flat — because the Text Content editor renders one input per top-level key and
+  shallow-merges the section object; a nested object would render as `[object Object]`.
+- Each `CmsPanel` sub-component calls `useLang()` itself (`const c = t.dashboard`) rather than
+  threading props — leaf components (`AssetThumb`, `PdfSlot`) included.
+- Tab labels/descriptions come from `SECTIONS[].labelKey/descKey` → `c[key]`.
+- All keys are exposed in `textSchema.js` → Dashboard section so they are CMS-editable, and the
+  `useLang` deep-merge means a CMS override updates the live panel.
+- **Out of scope (left English):** `GALLERY_CATS` + `PROPERTY_NAMES` (data identifiers that mirror
+  the public gallery filters / property cards) and the `SiteMapZoneEditor` sub-tool.
+**Rule:** any new CMS-panel string must be added as a `cms*` key in en.js **and** es.js (and
+usually textSchema.js), never hardcoded in `CmsPanel.jsx`.

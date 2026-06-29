@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 
 const menuIcon = assetsUrls['menu-lines.svg'];
-const logoUrl  = assetsUrls['logo.png'];
+// Local bundled logo — CMS can override via assets.branding.logo
+const DEFAULT_LOGO = '/logo-yb.svg';
 
 export default function Navbar() {
   const { t, lang, toggle } = useLang();
+  const { assets } = useAssets();
+  const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   // On the home page the header stays hidden over the hero scrub, then drops

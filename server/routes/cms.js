@@ -27,6 +27,8 @@ function auth(req, res, next) {
 // ── Image resize ─────────────────────────────────────────────────────────────
 async function resizeIfNeeded(buffer, mimetype) {
   if (!/image\//i.test(mimetype)) return buffer;
+  // SVGs are vector — never rasterize/resize them.
+  if (/svg/i.test(mimetype)) return buffer;
   const meta = await sharp(buffer).metadata();
   if ((meta.width || 0) <= 1920 && (meta.height || 0) <= 1080) return buffer;
   return sharp(buffer)
@@ -132,10 +134,10 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB (videos)
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
+    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images (jpg, png, webp, gif), videos (mp4, webm), and PDFs are allowed.'));
+      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
     }
   },
 });
@@ -167,9 +169,9 @@ function multipartParser(req, res, next) {
       bb.on('file', (fieldname, file, info) => {
         const { filename, encoding, mimeType } = info;
         
-        if (!/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|pdf)$/i.test(filename)) {
+        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(filename)) {
           file.resume();
-          return next(new Error('Only images (jpg, png, webp, gif), videos (mp4, webm), and PDFs are allowed.'));
+          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
         }
 
         const chunks = [];
@@ -378,6 +380,13 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.decor[slot] = filePath;
       break;
     }
+    case 'branding': {
+      // Site logo — used in header, footer, preloader and favicon.
+      if (!assets.branding) assets.branding = {};
+      await deletePhysical(assets.branding.logo);
+      assets.branding.logo = filePath;
+      break;
+    }
     default:
       await deletePhysical(filePath); // Cleanup file if invalid section
       return res.status(400).json({ error: `Unknown section: ${section}` });
@@ -453,6 +462,11 @@ router.delete('/assets/:section', auth, async (req, res) => {
         await deletePhysical(assets.decor?.[slot]);
         if (assets.decor) assets.decor[slot] = null;
       }
+      break;
+    }
+    case 'branding': {
+      await deletePhysical(assets.branding?.logo);
+      if (assets.branding) assets.branding.logo = null;
       break;
     }
     default:

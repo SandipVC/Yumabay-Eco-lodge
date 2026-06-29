@@ -197,22 +197,30 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
     };
   }
 
-  function handleWheel(e) {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
-    const newZoom = Math.max(1, Math.min(6, zoom * factor));
-    if (newZoom === zoom) return;
-    const r = svgRef.current.getBoundingClientRect();
-    const vw = VIEWBOX_W / zoom;
-    const vh = VIEWBOX_H / zoom;
-    const svgCX = panX + (e.clientX - r.left) * (vw / r.width);
-    const svgCY = panY + (e.clientY - r.top)  * (vh / r.height);
-    const newVW = VIEWBOX_W / newZoom;
-    const newVH = VIEWBOX_H / newZoom;
-    setPanX(Math.max(0, Math.min(VIEWBOX_W - newVW, svgCX - (e.clientX - r.left) * (newVW / r.width))));
-    setPanY(Math.max(0, Math.min(VIEWBOX_H - newVH, svgCY - (e.clientY - r.top)  * (newVH / r.height))));
-    setZoom(newZoom);
-  }
+  // Native wheel listener with passive:false so we can preventDefault and stop
+  // the page from scrolling while the user zooms the canvas.
+  useEffect(() => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    function onWheel(e) {
+      e.preventDefault();
+      const factor = e.deltaY < 0 ? 1.15 : 1 / 1.15;
+      const newZoom = Math.max(1, Math.min(6, zoom * factor));
+      if (newZoom === zoom) return;
+      const r = svg.getBoundingClientRect();
+      const vw = VIEWBOX_W / zoom;
+      const vh = VIEWBOX_H / zoom;
+      const svgCX = panX + (e.clientX - r.left) * (vw / r.width);
+      const svgCY = panY + (e.clientY - r.top)  * (vh / r.height);
+      const newVW = VIEWBOX_W / newZoom;
+      const newVH = VIEWBOX_H / newZoom;
+      setPanX(Math.max(0, Math.min(VIEWBOX_W - newVW, svgCX - (e.clientX - r.left) * (newVW / r.width))));
+      setPanY(Math.max(0, Math.min(VIEWBOX_H - newVH, svgCY - (e.clientY - r.top)  * (newVH / r.height))));
+      setZoom(newZoom);
+    }
+    svg.addEventListener('wheel', onWheel, { passive: false });
+    return () => svg.removeEventListener('wheel', onWheel);
+  }, [zoom, panX, panY]);
 
   function applyZoom(newZoom) {
     const vw = VIEWBOX_W / zoom;
@@ -246,7 +254,6 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
             viewBox={`${panX} ${panY} ${VIEWBOX_W / zoom} ${VIEWBOX_H / zoom}`}
             xmlns="http://www.w3.org/2000/svg"
             onPointerDown={startSvgBg}
-            onWheel={handleWheel}
             style={{ cursor: zoom > 1 ? 'grab' : 'default' }}
           >
             <SiteMapBackdrop idPrefix="edit" />

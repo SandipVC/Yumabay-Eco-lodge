@@ -1,4 +1,7 @@
 {
+  "branding": {
+    "logo": null
+  },
   "hero": {
     "video": null,
     "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2Fhero-dusk.jpg?alt=media"

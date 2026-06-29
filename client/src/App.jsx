@@ -1,6 +1,7 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
 import { LanguageProvider } from './context/LanguageContext.jsx';
+import { useAssets } from './hooks/useAssets.js';
 import Layout from './components/layout/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
@@ -15,9 +16,28 @@ function ScrollReset() {
   return null;
 }
 
+// Keep the favicon in sync with the CMS-managed logo (falls back to the
+// bundled /logo-yb.svg set in index.html).
+function FaviconSync() {
+  const { assets } = useAssets();
+  const logo = assets?.branding?.logo;
+  useEffect(() => {
+    if (!logo) return;
+    let link = document.querySelector("link[rel~='icon']");
+    if (!link) {
+      link = document.createElement('link');
+      link.rel = 'icon';
+      document.head.appendChild(link);
+    }
+    link.href = logo;
+  }, [logo]);
+  return null;
+}
+
 export default function App() {
   return (
     <LanguageProvider>
+      <FaviconSync />
       <Preloader />
       <ScrollReset />
       <Suspense fallback={null}>
