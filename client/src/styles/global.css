@@ -436,11 +436,13 @@ a  { color: inherit; }
 .props-divider-center { text-align: center; }
 .props-divider-label {
   display: block;
-  font-size: 10px; letter-spacing: .28em; text-transform: uppercase;
-  color: rgb(123,143,92); white-space: nowrap; font-weight: 600;
+  font-size: 22px; line-height: 1.5;
+  color: rgb(123,143,92); white-space: nowrap;
 }
+.props-divider-label::before { content: '('; }
+.props-divider-label::after  { content: ')'; }
 .props-divider-note {
-  font-size: 12px; color: rgba(10,34,41,.5); margin-top: 6px; line-height: 1.55;
+  font-size: 14px; color: rgba(10,34,41,.5); margin-top: 6px; line-height: 1.55;
 }
 .prop-row {
   display: flex; align-items: center;
