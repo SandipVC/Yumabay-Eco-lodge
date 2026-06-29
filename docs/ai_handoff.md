@@ -3,7 +3,7 @@
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge  
 **Local path:** `C:\Yumabay-Eco-lodge`  
 **Last updated:** 2026-06-29  
-**Current branch:** `text-changes-client` (branched from `drishti-new-design`)  
+**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · commit `f8d5cbb`  
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 ---
@@ -36,9 +36,19 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Sitemap: AVAILABLE/LIMITED badge removed from panel | `SiteMap.jsx` |
 | Sitemap: gold scrollbar on level-tabs strip | `global.css` |
 
-### What `text-changes-client` is for
+### What landed on `text-changes-client` (commit `f8d5cbb`)
 
-Text / copy updates as directed by client. No features — only translation string changes in `en.js`, `es.js`, and CMS text schema.
+| Change | Files |
+|---|---|
+| Hero subtitle: 4-pillar identity line (Eco-Lodge · Residences · Hospitality · Investment) | `en.js`, `es.js`, `Hero.jsx` |
+| Strip: identity-first messaging | `en.js`, `es.js` |
+| Gallery filters renamed: Villas / Apartments / Beach Club & Amenities / Boca de Yuma | `en.js`, `es.js`, `Gallery.jsx` |
+| Contact form: Bungalows removed from sales interest options | `en.js`, `es.js` |
+| Properties: visual For Sale / Hospitality & Rental split with divider | `Properties.jsx`, `en.js`, `es.js`, `global.css` |
+
+### What's next
+
+Tier C (CSS / spacing tweaks per client feedback) — pending client review of A+B first.
 
 ---
 

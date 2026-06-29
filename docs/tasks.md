@@ -5,7 +5,7 @@ _Updated: 2026-06-29_
 ## Current branch: `text-changes-client`
 
 Branched from `drishti-new-design` on 2026-06-29.  
-Purpose: text / copy changes for client review.
+Purpose: client feedback implementation — Tiers A (text) + B (structural) complete on commit `f8d5cbb`.
 
 ---
 
@@ -36,8 +36,8 @@ Purpose: text / copy changes for client review.
 
 | Task | Priority | Notes |
 |---|---|---|
-| Text / copy changes (client feedback) | High | On current branch `text-changes-client` |
-| Merge `drishti-new-design` → `firebase` / `main` | Medium | When design sign-off received |
+| Tier C: CSS/spacing tweaks (client feedback) | Medium | More whitespace, location section maritime feel, larger amenity images — awaiting review of A+B first |
+| Merge `text-changes-client` → `drishti-new-design` → `firebase` | Medium | When sign-off received |
 
 ---
 
