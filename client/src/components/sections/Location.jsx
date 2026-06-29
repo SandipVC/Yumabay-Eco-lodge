@@ -28,6 +28,22 @@ export default function Location() {
           referrerPolicy="no-referrer-when-downgrade"
         />
       </div>
+
+      {Array.isArray(l.distances) && l.distances.length > 0 && (
+        <div className="wrap">
+          <ul className="location-distances reveal">
+            {l.distances.map((d, i) => (
+              <li className="distance-stat" key={i}>
+                <span className="distance-val">
+                  {d.val}
+                  {d.unit ? <em>{d.unit}</em> : null}
+                </span>
+                <span className="distance-name">{d.name}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
     </section>
   );
 }

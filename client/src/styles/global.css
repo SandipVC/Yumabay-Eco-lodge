@@ -335,7 +335,7 @@ a  { color: inherit; }
 /* ── About (Figma: title over image card, side copy, skewed stats strip) ── */
 #about {
   position: relative; background: var(--dark);
-  padding: 120px 0 0; overflow: hidden;
+  padding: 150px 0 0; overflow: hidden;
 }
 .about-palms {
   position: absolute; left: -4.9vw; top: 33%; width: 46vw;
@@ -411,7 +411,7 @@ a  { color: inherit; }
 }
 
 /* ── Properties (Figma: alternating full-width rows) ── */
-#properties { padding: 120px 0; background: var(--dark); }
+#properties { padding: 150px 0; background: var(--dark); }
 .props-head {
   display: flex; align-items: center; justify-content: space-between;
   gap: clamp(40px, 5vw, 96px); margin-bottom: 88px;
@@ -551,7 +551,7 @@ a  { color: inherit; }
 .prop-enquire:hover { color: var(--white); border-color: var(--white); }
 
 /* ── Gallery (Figma: mosaic grid, black tile borders, filter chips) ── */
-#gallery { padding: 120px 0 0; background: var(--dark); }
+#gallery { padding: 150px 0 0; background: var(--dark); }
 .gallery-head {
   display: flex; align-items: flex-end; justify-content: space-between;
   gap: 40px; flex-wrap: wrap; margin-bottom: 60px;
@@ -679,7 +679,7 @@ a  { color: inherit; }
   position: relative;
     background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat, var(--bronze);
   background-size: cover;
-  padding: 100px 0; overflow: hidden;
+  padding: 140px 0; overflow: hidden;
 }
 .lounge-pattern {
   display: none;
@@ -698,7 +698,7 @@ a  { color: inherit; }
 .lounge-side .section-body { margin-bottom: 0; }
 
 /* ── Amenities (Figma: badge-shaped cards on faint lounge backdrop) ── */
-#amenities { position: relative; padding: 80px 0; background: var(--dark); overflow: hidden; }
+#amenities { position: relative; padding: 150px 0; background: var(--dark); overflow: hidden; }
 .amenities-bg {
   position: absolute; inset: 0; pointer-events: none;
   background-size: cover; background-position: center;
@@ -795,7 +795,7 @@ a  { color: inherit; }
 /* ── Location (Figma: white map card on dark, watermark wordmarks) ── */
 #location {
   position: relative; background: var(--dark);
-  padding: 80px 0; overflow: hidden;
+  padding: 150px 0; overflow: hidden;
 }
 .location-watermark {
   position: absolute; top: 50%; left: 0; width: 100%; transform: translateY(-50%);
@@ -852,7 +852,7 @@ a  { color: inherit; }
 #cta {
   position: relative;
   background: url('https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fcta-band.png?alt=media') center/cover no-repeat, var(--bronze);
-  padding: 80px 0; overflow: hidden;
+  padding: 140px 0; overflow: hidden;
 }
 .cta-inner {
   position: relative;
@@ -2190,7 +2190,7 @@ footer { background: var(--dark); padding: 80px 0 50px; }
     font-size: 18px; padding: 16px 28px;
   }
 
-  #about, #properties, #gallery, #amenities { padding-top: 70px; padding-bottom: 70px; }
+  #about, #properties, #gallery, #amenities { padding-top: 90px; padding-bottom: 90px; }
   #about, #gallery { padding-bottom: 0; }
   .about-stats { flex-direction: column; }
   .stat { max-width: none; width: 100%; height: 130px; }
@@ -2206,13 +2206,13 @@ footer { background: var(--dark); padding: 80px 0 50px; }
   .mosaic-item:nth-child(6n+1) { grid-column: span 2; }
   .mosaic-item { border-width: 2px; }
 
-  #lounge { padding: 70px 0; }
+  #lounge { padding: 90px 0; }
   /* Stacked list layout handles full-width margins on mobile */
 
-  #location { padding: 50px 0; }
+  #location { padding: 70px 0; }
   .location-chip { right: 14px; bottom: 14px; min-width: 0; padding: 14px 16px; }
 
-  #cta { padding: 60px 0; }
+  #cta { padding: 80px 0; }
   .cta-inner { justify-content: center; text-align: center; }
   .cta-title { max-width: none; }
 
@@ -2625,13 +2625,61 @@ body { background: var(--bg); color: var(--ink); }
 .mosaic-item { border-color: var(--bg); background: var(--bg-soft); }
 
 /* ── Location ────────────────────────────────────────────────── */
-#location { background: var(--bg); }
+#location { background: linear-gradient(180deg, var(--bg) 0%, var(--bg-soft) 100%); }
 .location-watermark { color: var(--teal); }
-.marquee-track span:nth-child(odd)  { opacity: .08; }
-.marquee-track span:nth-child(even) { opacity: .04; }
+.marquee-track span:nth-child(odd)  { opacity: .12; }
+.marquee-track span:nth-child(even) { opacity: .06; }
+.location-card {
+  border: 1px solid var(--rule);
+  box-shadow: 0 16px 40px -24px rgba(10, 76, 88, 0.35);
+}
 .location-chip { background: var(--teal); }
 .location-chip:hover { background: var(--teal-dark); }
 .location-chip-sub { color: rgba(255,255,255,.75); }
+
+/* Distance stat cards under the map */
+.location-distances {
+  position: relative; z-index: 1;
+  list-style: none; padding: 0; margin: 0;
+  margin-top: clamp(40px, 5vw, 64px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 2vw, 40px);
+}
+.distance-stat {
+  display: flex; flex-direction: column;
+  background: var(--bg-soft);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--teal);
+  padding: clamp(20px, 2vw, 32px) clamp(20px, 2vw, 28px);
+}
+.distance-val {
+  font-family: 'Merzalina', 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 3vw, 56px);
+  color: var(--teal);
+  line-height: 1;
+}
+.distance-val em {
+  font-size: .5em;
+  margin-left: 6px;
+  color: var(--teal-soft);
+  font-style: normal;
+  font-weight: 400;
+}
+.distance-name {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+@media (max-width: 900px) {
+  .location-distances { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+  .location-distances { grid-template-columns: 1fr; }
+}
 
 /* ── CTA band (lighter sage olive, white text + teal dial) ──── */
 
@@ -2816,6 +2864,9 @@ footer { background: var(--teal); color: var(--white); }
 /* Teal dropdown chevron (was gold) to match the light theme */
 .form-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230A4C58' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-color: var(--bg-soft);
 }
 .form-success { background: rgba(10,76,88,.06); border-color: rgba(10,76,88,.25); }
 .form-success h3 { color: var(--teal); }
