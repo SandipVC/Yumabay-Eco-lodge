@@ -4,6 +4,9 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 
+// Scrub progress past which the header is allowed to drop in from above.
+export const NAV_REVEAL_AT = 0.98;
+
 gsap.registerPlugin(ScrollTrigger);
 
 // All-keyframe re-encode (every frame is an I-frame) → instant seek on scrub.
@@ -19,13 +22,12 @@ export default function Hero() {
   const { assets } = useAssets();
   const sectionRef = useRef(null);
   const videoRef   = useRef(null);
+  const logoRef    = useRef(null);
 
   // CMS poster acts as a still while the video buffers / on reduced-data clients.
   const poster = assets?.hero?.poster || POSTER_FALLBACK;
   // CMS-uploaded video wins; falls back to the bundled scroll-scrub encode.
   const videoSrc = assets?.hero?.video || VIDEO_SRC;
-
-  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
   // useLayoutEffect (not useEffect): its cleanup runs during React's mutation
   // phase, BEFORE React removes #hero on unmount. That lets trigger.kill(true)
@@ -60,6 +62,20 @@ export default function Hero() {
         }
       };
 
+      // Logo: fades + drifts up over the first half of the scrub.
+      // Header: stays hidden until the scrub is (almost) complete, then the
+      // Navbar drops in from above (it listens for the broadcast progress).
+      const applyProgress = (p) => {
+        const logo = logoRef.current;
+        if (logo) {
+          const fade = Math.min(p / 0.5, 1);   // gone by 50% progress
+          logo.style.opacity = String(1 - fade);
+          logo.style.transform = `translate(-50%, ${-fade * 120}px)`;
+        }
+        window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: p }));
+      };
+      applyProgress(0);
+
       trigger = ScrollTrigger.create({
         trigger: section,
         start: 'top top',
@@ -69,6 +85,7 @@ export default function Hero() {
         scrub: true,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
+          applyProgress(self.progress);
           if (video.readyState < 1) return;
           targetTime = self.progress * duration;
           if (!pendingFrame) {
@@ -90,6 +107,9 @@ export default function Hero() {
     if (mq.matches) {
       trigger?.kill();
       video.play().catch(() => {});
+      // No scrub → reveal the header immediately and clear the logo offset.
+      if (logoRef.current) logoRef.current.style.opacity = '0';
+      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
     }
 
     return () => {
@@ -115,22 +135,9 @@ export default function Hero() {
         aria-label="Yuma Bay Eco Lodge intro"
       />
       <div className="hero-overlay" />
-      <div className="hero-fade" />
-      <div className="hero-content">
-        <div className="hero-heading">
-          <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
-          <p className="hero-tagline">{h.tagline}</p>
-        </div>
-        <div className="hero-actions">
-          <div className="hero-action-btns">
-            <button onClick={() => scrollTo('properties')} className="btn-primary">
-              {h.exploreBtn}
-            </button>
-            <button onClick={() => scrollTo('about')} className="btn-ghost">
-              {h.discoverBtn}
-            </button>
-          </div>
-        </div>
+      <div className="hero-logo-center" ref={logoRef}>
+        <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
+        <p className="hero-tagline">{h.tagline}</p>
       </div>
     </section>
   );

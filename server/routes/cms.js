@@ -283,8 +283,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     return res.status(500).json({ error: 'Failed to upload file.' });
   }
 
-  const label = (req.body.label || req.file.originalname.replace(/\.[^.]+$/, '')).trim();
-  const cat   = req.body.cat || 'Exterior';
+  const labelEn = (req.body.labelEn || req.body.label || req.file.originalname.replace(/\.[^.]+$/, '')).trim();
+  const labelEs = (req.body.labelEs || '').trim();
+  const cat     = req.body.cat || 'Exterior';
 
   const assets = await readAssets();
 
@@ -331,7 +332,7 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     }
     case 'gallery': {
       if (!Array.isArray(assets.gallery)) assets.gallery = [];
-      assets.gallery.push({ src: filePath, label, cat });
+      assets.gallery.push({ src: filePath, labelEn, labelEs, cat });
       break;
     }
     case 'lounge': {

@@ -463,10 +463,6 @@ export default function SiteMap() {
             <div className="sitemap-zone-card">
               <button className="sitemap-card-close" onClick={() => setActiveId(null)} aria-label="Close">✕</button>
 
-              <div className="sitemap-card-badge" style={{ background: `${AVAIL[activeZone.availability]?.badge}22`, borderColor: `${AVAIL[activeZone.availability]?.badge}55`, color: AVAIL[activeZone.availability]?.badge }}>
-                {AVAIL_LABEL[activeZone.availability]}
-              </div>
-
               <h2 className="sitemap-card-title">{activeZone.icon} {activeZone.label}</h2>
               <p className="sitemap-card-type">{activeZone.type}</p>
 

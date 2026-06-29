@@ -84,6 +84,17 @@ export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
   const { assets, refresh } = useAssets();
+
+  // Force light background on body/html for the whole dashboard page.
+  useEffect(() => {
+    const prev = document.body.style.background;
+    document.documentElement.style.background = '#F0EDE8';
+    document.body.style.background = '#F0EDE8';
+    return () => {
+      document.documentElement.style.background = '';
+      document.body.style.background = prev;
+    };
+  }, []);
   const [token, setToken]     = useState(safeSessionStorage.getItem('yb_admin') || '');
   const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
@@ -125,12 +136,12 @@ export default function Dashboard() {
     fetchLeads();
   };
 
-  if (!token) return <div style={{ background: 'var(--dark)', minHeight: '100vh' }}><LoginForm onLogin={handleLogin} /></div>;
+  if (!token) return <div className="dash-light" style={{ minHeight: '100vh' }}><LoginForm onLogin={handleLogin} /></div>;
 
   const newCount = leads.filter(l => l.status === 'new').length;
 
   return (
-    <div style={{ background: 'var(--dark)', minHeight: '100vh' }}>
+    <div className="dash-light" style={{ minHeight: '100vh' }}>
       <div className="dashboard-page">
         <div className="dashboard-header">
           <div>

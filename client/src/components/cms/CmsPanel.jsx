@@ -27,11 +27,12 @@ const SECTIONS = [
 
 // ── Shared upload helper ──────────────────────────────────────────────────────
 
-async function uploadFile({ file, section, slot, label, cat, token }) {
+async function uploadFile({ file, section, slot, labelEn, labelEs, cat, token }) {
   const fd = new FormData();
   fd.append('file', file);
-  if (label) fd.append('label', label);
-  if (cat)   fd.append('cat',   cat);
+  if (labelEn !== undefined) fd.append('labelEn', labelEn);
+  if (labelEs !== undefined) fd.append('labelEs', labelEs);
+  if (cat)   fd.append('cat', cat);
   const url = `/api/cms/assets/${section}${slot != null ? `/${slot}` : ''}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -464,8 +465,20 @@ function GallerySection({ assets, token, refresh }) {
   const [defaultCat, setDefaultCat] = useState('Exterior');
   const [selectMode, setSelectMode] = useState(false);
   const [selected,   setSelected]   = useState(() => new Set());
-  const [confirmDel, setConfirmDel] = useState(null); // src pending single-delete confirm
+  const [confirmDel, setConfirmDel] = useState(null);
+  // Inline label edits: { [src]: { labelEn, labelEs } }
+  const [labelEdits,   setLabelEdits]   = useState({});
+  const [labelSaving,  setLabelSaving]  = useState(false);
+  const [labelSaved,   setLabelSaved]   = useState(false);
+  // Parent-level "show labels on website" toggle (default true = on)
+  const [showLabels,     setShowLabels]     = useState(() => assets?.galleryShowLabels !== false);
+  const [labelToggleBusy, setLabelToggleBusy] = useState(false);
   const fileRef = useRef();
+
+  // Keep local state in sync when assets reload
+  useEffect(() => {
+    setShowLabels(assets?.galleryShowLabels !== false);
+  }, [assets?.galleryShowLabels]);
 
   const gallery = assets?.gallery || [];
   const visible = filter === 'All' ? gallery : gallery.filter(img => img.cat === filter);
@@ -484,7 +497,8 @@ function GallerySection({ assets, token, refresh }) {
         id: ++_queueId,
         file: f,
         preview: URL.createObjectURL(f),
-        label: f.name.replace(/\.[^.]+$/, ''),
+        labelEn: f.name.replace(/\.[^.]+$/, ''),
+        labelEs: '',
         cat: defaultCat,
       })),
     ]);
@@ -517,7 +531,8 @@ function GallerySection({ assets, token, refresh }) {
       for (const item of queue) {
         await uploadFile({
           file: item.file, section: 'gallery',
-          label: item.label.trim() || item.file.name.replace(/\.[^.]+$/, ''),
+          labelEn: item.labelEn.trim() || item.file.name.replace(/\.[^.]+$/, ''),
+          labelEs: item.labelEs.trim(),
           cat: item.cat, token,
         });
       }
@@ -561,6 +576,40 @@ function GallerySection({ assets, token, refresh }) {
 
   const toggleSelect = (src) =>
     setSelected(s => { const n = new Set(s); n.has(src) ? n.delete(src) : n.add(src); return n; });
+
+  // Save all pending label edits by PATCHing the full gallery array.
+  async function saveLabels() {
+    setLabelSaving(true); setErr(null);
+    try {
+      const updated = gallery.map(img => {
+        // Drop legacy `label` field — EN/ES fields are now authoritative.
+        const { label: _legacy, ...rest } = img;
+        return { ...rest, ...(labelEdits[img.src] || {}) };
+      });
+      await patchSection({ section: 'gallery', data: updated, token });
+      setLabelEdits({});
+      invalidateAssetsCache(); refresh();
+      setLabelSaved(true);
+      setTimeout(() => setLabelSaved(false), 2000);
+    } catch (e) { setErr(e.message); }
+    finally { setLabelSaving(false); }
+  }
+
+  const setLabelEdit = (src, field, val) =>
+    setLabelEdits(prev => ({ ...prev, [src]: { ...(prev[src] || {}), [field]: val } }));
+
+  const hasLabelEdits = Object.keys(labelEdits).length > 0;
+
+  async function toggleShowLabels() {
+    const next = !showLabels;
+    setLabelToggleBusy(true);
+    try {
+      await patchSection({ section: 'galleryShowLabels', data: next, token });
+      setShowLabels(next);
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setLabelToggleBusy(false); }
+  }
 
   const selectAllVisible = () => setSelected(new Set(visible.map(i => i.src)));
 
@@ -627,10 +676,17 @@ function GallerySection({ assets, token, refresh }) {
                 </div>
                 <input
                   className="cms-queue-label"
-                  type="text" value={item.label}
-                  placeholder="Label"
+                  type="text" value={item.labelEn}
+                  placeholder="EN label"
                   disabled={uploading}
-                  onChange={e => updateQueueItem(item.id, { label: e.target.value })}
+                  onChange={e => updateQueueItem(item.id, { labelEn: e.target.value })}
+                />
+                <input
+                  className="cms-queue-label"
+                  type="text" value={item.labelEs}
+                  placeholder="ES etiqueta"
+                  disabled={uploading}
+                  onChange={e => updateQueueItem(item.id, { labelEs: e.target.value })}
                 />
                 <select
                   className="cms-queue-cat"
@@ -659,6 +715,15 @@ function GallerySection({ assets, token, refresh }) {
 
         {gallery.length > 0 && (
           <div className="cms-select-controls">
+            <button
+              className={showLabels ? 'cms-btn-gold' : 'cms-btn-ghost'}
+              onClick={toggleShowLabels}
+              disabled={labelToggleBusy}
+              title="Toggle whether labels are shown on the public gallery"
+              style={{ minWidth: 110 }}
+            >
+              {labelToggleBusy ? '…' : showLabels ? '🏷 Labels ON' : '🏷 Labels OFF'}
+            </button>
             {!selectMode ? (
               <button className="cms-btn-ghost" onClick={() => setSelectMode(true)}>Select</button>
             ) : (
@@ -681,45 +746,64 @@ function GallerySection({ assets, token, refresh }) {
           const isSel  = selected.has(img.src);
           const busyD  = delBusy[img.src];
           const askDel = confirmDel === img.src;
+          const edits  = labelEdits[img.src] || {};
+          // Show legacy `label` in the EN field until user saves (migration hint).
+          const curEn  = edits.labelEn !== undefined ? edits.labelEn : (img.labelEn ?? img.label ?? '');
+          const curEs  = edits.labelEs !== undefined ? edits.labelEs : (img.labelEs ?? '');
+          const isLegacy = !('labelEn' in img);
           return (
-            <div
-              key={img.src}
-              className={`cms-thumb${selectMode ? ' selectable' : ''}${isSel ? ' selected' : ''}${busyD ? ' deleting' : ''}`}
-              onClick={() => selectMode && toggleSelect(img.src)}
-            >
-              <img src={img.src} alt={img.label} className="cms-thumb-img" loading="lazy" />
+            <div key={img.src} style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <div
+                className={`cms-thumb${selectMode ? ' selectable' : ''}${isSel ? ' selected' : ''}${busyD ? ' deleting' : ''}`}
+                onClick={() => selectMode && toggleSelect(img.src)}
+              >
+                <img src={img.src} alt={curEn} className="cms-thumb-img" loading="lazy" />
 
-              {/* Select checkbox (select mode) */}
-              {selectMode && (
-                <div className={`cms-thumb-check${isSel ? ' on' : ''}`}>{isSel ? '✓' : ''}</div>
-              )}
+                {selectMode && (
+                  <div className={`cms-thumb-check${isSel ? ' on' : ''}`}>{isSel ? '✓' : ''}</div>
+                )}
 
-              {/* Always-visible delete badge (normal mode) */}
-              {!selectMode && !askDel && (
-                <button
-                  className="cms-thumb-delbadge"
-                  onClick={(e) => { e.stopPropagation(); setConfirmDel(img.src); }}
-                  disabled={busyD}
-                  title="Remove image"
-                >
-                  {busyD ? '…' : '✕'}
-                </button>
-              )}
+                {!selectMode && !askDel && (
+                  <button
+                    className="cms-thumb-delbadge"
+                    onClick={(e) => { e.stopPropagation(); setConfirmDel(img.src); }}
+                    disabled={busyD}
+                    title="Remove image"
+                  >
+                    {busyD ? '…' : '✕'}
+                  </button>
+                )}
 
-              {/* Inline delete confirm */}
-              {askDel && (
-                <div className="cms-thumb-confirm" onClick={e => e.stopPropagation()}>
-                  <p>Remove this image?</p>
-                  <div>
-                    <button className="cms-btn-ghost" onClick={() => setConfirmDel(null)}>No</button>
-                    <button className="cms-btn-danger" onClick={() => doDelete(img.src)}>Remove</button>
+                {askDel && (
+                  <div className="cms-thumb-confirm" onClick={e => e.stopPropagation()}>
+                    <p>Remove this image?</p>
+                    <div>
+                      <button className="cms-btn-ghost" onClick={() => setConfirmDel(null)}>No</button>
+                      <button className="cms-btn-danger" onClick={() => doDelete(img.src)}>Remove</button>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
 
-              <p className="cms-thumb-label">
-                <span className="cms-cat-tag">{img.cat}</span> {img.label}
-              </p>
+              {/* EN / ES label inputs */}
+              <input
+                className="cms-queue-label"
+                type="text"
+                value={curEn}
+                placeholder="EN label"
+                onChange={e => setLabelEdit(img.src, 'labelEn', e.target.value)}
+                style={{ fontSize: 14 }}
+              />
+              <input
+                className="cms-queue-label"
+                type="text"
+                value={curEs}
+                placeholder="ES etiqueta"
+                onChange={e => setLabelEdit(img.src, 'labelEs', e.target.value)}
+                style={{ fontSize: 14 }}
+              />
+              <span className="cms-cat-tag" style={{ alignSelf: 'flex-start' }}>{img.cat}</span>
+              {isLegacy && <span style={{ fontSize: 9, color: 'rgba(201,168,76,.7)', letterSpacing: '.08em' }}>legacy — save to migrate</span>}
             </div>
           );
         })}
@@ -729,6 +813,16 @@ function GallerySection({ assets, token, refresh }) {
           </p>
         )}
       </div>
+
+      {/* Save bar for label edits */}
+      {hasLabelEdits && (
+        <div className="cms-save-bar">
+          <span className="cms-save-note">Unsaved label changes</span>
+          <button className="cms-btn-gold" onClick={saveLabels} disabled={labelSaving}>
+            {labelSaving ? 'Saving…' : labelSaved ? 'Saved ✓' : 'Save Labels'}
+          </button>
+        </div>
+      )}
     </div>
   );
 }

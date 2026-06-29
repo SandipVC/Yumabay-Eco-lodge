@@ -17,15 +17,16 @@ const FILTER_MAP = {
 const PAGE_SIZE = 10;
 
 export default function Gallery() {
-  const { t }      = useLang();
-  const g          = t.gallery;
+  const { t, lang } = useLang();
+  const g           = t.gallery;
   const { assets } = useAssets();
 
   const [active, setActive]     = useState(g.filters[0]);
   const [lightbox, setLightbox] = useState(null);
   const [visible, setVisible]   = useState(PAGE_SIZE);
 
-  const ALL_IMAGES = assets?.gallery?.length ? assets.gallery : GALLERY_DEFAULTS;
+  const ALL_IMAGES    = assets?.gallery?.length ? assets.gallery : GALLERY_DEFAULTS;
+  const labelsEnabled = assets?.galleryShowLabels !== false;
 
   const filtered = useMemo(() => {
     const key = FILTER_MAP[active] || active;
@@ -83,16 +84,29 @@ export default function Gallery() {
             className="mosaic-item"
             onClick={() => open(i)}
           >
-            <img src={img.src} alt={img.label} loading="lazy" />
-            <div className="mosaic-overlay">
-              <span className="mosaic-label">{img.label}</span>
-            </div>
+            {(() => {
+              // If labelEn key exists (new record), never fall back to legacy label.
+              const hasNew = 'labelEn' in img;
+              const label = lang === 'es'
+                ? (hasNew ? (img.labelEs || '') : (img.label || ''))
+                : (hasNew ? (img.labelEn || '') : (img.label || ''));
+              return (
+                <>
+                  <img src={img.src} alt={label} loading="lazy" />
+                  {labelsEnabled && label && (
+                    <div className="mosaic-overlay">
+                      <span className="mosaic-label">{label}</span>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         ))}
       </div>
 
       {hasMore && (
-        <div className="gallery-more reveal">
+        <div className="gallery-more">
           <button className="btn-outline" onClick={loadMore}>
             {g.loadMore}
           </button>

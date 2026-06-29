@@ -10,6 +10,9 @@ export default function Navbar() {
   const { t, lang, toggle } = useLang();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // On the home page the header stays hidden over the hero scrub, then drops
+  // in from above once the intro video finishes (Hero broadcasts progress).
+  const [heroDone, setHeroDone] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
@@ -18,6 +21,18 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const onProgress = (e) => setHeroDone(e.detail >= 0.98);
+    window.addEventListener('yb-hero-progress', onProgress);
+    return () => window.removeEventListener('yb-hero-progress', onProgress);
+  }, []);
+
+  // Reset the gate whenever we land back on home (hero will re-broadcast).
+  useEffect(() => { if (isHome) setHeroDone(false); }, [isHome]);
+
+  // Header is hidden only while the home hero scrub is still running.
+  const navHidden = isHome && !heroDone;
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
@@ -39,7 +54,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="nav" className={scrolled || menuOpen ? 'scrolled' : ''}>
+      <nav id="nav" className={`${scrolled || menuOpen ? 'scrolled' : ''}${navHidden ? ' nav-hidden' : ''}`}>
         <Link to="/" className="nav-logo">
           <img src={logoUrl} alt="Yuma Bay Logo" />
         </Link>
