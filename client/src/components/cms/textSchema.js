@@ -35,9 +35,6 @@ export const TEXT_SECTIONS = [
       { key: 'title', label: 'Title', kind: 'text' },
       { key: 'titleEm', label: 'Title (highlighted word)', kind: 'text' },
       { key: 'tagline', label: 'Tagline', kind: 'text' },
-      { key: 'subtitle', label: 'Subtitle (below tagline, above buttons)', kind: 'text' },
-      { key: 'exploreBtn', label: 'Explore button', kind: 'text' },
-      { key: 'discoverBtn', label: 'Discover button', kind: 'text' },
     ],
   },
   {
@@ -96,7 +93,7 @@ export const TEXT_SECTIONS = [
       { key: 'title', label: 'Title (start)', kind: 'text' },
       { key: 'titleEm', label: 'Title (highlighted word)', kind: 'text' },
       { key: 'titleEnd', label: 'Title (end, press Enter for break)', kind: 'textarea' },
-      { key: 'filters', label: 'Filter labels (All, Exterior, Interior, Amenities)', kind: 'array', count: 4 },
+      { key: 'filters', label: 'Filter labels (All, Villas, Apartments, Beach Club & Amenities, Boca de Yuma)', kind: 'array', count: 5 },
     ],
   },
   {

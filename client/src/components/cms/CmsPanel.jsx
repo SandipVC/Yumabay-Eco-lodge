@@ -13,7 +13,14 @@ const PROPERTY_NAMES = [
   'Villas', 'Suites & Apartments', 'Apartments', 'Premium 2BR', 'Beachfront Bungalows',
 ];
 
-const GALLERY_CATS = ['Exterior', 'Interior', 'Amenities'];
+// Keys must match the internal `cat` values used by Gallery.jsx FILTER_MAP.
+// Labels are what the CMS UI displays; they mirror the public-site filter chips.
+const GALLERY_CATS = [
+  { key: 'Villas',       label: 'Villas' },
+  { key: 'Apartments',   label: 'Apartments' },
+  { key: 'Amenities',    label: 'Beach Club & Amenities' },
+  { key: 'Boca de Yuma', label: 'Boca de Yuma' },
+];
 
 const SECTIONS = [
   { id: 'hero',       label: '🎬 Hero',       desc: 'Hero background image' },
@@ -462,7 +469,7 @@ function GallerySection({ assets, token, refresh }) {
   const [err,        setErr]        = useState(null);
   const [filter,     setFilter]     = useState('All');
   const [dragOver,   setDragOver]   = useState(false);
-  const [defaultCat, setDefaultCat] = useState('Exterior');
+  const [defaultCat, setDefaultCat] = useState('Villas');
   const [selectMode, setSelectMode] = useState(false);
   const [selected,   setSelected]   = useState(() => new Set());
   const [confirmDel, setConfirmDel] = useState(null);
@@ -633,10 +640,10 @@ function GallerySection({ assets, token, refresh }) {
         <div className="cms-dropzone-cat" onClick={e => e.stopPropagation()}>
           <span>New images go to:</span>
           {GALLERY_CATS.map(c => (
-            <button key={c}
-              className={`cms-catpick${defaultCat === c ? ' active' : ''}`}
-              onClick={() => setDefaultCat(c)}>
-              {c}
+            <button key={c.key}
+              className={`cms-catpick${defaultCat === c.key ? ' active' : ''}`}
+              onClick={() => setDefaultCat(c.key)}>
+              {c.label}
             </button>
           ))}
         </div>
@@ -693,7 +700,7 @@ function GallerySection({ assets, token, refresh }) {
                   value={item.cat} disabled={uploading}
                   onChange={e => updateQueueItem(item.id, { cat: e.target.value })}
                 >
-                  {GALLERY_CATS.map(c => <option key={c} value={c}>{c}</option>)}
+                  {GALLERY_CATS.map(c => <option key={c.key} value={c.key}>{c.label}</option>)}
                 </select>
               </div>
             ))}
@@ -704,11 +711,11 @@ function GallerySection({ assets, token, refresh }) {
       {/* ── Toolbar: filters + select mode ── */}
       <div className="cms-gallery-toolbar">
         <div className="cms-filter-row">
-          {['All', ...GALLERY_CATS].map(f => (
-            <button key={f}
-              className={`cms-filter-btn${filter === f ? ' active' : ''}`}
-              onClick={() => setFilter(f)}>
-              {f} {f === 'All' ? `(${gallery.length})` : `(${gallery.filter(i => i.cat === f).length})`}
+          {[{ key: 'All', label: 'All' }, ...GALLERY_CATS].map(f => (
+            <button key={f.key}
+              className={`cms-filter-btn${filter === f.key ? ' active' : ''}`}
+              onClick={() => setFilter(f.key)}>
+              {f.label} {f.key === 'All' ? `(${gallery.length})` : `(${gallery.filter(i => i.cat === f.key).length})`}
             </button>
           ))}
         </div>

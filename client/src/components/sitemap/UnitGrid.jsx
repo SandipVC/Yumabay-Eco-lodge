@@ -87,9 +87,11 @@ export default function UnitGrid({ building, onEnquire }) {
             <h4 className="selected-unit-title">
               {t.sitemap?.phase === 'Phase' ? 'Unit' : 'Unidad'} {selectedUnit.code}
             </h4>
-            <span className={`status-badge ${getStatusClass(selectedUnit.status)}`}>
-              {getStatusLabel(selectedUnit.status)}
-            </span>
+            {selectedUnit.status !== 'available' && (
+              <span className={`status-badge ${getStatusClass(selectedUnit.status)}`}>
+                {getStatusLabel(selectedUnit.status)}
+              </span>
+            )}
           </div>
 
           <div className="selected-unit-details">

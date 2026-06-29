@@ -46,6 +46,16 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Contact form: Bungalows removed from sales interest options | `en.js`, `es.js` |
 | Properties: visual For Sale / Hospitality & Rental split with divider | `Properties.jsx`, `en.js`, `es.js`, `global.css` |
 | Props divider label: matched section-label size (22px, `(` `)` parens, sage color) | `global.css` |
+| CMS Media Manager: gallery categories wired to public filters (Villas / Apartments / Beach Club & Amenities / Boca de Yuma) | `CmsPanel.jsx` |
+| Hero schema: removed `subtitle`, `exploreBtn`, `discoverBtn` (Hero.jsx no longer renders these) | `textSchema.js`, `en.js`, `es.js` |
+| Gallery schema: filter count 4→5, hint label updated | `textSchema.js` |
+| Sitemap: info panel now always dark (empty + selected); `.has-zone` qualifier dropped from theme rules | `global.css` |
+| Sitemap: removed AVAILABLE status badge from selected-unit-header (still shows blocked/sold) | `UnitGrid.jsx` |
+| Sitemap: removed page subtitle + "Interactive Zone Map" label + colour legend | `SiteMap.jsx` |
+| Sitemap: replaced emoji icons with inline SVG line-art (villa / building / bungalow / eco / beach / pool / map); panel-icon now gold + visible on dark bg | `ZoneIcon.jsx` (new), `SiteMap.jsx`, `global.css` |
+| CMS Zone Editor: emoji text input → icon dropdown (Villa/Building/Bungalow/Eco/Beach/Pool/Map) with live SVG preview; SVG canvas label drops emoji prefix; pill + header swapped to ZoneIcon | `SiteMapZoneEditor.jsx` |
+| CMS / Dashboard: typography + colour sweep — Jost body, Cormorant headings, font sizes bumped (16px base, 22–38px headings, 12–15px labels), palette switched to public-site tokens (--teal / --gold / --ink / --rule / --bg-soft). Scoped under `.dash-light` so public site untouched | `global.css` |
+| CMS panel only: gold text → dark teal (`var(--teal)`); all font sizes inside `.cms-panel` bumped 20% (19.2px base, 14.4–26.4px labels/heads). Leads + login unchanged | `global.css` |
 
 ### What's next
 
@@ -109,13 +119,7 @@ After editing defaults: check if Firestore has a stale override for the same key
 
 ---
 
-## 7. Next recommended task
-
-Apply client text/copy feedback on `text-changes-client`, then open PR to merge `drishti-new-design` → `firebase` for production release.
-
----
-
-## 8. Quick commands
+## 7. Quick commands
 
 ```bash
 # Production build verify

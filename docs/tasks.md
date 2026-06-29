@@ -42,6 +42,16 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) comp
 | Contact form: Bungalows removed from sales interest options | `en.js`, `es.js` | ✅ |
 | Properties: For Sale / Hospitality & Rental split with divider | `Properties.jsx`, `en.js`, `es.js`, `global.css` | ✅ |
 | Props divider label: match section-label size (22px + parens) | `global.css` | ✅ |
+| CMS Media Manager: gallery categories wired to public filters | `CmsPanel.jsx` | ✅ |
+| Hero schema cleanup: removed unused `subtitle`/`exploreBtn`/`discoverBtn` | `textSchema.js`, `en.js`, `es.js` | ✅ |
+| Gallery filter schema: count 4→5, label updated | `textSchema.js` | ✅ |
+| Sitemap: info panel always dark (drop `.has-zone` qualifier from theme) | `global.css` | ✅ |
+| Sitemap: drop AVAILABLE badge from selected-unit-header | `UnitGrid.jsx` | ✅ |
+| Sitemap: drop page subtitle, "Interactive Zone Map" label, colour legend | `SiteMap.jsx` | ✅ |
+| Sitemap: swap emoji icons for inline SVG line-art (top panel icon + zone pills + selected-zone card title) | `ZoneIcon.jsx`, `SiteMap.jsx`, `global.css` | ✅ |
+| CMS Zone Editor: replace emoji input with icon dropdown + live SVG preview; backward-compat with legacy emoji values | `SiteMapZoneEditor.jsx` | ✅ |
+| CMS / Dashboard: align typography + colour with public site (Jost / Cormorant, bumped sizes, teal/gold/ink tokens) | `global.css` | ✅ |
+| CMS panel only: gold text → dark teal; font sizes +20% inside `.cms-panel` | `global.css` | ✅ |
 
 ---
 

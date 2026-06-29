@@ -5,6 +5,7 @@ import { useAssets }  from '../hooks/useAssets.js';
 import { BACKDROP_URL } from '../components/sitemap/SiteMapBackdrop.jsx';
 import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 import UnitGrid from '../components/sitemap/UnitGrid.jsx';
+import ZoneIcon from '../components/sitemap/ZoneIcon.jsx';
 
 const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
@@ -163,11 +164,6 @@ export default function SiteMap() {
       <h1 className="section-title reveal rd1">
         {s.title} <em>{s.titleEm}</em>
       </h1>
-      <p className="section-body reveal rd2" style={{ maxWidth: 600 }}>{s.subtitle}</p>
-
-      <p className="section-label reveal" style={{ marginTop: 24, marginBottom: 0 }}>
-        {s.phase === 'Phase' ? 'Interactive Zone Map' : 'Mapa de Zonas Interactivo'}
-      </p>
 
       <div className="sitemap-layout">
         {/* ── Interactive SVG ── */}
@@ -335,28 +331,13 @@ export default function SiteMap() {
             )}
           </svg>
 
-          {/* ── Legend ── */}
-          <div className="sitemap-legend">
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(26,107,138,.7)' }} />
-              {s.available}
-            </div>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(201,168,76,.7)' }} />
-              {s.limited}
-            </div>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(224,122,95,.6)' }} />
-              {s.soldOut}
-            </div>
-          </div>
         </div>
 
         {/* ── Info Panel ── */}
         <div className={`sitemap-info-panel${activeZone ? ' has-zone' : ''}`}>
           {!activeZone ? (
             <div className="sitemap-panel-empty">
-              <div className="sitemap-panel-icon">🗺</div>
+              <div className="sitemap-panel-icon"><ZoneIcon name="map" size={40} /></div>
               <p className="sitemap-panel-hint-title">Interactive Master Plan</p>
               <p className="sitemap-panel-hint-body">
                 Click any building, villa, or amenity zone on the plan to view unit details and availability.
@@ -368,7 +349,9 @@ export default function SiteMap() {
                     className="sitemap-zone-pill"
                     onClick={() => setActiveId(z.id)}
                   >
-                    <span style={{ color: AVAIL[z.availability]?.badge }}>{z.icon}</span>
+                    <span className="sitemap-zone-pill-icon" style={{ color: AVAIL[z.availability]?.badge }}>
+                      <ZoneIcon zone={z} size={18} />
+                    </span>
                     {z.label}
                   </button>
                 ))}
@@ -463,7 +446,10 @@ export default function SiteMap() {
             <div className="sitemap-zone-card">
               <button className="sitemap-card-close" onClick={() => setActiveId(null)} aria-label="Close">✕</button>
 
-              <h2 className="sitemap-card-title">{activeZone.icon} {activeZone.label}</h2>
+              <h2 className="sitemap-card-title">
+                <ZoneIcon zone={activeZone} size={22} />
+                <span style={{ marginLeft: 8 }}>{activeZone.label}</span>
+              </h2>
               <p className="sitemap-card-type">{activeZone.type}</p>
 
               {inventoryBuilding ? (

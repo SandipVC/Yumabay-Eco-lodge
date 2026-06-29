@@ -14,9 +14,6 @@ export const es = {
     title: 'YUMA',
     titleEm: 'BAY',
     tagline: 'Eco Lodge & Residences',
-    subtitle: 'Eco-Lodge Caribeño · Residencias Exclusivas · Hospitalidad · Inversión',
-    exploreBtn: 'Ver Propiedades',
-    discoverBtn: 'Descubrir Más',
   },
   strip: [
     'Eco-Lodge Caribeño',

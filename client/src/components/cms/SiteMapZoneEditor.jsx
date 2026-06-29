@@ -6,11 +6,24 @@
  */
 import { useState, useRef, useEffect, useCallback } from 'react';
 import SiteMapBackdrop from '../sitemap/SiteMapBackdrop.jsx';
+import ZoneIcon, { resolveIconName } from '../sitemap/ZoneIcon.jsx';
 import {
   ZONE_DEFAULTS, AVAIL, AVAIL_OPTIONS,
   VIEWBOX_W, VIEWBOX_H, MIN_W, MIN_H,
   clampZone, makeBlankZone, zoneCenter,
 } from '../sitemap/zonesData.js';
+
+// Selectable icon set surfaced in the CMS dropdown. Keys must match ZoneIcon's
+// ICONS map. Order = order shown in dropdown.
+const ICON_OPTIONS = [
+  { value: 'villa',    label: 'Villa' },
+  { value: 'building', label: 'Building' },
+  { value: 'bungalow', label: 'Bungalow' },
+  { value: 'eco',      label: 'Eco / Nature' },
+  { value: 'beach',    label: 'Beach' },
+  { value: 'pool',     label: 'Pool' },
+  { value: 'map',      label: 'Map / General' },
+];
 
 const DRAG_THRESHOLD = 3; // svg units before a press counts as a drag (not a click)
 const HANDLE_SIZE = 9;   // px (SVG units) for edge-handle squares
@@ -265,7 +278,7 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
                     fontSize="8.5" fontFamily="Jost, sans-serif" fontWeight="500"
                     style={{ pointerEvents: 'none', userSelect: 'none' }}
                   >
-                    {z.icon} {z.label}
+                    {z.label}
                   </text>
                   <text
                     x={cx} y={cy + 8} textAnchor="middle"
@@ -322,12 +335,17 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
         <div className="zone-edit-panel">
           {!selected ? (
             <div className="zone-edit-empty">
-              <div className="zone-edit-empty-icon">🗺</div>
+              <div className="zone-edit-empty-icon" style={{ color: 'var(--gold)' }}>
+                <ZoneIcon name="map" size={36} />
+              </div>
               <p>Click a box on the map to edit its name, price, availability and details — or drag it to reposition.</p>
               <div className="zone-pill-list">
                 {zones.map(z => (
                   <button key={z.id} className="zone-pill" onClick={() => setSelId(z.id)}>
-                    <span style={{ color: AVAIL[z.availability]?.badge }}>{z.icon}</span> {z.label}
+                    <span style={{ color: AVAIL[z.availability]?.badge, display: 'inline-flex', alignItems: 'center', marginRight: 6 }}>
+                      <ZoneIcon zone={z} size={16} />
+                    </span>
+                    {z.label}
                   </button>
                 ))}
               </div>
@@ -335,7 +353,10 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
           ) : (
             <div className="zone-edit-form">
               <div className="zone-edit-head">
-                <span className="zone-edit-title">{selected.icon} {selected.label}</span>
+                <span className="zone-edit-title" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <ZoneIcon zone={selected} size={20} />
+                  {selected.label}
+                </span>
                 <button className="cms-btn-danger" onClick={() => deleteZone(selected.id)}>Delete</button>
               </div>
 
@@ -350,7 +371,20 @@ export default function SiteMapZoneEditor({ initialZones, onSave }) {
               <div className="zone-field-row">
                 <label className="zone-field">
                   <span>Icon</span>
-                  <input type="text" value={selected.icon} maxLength={4} onChange={e => editField('icon', e.target.value)} />
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <select
+                      value={resolveIconName(selected)}
+                      onChange={e => editField('icon', e.target.value)}
+                      style={{ flex: 1 }}
+                    >
+                      {ICON_OPTIONS.map(opt => (
+                        <option key={opt.value} value={opt.value}>{opt.label}</option>
+                      ))}
+                    </select>
+                    <span style={{ color: 'var(--gold)', display: 'inline-flex', alignItems: 'center' }}>
+                      <ZoneIcon zone={selected} size={20} />
+                    </span>
+                  </div>
                 </label>
                 <label className="zone-field">
                   <span>Phase</span>

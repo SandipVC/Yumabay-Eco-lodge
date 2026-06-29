@@ -1016,13 +1016,28 @@ a  { color: inherit; }
   min-height: 360px;
   transition: border-color .3s;
 }
-.sitemap-info-panel.has-zone { border-color: rgba(201,168,76,.25); }
+.sitemap-info-panel { border-color: rgba(201,168,76,.25); }
 
 /* Empty state */
 .sitemap-panel-empty {
   padding: 32px 24px; text-align: center;
 }
-.sitemap-panel-icon { font-size: 36px; margin-bottom: 16px; opacity: .6; }
+.sitemap-panel-icon {
+  margin-bottom: 16px;
+  color: var(--gold);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sitemap-zone-pill .sitemap-zone-pill-icon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 10px;
+}
+.sitemap-card-title {
+  display: inline-flex;
+  align-items: center;
+}
 .sitemap-panel-hint-title {
   font-family: 'Merzalina', 'Cormorant Garamond', serif;
   font-size: 24px; font-weight: 400;
@@ -2813,7 +2828,7 @@ footer { background: var(--teal); color: var(--white); }
 .legend-item { color: var(--ink-soft); }
 
 .sitemap-info-panel { background: var(--bg-soft); border-color: var(--rule); }
-.sitemap-info-panel.has-zone { border-color: rgba(10,76,88,.35); }
+.sitemap-info-panel { border-color: rgba(10,76,88,.35); }
 
 .sitemap-panel-hint-title { color: var(--teal); }
 .sitemap-panel-hint-body  { color: var(--ink-soft); }
@@ -2862,58 +2877,431 @@ footer { background: var(--teal); color: var(--white); }
 .unit-note-text { color: var(--ink-mute); }
 
 /* ── Sitemap info panel — has-zone state is dark; empty/loading state stays light ── */
-.sitemap-info-panel.has-zone {
+.sitemap-info-panel {
   background: rgba(6,6,9,.92) !important;
   border-color: rgba(201,168,76,.28) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
 }
 
-.sitemap-info-panel.has-zone .sitemap-card-close       { color: rgba(255,255,255,.28); }
-.sitemap-info-panel.has-zone .sitemap-card-close:hover { color: rgba(255,255,255,.8);  }
-.sitemap-info-panel.has-zone .sitemap-card-title       { color: var(--gold);           }
-.sitemap-info-panel.has-zone .sitemap-card-type        { color: rgba(255,255,255,.45); }
-.sitemap-info-panel.has-zone .sitemap-card-meta        { border-top-color: rgba(255,255,255,.08); }
-.sitemap-info-panel.has-zone .meta-key                 { color: rgba(255,255,255,.4);  }
-.sitemap-info-panel.has-zone .meta-val                 { color: rgba(255,255,255,.85); }
-.sitemap-info-panel.has-zone .meta-price               { color: var(--gold);           }
-.sitemap-info-panel.has-zone .sitemap-amenity-note     { color: rgba(255,255,255,.45); }
-.sitemap-info-panel.has-zone .sitemap-card-nav-hint    { color: rgba(255,255,255,.35); }
+.sitemap-info-panel .sitemap-card-close       { color: rgba(255,255,255,.28); }
+.sitemap-info-panel .sitemap-card-close:hover { color: rgba(255,255,255,.8);  }
+.sitemap-info-panel .sitemap-card-title       { color: var(--gold);           }
+.sitemap-info-panel .sitemap-card-type        { color: rgba(255,255,255,.45); }
+.sitemap-info-panel .sitemap-card-meta        { border-top-color: rgba(255,255,255,.08); }
+.sitemap-info-panel .meta-key                 { color: rgba(255,255,255,.4);  }
+.sitemap-info-panel .meta-val                 { color: rgba(255,255,255,.85); }
+.sitemap-info-panel .meta-price               { color: var(--gold);           }
+.sitemap-info-panel .sitemap-amenity-note     { color: rgba(255,255,255,.45); }
+.sitemap-info-panel .sitemap-card-nav-hint    { color: rgba(255,255,255,.35); }
 
-.sitemap-info-panel.has-zone .building-unit-drilldown  { border-top-color: rgba(255,255,255,.08); }
-.sitemap-info-panel.has-zone .sitemap-level-tabs       { border-bottom-color: rgba(255,255,255,.1); }
-.sitemap-info-panel.has-zone .sitemap-level-tab {
+.sitemap-info-panel .building-unit-drilldown  { border-top-color: rgba(255,255,255,.08); }
+.sitemap-info-panel .sitemap-level-tabs       { border-bottom-color: rgba(255,255,255,.1); }
+.sitemap-info-panel .sitemap-level-tab {
   border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.5);
 }
-.sitemap-info-panel.has-zone .sitemap-level-tab:hover  { color: rgba(255,255,255,.85); border-color: rgba(201,168,76,.35); }
-.sitemap-info-panel.has-zone .sitemap-level-tab.active { background: var(--gold); border-color: var(--gold); color: #060609; }
+.sitemap-info-panel .sitemap-level-tab:hover  { color: rgba(255,255,255,.85); border-color: rgba(201,168,76,.35); }
+.sitemap-info-panel .sitemap-level-tab.active { background: var(--gold); border-color: var(--gold); color: #060609; }
 
 /* Scrollbar for level-tabs strip inside dark panel */
-.sitemap-info-panel.has-zone .sitemap-level-tabs::-webkit-scrollbar { height: 3px; }
-.sitemap-info-panel.has-zone .sitemap-level-tabs::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 2px; }
-.sitemap-info-panel.has-zone .sitemap-level-tabs::-webkit-scrollbar-thumb { background: rgba(201,168,76,.45); border-radius: 2px; }
+.sitemap-info-panel .sitemap-level-tabs::-webkit-scrollbar { height: 3px; }
+.sitemap-info-panel .sitemap-level-tabs::-webkit-scrollbar-track { background: rgba(255,255,255,.04); border-radius: 2px; }
+.sitemap-info-panel .sitemap-level-tabs::-webkit-scrollbar-thumb { background: rgba(201,168,76,.45); border-radius: 2px; }
 
-.sitemap-info-panel.has-zone .unit-cell {
+.sitemap-info-panel .unit-cell {
   background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1);
 }
-.sitemap-info-panel.has-zone .unit-cell-code  { color: rgba(255,255,255,.85); }
-.sitemap-info-panel.has-zone .unit-cell-type  { color: rgba(255,255,255,.4);  }
-.sitemap-info-panel.has-zone .unit-cell-price { color: rgba(255,255,255,.55); }
-.sitemap-info-panel.has-zone .unit-cell.selected { outline-color: var(--gold); border-color: var(--gold) !important; }
+.sitemap-info-panel .unit-cell-code  { color: rgba(255,255,255,.85); }
+.sitemap-info-panel .unit-cell-type  { color: rgba(255,255,255,.4);  }
+.sitemap-info-panel .unit-cell-price { color: rgba(255,255,255,.55); }
+.sitemap-info-panel .unit-cell.selected { outline-color: var(--gold); border-color: var(--gold) !important; }
 
-.sitemap-info-panel.has-zone .selected-unit-card { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.08); }
-.sitemap-info-panel.has-zone .selected-unit-header { border-bottom-color: rgba(255,255,255,.08); }
-.sitemap-info-panel.has-zone .selected-unit-title  { color: rgba(255,255,255,.9); }
-.sitemap-info-panel.has-zone .detail-label         { color: rgba(255,255,255,.4) !important; }
-.sitemap-info-panel.has-zone .detail-value         { color: rgba(255,255,255,.85) !important; }
-.sitemap-info-panel.has-zone .detail-row.highlight.price .detail-value { color: var(--gold) !important; }
-.sitemap-info-panel.has-zone .unit-note-text       { color: rgba(255,255,255,.4); }
-.sitemap-info-panel.has-zone .status-badge.unit-cell--blocked {
+.sitemap-info-panel .selected-unit-card { background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.08); }
+.sitemap-info-panel .selected-unit-header { border-bottom-color: rgba(255,255,255,.08); }
+.sitemap-info-panel .selected-unit-title  { color: rgba(255,255,255,.9); }
+.sitemap-info-panel .detail-label         { color: rgba(255,255,255,.4) !important; }
+.sitemap-info-panel .detail-value         { color: rgba(255,255,255,.85) !important; }
+.sitemap-info-panel .detail-row.highlight.price .detail-value { color: var(--gold) !important; }
+.sitemap-info-panel .unit-note-text       { color: rgba(255,255,255,.4); }
+.sitemap-info-panel .status-badge.unit-cell--blocked {
   background: rgba(255,255,255,.04); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.35);
+}
+
+/* Empty-state dark theme (panel is always dark now). */
+.sitemap-info-panel .sitemap-panel-hint-title { color: var(--gold); }
+.sitemap-info-panel .sitemap-panel-hint-body  { color: rgba(255,255,255,.55); }
+.sitemap-info-panel .sitemap-zone-pill {
+  border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.7); background: rgba(255,255,255,.02);
+}
+.sitemap-info-panel .sitemap-zone-pill:hover {
+  background: rgba(201,168,76,.08);
+  border-color: rgba(201,168,76,.35);
+  color: var(--gold);
 }
 
 /* ── Mobile/responsive parity for new theme ──────────────────── */
 @media (max-width: 768px) {
   .stat + .stat { border-top-color: var(--rule); }
 }
+
+/* ============================================================
+   CMS / Dashboard — typography + colour parity with public site
+   Body font: Jost (matches main site). Headings: Cormorant Garamond.
+   Sizes bumped from 10–13px (too small) to 14–22px to match the
+   public site's readable scale. Colours use the public-site light
+   tokens (--ink / --teal / --gold / --rule / --bg-soft).
+   Scoped under .dash-light so the public site is untouched.
+   ============================================================ */
+
+.dash-light {
+  font-family: 'Jost', 'Aptos Narrow', sans-serif;
+  font-size: 16px;
+  color: var(--ink);
+}
+
+/* Page header */
+.dash-light .section-title,
+.dash-light h1 {
+  font-family: 'Cormorant Garamond', 'Merzalina', serif;
+  font-size: clamp(28px, 3vw, 38px);
+  font-weight: 400;
+  letter-spacing: .01em;
+  color: var(--teal);
+}
+.dash-light .section-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Tabs */
+.dash-light .dashboard-tabs { border-bottom-color: var(--rule); }
+.dash-light .dash-tab-btn {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  letter-spacing: .04em;
+  color: var(--ink-mute);
+  padding: 14px 24px;
+}
+.dash-light .dash-tab-btn:hover { color: var(--ink-soft); }
+.dash-light .dash-tab-btn.active { color: var(--teal); border-bottom-color: var(--teal); }
+
+.dash-light .cms-tab {
+  font-family: 'Jost', sans-serif;
+  border-color: var(--rule);
+  background: #fff;
+  color: var(--ink-soft);
+  padding: 14px 22px;
+  min-width: 150px;
+}
+.dash-light .cms-tab span { font-size: 15px; letter-spacing: .04em; }
+.dash-light .cms-tab small { font-size: 12px; color: var(--ink-mute); margin-top: 4px; }
+.dash-light .cms-tab:hover { background: var(--bg-soft); color: var(--ink); border-color: rgba(10,76,88,.25); }
+.dash-light .cms-tab.active {
+  background: rgba(201,168,76,.08); border-color: var(--gold); color: var(--teal);
+}
+.dash-light .cms-tab.active small { color: var(--gold); }
+
+/* Content surface */
+.dash-light .cms-content {
+  background: #fff;
+  border: 1px solid var(--rule);
+  padding: 32px;
+}
+
+/* Hints + labels */
+.dash-light .cms-hint {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  font-style: italic;
+  color: var(--ink-mute);
+  margin-bottom: 22px;
+}
+.dash-light .cms-slot-label {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+.dash-light .cms-error {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  background: rgba(224,122,95,.08);
+  color: #b04a36;
+  border-left-color: var(--coral);
+  padding: 12px 16px;
+}
+
+/* Inputs / selects / textareas */
+.dash-light .cms-input,
+.dash-light .cms-textarea,
+.dash-light .cms-price-input,
+.dash-light .zone-field input,
+.dash-light .zone-field select,
+.dash-light .zone-geom-field input,
+.dash-light .cms-queue-label,
+.dash-light .cms-queue-cat {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  padding: 11px 14px;
+  border-color: var(--rule);
+  color: var(--ink);
+  background: #fff;
+}
+.dash-light .cms-input:focus,
+.dash-light .cms-textarea:focus,
+.dash-light .zone-field input:focus,
+.dash-light .zone-field select:focus { border-color: var(--gold); outline: none; }
+
+/* Buttons */
+.dash-light .cms-btn-gold,
+.dash-light .cms-btn-ghost,
+.dash-light .cms-btn-danger {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  letter-spacing: .04em;
+  padding: 10px 18px;
+}
+.dash-light .cms-btn-gold {
+  background: var(--gold); color: #fff; border: 1px solid var(--gold);
+}
+.dash-light .cms-btn-gold:hover:not(:disabled) { background: #b87f3e; border-color: #b87f3e; }
+
+/* Inventory table */
+.dash-light .inventory-table {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+}
+.dash-light .inventory-table th {
+  font-size: 12px; letter-spacing: .12em; color: var(--gold);
+  padding: 16px 14px;
+}
+.dash-light .inventory-table td { padding: 12px 14px; color: var(--ink); }
+
+/* Inventory status / badges */
+.dash-light .inventory-badge {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  color: var(--ink-soft);
+}
+.dash-light .inventory-badge strong { color: var(--teal); }
+
+/* Property / thumb blocks */
+.dash-light .cms-prop-block {
+  background: var(--bg-soft); border-color: var(--rule);
+}
+.dash-light .cms-thumb-label,
+.dash-light .cms-pdf-name,
+.dash-light .cms-pdf-empty,
+.dash-light .cms-pdf-hint {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+}
+
+/* Dropzone */
+.dash-light .cms-dropzone {
+  background: var(--bg-soft); border-color: rgba(202,147,82,.4);
+}
+.dash-light .cms-dropzone-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px; font-weight: 400; color: var(--teal);
+}
+.dash-light .cms-dropzone-sub {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px; color: var(--ink-mute);
+}
+.dash-light .cms-dropzone-cat > span,
+.dash-light .cms-dropzone-cat {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+}
+.dash-light .cms-catpick,
+.dash-light .cms-filter-btn {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  padding: 8px 14px;
+  border-color: var(--rule);
+  color: var(--ink-soft);
+}
+.dash-light .cms-catpick.active,
+.dash-light .cms-filter-btn.active {
+  background: rgba(201,168,76,.1);
+  border-color: var(--gold);
+  color: var(--teal);
+}
+
+/* Upload queue */
+.dash-light .cms-queue {
+  background: rgba(201,168,76,.05); border-color: rgba(201,168,76,.25);
+}
+.dash-light .cms-queue-title {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px; color: var(--teal);
+}
+
+/* Zone editor */
+.dash-light .zone-edit-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--teal);
+}
+.dash-light .zone-edit-empty {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+.dash-light .zone-field > span,
+.dash-light .zone-geom-label,
+.dash-light .zone-geom-field > span {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold);
+}
+.dash-light .zone-pill {
+  font-family: 'Jost', sans-serif;
+  font-size: 14px;
+  padding: 9px 14px;
+  border-color: var(--rule); color: var(--ink-soft);
+  background: var(--bg-soft);
+}
+.dash-light .zone-pill:hover {
+  border-color: var(--gold); color: var(--teal); background: rgba(201,168,76,.06);
+}
+.dash-light .zone-count {
+  font-family: 'Jost', sans-serif;
+  font-size: 13px; color: var(--ink-mute);
+}
+
+/* Save bar */
+.dash-light .cms-save-bar {
+  background: var(--bg-soft);
+  border-top: 1px solid var(--rule);
+}
+
+/* Leads table */
+.dash-light .leads-table {
+  font-family: 'Jost', sans-serif;
+  font-size: 15px;
+}
+.dash-light .leads-table th {
+  font-size: 12px; letter-spacing: .12em; color: var(--gold);
+}
+
+/* Dashboard stats */
+.dash-light .dash-stat-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px; font-weight: 400; color: var(--teal);
+}
+.dash-light .dash-stat-lbl {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ============================================================
+   CMS panel — gold text → dark teal, font sizes +20%.
+   Scoped to .dash-light .cms-panel so only the CMS / Text Content
+   surfaces are affected (leads + login keep their treatment).
+   Higher specificity (.cms-panel descendant) wins over the
+   .dash-light .cms-* rules above without needing !important.
+   ============================================================ */
+
+.dash-light .cms-panel { font-size: 19.2px; }
+
+/* Hints, labels, eyebrow text — were gold, now teal */
+.dash-light .cms-panel .cms-hint              { font-size: 16.8px; color: var(--teal); }
+.dash-light .cms-panel .cms-slot-label        { font-size: 14.4px; color: var(--teal); }
+.dash-light .cms-panel .cms-thumb-label,
+.dash-light .cms-panel .cms-pdf-name,
+.dash-light .cms-panel .cms-pdf-empty,
+.dash-light .cms-panel .cms-pdf-hint          { font-size: 16.8px; color: var(--teal); }
+
+/* Tabs */
+.dash-light .cms-panel .cms-tab               { padding: 16px 26px; min-width: 168px; }
+.dash-light .cms-panel .cms-tab span          { font-size: 18px; }
+.dash-light .cms-panel .cms-tab small         { font-size: 14.4px; color: var(--teal); }
+.dash-light .cms-panel .cms-tab.active        { color: var(--teal); border-color: var(--teal); background: rgba(10,76,88,.06); }
+.dash-light .cms-panel .cms-tab.active small  { color: var(--teal); }
+
+/* Section heads inside CMS */
+.dash-light .cms-panel h2,
+.dash-light .cms-panel h3,
+.dash-light .cms-panel .cms-section-title {
+  color: var(--teal);
+}
+
+/* Inputs / selects / textareas */
+.dash-light .cms-panel .cms-input,
+.dash-light .cms-panel .cms-textarea,
+.dash-light .cms-panel .cms-price-input,
+.dash-light .cms-panel .cms-queue-label,
+.dash-light .cms-panel .cms-queue-cat,
+.dash-light .cms-panel .zone-field input,
+.dash-light .cms-panel .zone-field select,
+.dash-light .cms-panel .zone-geom-field input {
+  font-size: 18px;
+  padding: 13px 16px;
+  color: var(--teal);
+}
+.dash-light .cms-panel .cms-input:focus,
+.dash-light .cms-panel .cms-textarea:focus,
+.dash-light .cms-panel .zone-field input:focus,
+.dash-light .cms-panel .zone-field select:focus { border-color: var(--teal); }
+
+/* Buttons — keep gold fill for primary, teal for ghost text */
+.dash-light .cms-panel .cms-btn-gold,
+.dash-light .cms-panel .cms-btn-ghost,
+.dash-light .cms-panel .cms-btn-danger {
+  font-size: 16.8px;
+  padding: 12px 22px;
+}
+.dash-light .cms-panel .cms-btn-ghost { color: var(--teal); border-color: rgba(10,76,88,.4); }
+.dash-light .cms-panel .cms-btn-ghost:hover:not(:disabled) { color: var(--teal-dark); border-color: var(--teal); }
+
+/* Dropzone */
+.dash-light .cms-panel .cms-dropzone        { border-color: rgba(10,76,88,.4); }
+.dash-light .cms-panel .cms-dropzone-title  { font-size: 26.4px; color: var(--teal); }
+.dash-light .cms-panel .cms-dropzone-sub    { font-size: 16.8px; }
+.dash-light .cms-panel .cms-dropzone-cat,
+.dash-light .cms-panel .cms-dropzone-cat > span { font-size: 16.8px; color: var(--teal); }
+.dash-light .cms-panel .cms-dropzone-icon   { color: var(--teal); }
+
+/* Filter / category pills */
+.dash-light .cms-panel .cms-catpick,
+.dash-light .cms-panel .cms-filter-btn      { font-size: 16.8px; padding: 10px 17px; color: var(--teal); border-color: rgba(10,76,88,.25); }
+.dash-light .cms-panel .cms-catpick.active,
+.dash-light .cms-panel .cms-filter-btn.active { color: #fff; background: var(--teal); border-color: var(--teal); }
+
+/* Upload queue */
+.dash-light .cms-panel .cms-queue-title     { font-size: 18px; color: var(--teal); }
+
+/* Inventory table */
+.dash-light .cms-panel .inventory-table     { font-size: 18px; }
+.dash-light .cms-panel .inventory-table th  { font-size: 14.4px; color: var(--teal); padding: 19px 17px; }
+.dash-light .cms-panel .inventory-table td  { padding: 14px 17px; color: var(--teal); }
+
+.dash-light .cms-panel .inventory-badge     { font-size: 16.8px; color: var(--teal); }
+.dash-light .cms-panel .inventory-badge strong { color: var(--teal-dark); }
+
+/* Errors */
+.dash-light .cms-panel .cms-error           { font-size: 16.8px; }
+
+/* Zone editor */
+.dash-light .cms-panel .zone-edit-title     { font-size: 26.4px; color: var(--teal); }
+.dash-light .cms-panel .zone-edit-empty     { font-size: 18px; color: var(--teal); }
+.dash-light .cms-panel .zone-field > span,
+.dash-light .cms-panel .zone-geom-label,
+.dash-light .cms-panel .zone-geom-field > span { font-size: 14.4px; color: var(--teal); }
+.dash-light .cms-panel .zone-pill           { font-size: 16.8px; padding: 11px 17px; color: var(--teal); }
+.dash-light .cms-panel .zone-pill:hover     { color: var(--teal-dark); border-color: var(--teal); background: rgba(10,76,88,.06); }
+.dash-light .cms-panel .zone-count          { font-size: 15.6px; color: var(--teal); }
+.dash-light .cms-panel .zone-edit-empty-icon { color: var(--teal) !important; }
+
+/* Save bar text */
+.dash-light .cms-panel .cms-save-bar        { font-size: 18px; color: var(--teal); }
 

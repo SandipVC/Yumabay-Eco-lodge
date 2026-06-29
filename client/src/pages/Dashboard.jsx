@@ -188,7 +188,7 @@ export default function Dashboard() {
         {tab === 'cms'  && <CmsPanel token={token} />}
         {tab === 'text' && (
           <>
-            <InventoryStatusBadge />
+            {/* <InventoryStatusBadge /> */}
             <TextContentSection token={token} />
           </>
         )}
