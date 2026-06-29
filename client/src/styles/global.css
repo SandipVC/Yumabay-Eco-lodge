@@ -2111,9 +2111,15 @@ footer { background: var(--dark); padding: 80px 0 50px; }
   padding-bottom: 60px; border-bottom: 1px solid rgba(255,255,255,.2);
 }
 .footer-brand {
-  height: clamp(65px, 6vw, 95px);
-  width: auto;
+  height: clamp(76px, 6.4vw, 104px);
+  width: clamp(76px, 6.4vw, 104px);
   display: block;
+  /* White circle behind logo so it stays legible on the dark footer */
+  background: #fff;
+  padding: 11px;
+  border-radius: 50%;
+  object-fit: contain;
+  box-sizing: border-box;
 }
 .footer-contact { display: flex; flex-direction: column; gap: 30px; }
 .footer-contact a {
