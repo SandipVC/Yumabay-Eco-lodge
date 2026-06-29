@@ -138,6 +138,7 @@ export default function Hero() {
       <div className="hero-logo-center" ref={logoRef}>
         <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
         <p className="hero-tagline">{h.tagline}</p>
+        {h.subtitle && <p className="hero-subtitle">{h.subtitle}</p>}
       </div>
     </section>
   );

@@ -8,8 +8,12 @@ import SplitText from '../ui/SplitText.jsx';
 const GALLERY_DEFAULTS = [];
 
 const FILTER_MAP = {
-  'All': 'All', 'Exterior': 'Exterior', 'Interior': 'Interior', 'Amenities': 'Amenities',
-  'Todo': 'All', 'Comodidades': 'Amenities',
+  'All': 'All', 'Villas': 'Villas', 'Apartments': 'Apartments',
+  'Beach Club & Amenities': 'Amenities', 'Boca de Yuma': 'Boca de Yuma',
+  'Todo': 'All', 'Apartamentos': 'Apartments',
+  'Club de Playa y Comodidades': 'Amenities',
+  // legacy cats still in data — shown under All only
+  'Exterior': 'Exterior', 'Interior': 'Interior', 'Comodidades': 'Amenities',
 };
 
 // One full pass of the 18-tile mosaic pattern fills exactly 3 rows by item 10.
