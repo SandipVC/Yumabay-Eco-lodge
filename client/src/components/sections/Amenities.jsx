@@ -2,6 +2,7 @@ import { motion }    from 'motion/react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import SplitText from '../ui/SplitText.jsx';
+import EditMark from '../cms/EditMark.jsx';
 import assetsUrls from '../../assetsUrls.json';
 
 const badgeUrl = assetsUrls['badge-shape.svg'];
@@ -35,20 +36,26 @@ export default function Amenities() {
       <div className="wrap">
         <div className="amenities-header">
           <div className="amenities-header-left">
-            <p className="section-label reveal">{a.label}</p>
-            <SplitText
-              text={a.title.replace(/\n/g, ' ')}
-              className="section-title"
-              delay={10}
-              duration={0.25}
-              ease="power3.out"
-              splitType="chars"
-              tag="h2"
-              textAlign="left"
-            />
+            <p className="section-label reveal">
+              <EditMark path="amenities.label" label="Amenities label">{a.label}</EditMark>
+            </p>
+            <EditMark as="div" path="amenities.title" label="Amenities heading">
+              <SplitText
+                text={a.title.replace(/\n/g, ' ')}
+                className="section-title"
+                delay={10}
+                duration={0.25}
+                ease="power3.out"
+                splitType="chars"
+                tag="h2"
+                textAlign="left"
+              />
+            </EditMark>
           </div>
           <div className="amenities-header-right reveal rd2">
-            <p className="section-body">{a.body}</p>
+            <p className="section-body">
+              <EditMark path="amenities.body" label="Amenities body">{a.body}</EditMark>
+            </p>
           </div>
         </div>
       </div>
@@ -75,8 +82,12 @@ export default function Amenities() {
                 </span>
               </div>
               <div className="amenity-right">
-                <h3 className="amenity-name">{item.name}</h3>
-                <p className="amenity-desc">{item.desc}</p>
+                <h3 className="amenity-name">
+                  <EditMark path={`amenities.items.${i}.name`} label={`Amenity ${i + 1} · name`}>{item.name}</EditMark>
+                </h3>
+                <p className="amenity-desc">
+                  <EditMark path={`amenities.items.${i}.desc`} label={`Amenity ${i + 1} · description`}>{item.desc}</EditMark>
+                </p>
               </div>
             </div>
           </motion.div>

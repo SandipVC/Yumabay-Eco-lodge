@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
+import EditMark from '../cms/EditMark.jsx';
 import assetsUrls from '../../assetsUrls.json';
 
 const menuIcon = assetsUrls['menu-lines.svg'];
@@ -82,13 +83,13 @@ export default function Navbar() {
 
       {menuOpen && (
         <div className="nav-overlay">
-          <button className="nav-overlay-link" onClick={() => scrollTo('about')}>{t.nav.about}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('properties')}>{t.nav.properties}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('gallery')}>{t.nav.gallery}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('amenities')}>{t.nav.amenities}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('location')}>{t.nav.location}</button>
-          <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}>{t.nav.siteMap}</Link>
-          <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}>{t.nav.reserveNow}</Link>
+          <button className="nav-overlay-link" onClick={() => scrollTo('about')}><EditMark path="nav.about" label="Nav · About">{t.nav.about}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('properties')}><EditMark path="nav.properties" label="Nav · Properties">{t.nav.properties}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('gallery')}><EditMark path="nav.gallery" label="Nav · Gallery">{t.nav.gallery}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('amenities')}><EditMark path="nav.amenities" label="Nav · Amenities">{t.nav.amenities}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('location')}><EditMark path="nav.location" label="Nav · Location">{t.nav.location}</EditMark></button>
+          <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}><EditMark path="nav.siteMap" label="Nav · Site Map">{t.nav.siteMap}</EditMark></Link>
+          <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}><EditMark path="nav.reserveNow" label="Nav · Reserve Now">{t.nav.reserveNow}</EditMark></Link>
         </div>
       )}
     </>

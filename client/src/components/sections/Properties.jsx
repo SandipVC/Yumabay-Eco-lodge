@@ -5,6 +5,7 @@ import { useLang }    from '../../context/LanguageContext.jsx';
 import { useAssets }  from '../../hooks/useAssets.js';
 import SplitText  from '../ui/SplitText.jsx';
 import Lightbox   from '../ui/Lightbox.jsx';
+import EditMark   from '../cms/EditMark.jsx';
 
 // 1×1 transparent GIF — shown while CMS images haven't loaded yet
 const BLANK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
@@ -94,17 +95,25 @@ export default function Properties() {
         transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
       >
         <div className="prop-header">
-          <span className="prop-tag">{item.tag}</span>
-          <h3 className="prop-name">{item.name}</h3>
-          <p className="prop-area">{item.area}</p>
+          <span className="prop-tag">
+            <EditMark path={`properties.items.${i}.tag`} label={`Card ${i + 1} · tag`}>{item.tag}</EditMark>
+          </span>
+          <h3 className="prop-name">
+            <EditMark path={`properties.items.${i}.name`} label={`Card ${i + 1} · name`}>{item.name}</EditMark>
+          </h3>
+          <p className="prop-area">
+            <EditMark path={`properties.items.${i}.area`} label={`Card ${i + 1} · area`}>{item.area}</EditMark>
+          </p>
         </div>
         <div className="prop-feats">
           {item.feats.map((f, j) => (
-            <span key={j} className="prop-feat">{f}</span>
+            <span key={j} className="prop-feat">
+              <EditMark path={`properties.items.${i}.feats.${j}`} label={`Card ${i + 1} · feature ${j + 1}`}>{f}</EditMark>
+            </span>
           ))}
         </div>
         <button className="prop-enquire" onClick={() => enquire(item.name)}>
-          {p.enquire}
+          <EditMark path="properties.enquire" label="Enquire button">{p.enquire}</EditMark>
         </button>
       </motion.div>
     </article>
@@ -120,19 +129,25 @@ export default function Properties() {
     <section id="properties">
       <div className="props-head wrap reveal">
         <div>
-          <p className="section-label">{p.label}</p>
-          <SplitText
-            text={title}
-            className="section-title"
-            delay={10}
-            duration={0.25}
-            ease="power3.out"
-            splitType="chars"
-            tag="h2"
-            textAlign="left"
-          />
+          <p className="section-label">
+            <EditMark path="properties.label" label="Properties label">{p.label}</EditMark>
+          </p>
+          <EditMark as="div" path={['properties.title', 'properties.titleEm']} label="Properties heading">
+            <SplitText
+              text={title}
+              className="section-title"
+              delay={10}
+              duration={0.25}
+              ease="power3.out"
+              splitType="chars"
+              tag="h2"
+              textAlign="left"
+            />
+          </EditMark>
         </div>
-        <p className="props-sub">{p.subtitle}</p>
+        <p className="props-sub">
+          <EditMark path="properties.subtitle" label="Properties subtitle">{p.subtitle}</EditMark>
+        </p>
       </div>
 
       <div className="props-list">
@@ -144,8 +159,14 @@ export default function Properties() {
           <div className="props-divider reveal">
             <div className="props-divider-line" />
             <div className="props-divider-center">
-              <span className="props-divider-label">{p.rentalSectionLabel}</span>
-              {p.rentalSectionNote && <p className="props-divider-note">{p.rentalSectionNote}</p>}
+              <span className="props-divider-label">
+                <EditMark path="properties.rentalSectionLabel" label="Rental section label">{p.rentalSectionLabel}</EditMark>
+              </span>
+              {p.rentalSectionNote && (
+                <p className="props-divider-note">
+                  <EditMark path="properties.rentalSectionNote" label="Rental section note">{p.rentalSectionNote}</EditMark>
+                </p>
+              )}
             </div>
             <div className="props-divider-line" />
           </div>

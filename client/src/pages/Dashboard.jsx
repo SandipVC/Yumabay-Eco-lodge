@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
 import InventoryStatusBadge from '../components/cms/InventoryStatusBadge.jsx';
 import { useAssets } from '../hooks/useAssets.js';
 import { useLang } from '../context/LanguageContext.jsx';
+import { useEditMode } from '../context/EditModeContext.jsx';
 
 const safeSessionStorage = {
   getItem(key) {
@@ -84,6 +86,8 @@ export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
   const { assets, refresh } = useAssets();
+  const navigate = useNavigate();
+  const editMode = useEditMode();
 
   // Force light background on body/html for the whole dashboard page.
   useEffect(() => {
@@ -188,7 +192,18 @@ export default function Dashboard() {
         {tab === 'cms'  && <CmsPanel token={token} />}
         {tab === 'text' && (
           <>
-            {/* <InventoryStatusBadge /> */}
+            <div className="cms-inline-cta">
+              <div>
+                <strong>Edit text directly on the live site</strong>
+                <p>See each text in its real place and edit English + Spanish inline. Opens the home page in edit mode.</p>
+              </div>
+              <button
+                className="btn-primary"
+                onClick={() => { editMode?.enterEdit(); navigate('/'); }}
+              >
+                ✏️ Edit on live site
+              </button>
+            </div>
             <TextContentSection token={token} />
           </>
         )}

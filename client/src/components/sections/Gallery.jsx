@@ -3,6 +3,7 @@ import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import Lightbox from '../ui/Lightbox.jsx';
 import SplitText from '../ui/SplitText.jsx';
+import EditMark from '../cms/EditMark.jsx';
 
 // No bundled media — gallery items are served from Firebase Storage via CMS.
 const GALLERY_DEFAULTS = [];
@@ -56,26 +57,30 @@ export default function Gallery() {
     <section id="gallery">
       <div className="gallery-head wrap">
         <div>
-          <p className="section-label reveal">{g.label}</p>
-          <SplitText
-            text={title}
-            className="section-title"
-            delay={10}
-            duration={0.25}
-            ease="power3.out"
-            splitType="chars"
-            tag="h2"
-            textAlign="left"
-          />
+          <p className="section-label reveal">
+            <EditMark path="gallery.label" label="Gallery label">{g.label}</EditMark>
+          </p>
+          <EditMark as="div" path={['gallery.title', 'gallery.titleEm', 'gallery.titleEnd']} label="Gallery heading">
+            <SplitText
+              text={title}
+              className="section-title"
+              delay={10}
+              duration={0.25}
+              ease="power3.out"
+              splitType="chars"
+              tag="h2"
+              textAlign="left"
+            />
+          </EditMark>
         </div>
         <div className="gallery-filters reveal rd1">
-          {g.filters.map((f) => (
+          {g.filters.map((f, i) => (
             <button
               key={f}
               className={`filter-btn${active === f ? ' active' : ''}`}
               onClick={() => setActive(f)}
             >
-              {f}
+              <EditMark path={`gallery.filters.${i}`} label={`Filter ${i + 1}`}>{f}</EditMark>
             </button>
           ))}
         </div>
@@ -112,7 +117,7 @@ export default function Gallery() {
       {hasMore && (
         <div className="gallery-more">
           <button className="btn-outline" onClick={loadMore}>
-            {g.loadMore}
+            <EditMark path="gallery.loadMore" label="Load more button">{g.loadMore}</EditMark>
           </button>
         </div>
       )}

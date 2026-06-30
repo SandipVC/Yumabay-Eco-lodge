@@ -92,6 +92,19 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 | CTA Circle: fixed iOS Safari wobbling rotation bug by moving CSS spin animation from `<text>` SVG node to outer `<svg>` container | `global.css` | ✅ |
 
 ---
+---
+
+## Recently completed (UI + CMS updates, 2026-06-30)
+
+| Task | Files | Done |
+|---|---|---|
+| Reverted CSS split partition (Regex bug caused light-theme rules to bundle incorrectly) | `global.css` | ✅ |
+| Amenities header: bottom-aligned right-side text to match heading baseline | `global.css` | ✅ |
+| Translated "Book A Visit" button to "Visit Site plan" / "Visitar plano del sitio" | `en.js`, `es.js` | ✅ |
+| Footer: Replaced Twitter logo with inline X SVG logo | `Footer.jsx` | ✅ |
+| CMS: Added editable URL fields for footer social links (Instagram, Facebook, X) | `textSchema.js`, `en.js`, `es.js`, `Footer.jsx` | ✅ |
+
+---
 
 ## Pending / upcoming
 
@@ -110,3 +123,6 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 | 1 | Medium | Dashboard hardcoded admin secret fallback | `Dashboard.jsx` |
 | 2 | Low | CountUp fragile suffix parsing for stat3 | `About.jsx:91-93` |
 | 3 | Low | Firebase API key in plain text in `firebase.js` | Acceptable for web SDK |
+
+## Done — cms-upgrade
+- [x] In-context (WYSIWYG) bilingual text editing: `<EditMark>` + `EditModeContext` + `InlineTextEditor`; hybrid with existing `TextContentSection`. (ADR-10)

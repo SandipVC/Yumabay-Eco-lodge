@@ -733,6 +733,8 @@ a  { color: inherit; }
 .amenities-header-right {
   width: clamp(300px, 30vw, 540px);
   flex-shrink: 0;
+  align-self: flex-end;
+  margin-bottom: -8px;
 }
 .amenities-header-right .section-body {
   margin-bottom: 0;
@@ -3420,3 +3422,178 @@ footer { background: var(--teal); color: var(--white); }
 /* Price field focus → teal */
 .dash-light .cms-panel .cms-price-field:focus-within { border-color: var(--teal); }
 
+
+/* ──────────────────────────────────────────────────────────────────────────
+   In-context text editor (CMS WYSIWYG)
+   EditMark highlights + floating toolbar + edit popover. All scoped to
+   `body.yb-editing` so the public site is completely untouched when off.
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Highlightable text — only visible while editing */
+body.yb-editing .yb-em {
+  cursor: pointer;
+  /* Re-enable clicks even inside non-interactive parents (e.g. the hero
+     wordmark block sets pointer-events:none for its scroll-fade effect). */
+  pointer-events: auto;
+  outline: 1px dashed rgba(202, 147, 82, .45);
+  outline-offset: 2px;
+  border-radius: 2px;
+  transition: outline-color .12s ease, background .12s ease;
+}
+body.yb-editing .yb-em:hover {
+  outline: 2px dashed var(--gold);
+  background: rgba(202, 147, 82, .14);
+}
+
+/* Floating toolbar (bottom centre) */
+.yb-edit-toolbar {
+  position: fixed;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  z-index: 9000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 16px;
+  background: var(--deep);
+  color: #fff;
+  border: 1px solid rgba(202, 147, 82, .35);
+  border-radius: 999px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, .45);
+  font-family: 'Jost', sans-serif;
+  font-size: 13px;
+}
+.yb-edit-toolbar strong { font-weight: 600; letter-spacing: .02em; }
+.yb-edit-dot {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 0 0 0 rgba(202, 147, 82, .6);
+  animation: yb-edit-pulse 1.8s infinite;
+}
+@keyframes yb-edit-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(202, 147, 82, .6); }
+  70%  { box-shadow: 0 0 0 7px rgba(202, 147, 82, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(202, 147, 82, 0); }
+}
+.yb-edit-hint { color: rgba(255, 255, 255, .55); font-size: 12px; }
+.yb-edit-spacer { flex: 1; min-width: 8px; }
+.yb-edit-count { color: rgba(255, 255, 255, .6); font-size: 12px; white-space: nowrap; }
+.yb-edit-err   { color: #ff8b7a; font-size: 12px; }
+
+.yb-edit-btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, .25);
+  background: transparent;
+  color: #fff;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s ease, border-color .15s ease, opacity .15s ease;
+}
+.yb-edit-btn:hover:not(:disabled) { background: rgba(255, 255, 255, .12); }
+.yb-edit-btn:disabled { opacity: .4; cursor: default; }
+.yb-edit-btn-gold { background: var(--gold); border-color: var(--gold); color: #1a1206; font-weight: 600; }
+.yb-edit-btn-gold:hover:not(:disabled) { background: #d9a662; border-color: #d9a662; }
+
+/* Editor popover */
+.yb-edit-pop-wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 9100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(6, 6, 9, .45);
+  backdrop-filter: blur(2px);
+}
+.yb-edit-pop {
+  width: 100%;
+  max-width: 560px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--deep);
+  color: #fff;
+  border: 1px solid rgba(202, 147, 82, .3);
+  border-radius: 14px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .6);
+  font-family: 'Jost', sans-serif;
+  overflow: hidden;
+}
+.yb-edit-pop-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .01em;
+}
+.yb-edit-x {
+  appearance: none; border: none; background: transparent;
+  color: rgba(255, 255, 255, .6); font-size: 16px; cursor: pointer; line-height: 1;
+}
+.yb-edit-x:hover { color: #fff; }
+.yb-edit-pop-body { padding: 18px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.yb-edit-field { display: flex; flex-direction: column; gap: 8px; }
+.yb-edit-path {
+  font-size: 11px;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-family: 'Jost', monospace;
+}
+.yb-edit-langs { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.yb-edit-lang { display: flex; flex-direction: column; gap: 5px; }
+.yb-edit-flag {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .08em;
+  color: rgba(255, 255, 255, .5);
+}
+.yb-edit-input {
+  width: 100%;
+  resize: vertical;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .15);
+  border-radius: 8px;
+  color: #fff;
+  padding: 9px 11px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+}
+.yb-edit-input:focus { outline: none; border-color: var(--gold); background: rgba(255, 255, 255, .1); }
+.yb-edit-pop-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid rgba(255, 255, 255, .1);
+}
+@media (max-width: 520px) {
+  .yb-edit-langs { grid-template-columns: 1fr; }
+  .yb-edit-hint { display: none; }
+}
+
+/* Dashboard → "Edit on live site" call-to-action (text tab) */
+.cms-inline-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+  padding: 16px 18px;
+  background: rgba(10, 76, 88, .06);
+  border: 1px solid rgba(10, 76, 88, .18);
+  border-radius: 12px;
+}
+.cms-inline-cta strong { display: block; color: var(--teal, #0A4C58); font-size: 15px; margin-bottom: 4px; }
+.cms-inline-cta p { margin: 0; font-size: 13px; color: rgba(10, 76, 88, .7); max-width: 60ch; }

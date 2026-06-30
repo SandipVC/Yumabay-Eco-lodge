@@ -3,6 +3,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
+import EditMark from '../cms/EditMark.jsx';
 
 // Scrub progress past which the header is allowed to drop in from above.
 export const NAV_REVEAL_AT = 0.98;
@@ -165,8 +166,12 @@ export default function Hero() {
       )}
       <div className="hero-overlay" />
       <div className="hero-logo-center" ref={logoRef}>
-        <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
-        <p className="hero-tagline">{h.tagline}</p>
+        <h1 className="hero-title grad-text">
+          <EditMark path={['hero.title', 'hero.titleEm']} label="Hero title">{h.title} {h.titleEm}</EditMark>
+        </h1>
+        <p className="hero-tagline">
+          <EditMark path="hero.tagline" label="Hero tagline">{h.tagline}</EditMark>
+        </p>
       </div>
     </section>
   );

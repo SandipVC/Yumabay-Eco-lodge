@@ -1,4 +1,5 @@
 import { useLang } from '../../context/LanguageContext.jsx';
+import EditMark from '../cms/EditMark.jsx';
 
 const MAPS_LINK = 'https://www.google.com/maps/search/?api=1&query=18.3745744%2C-68.6097549';
 
@@ -37,10 +38,12 @@ export default function Location() {
             {l.distances.map((d, i) => (
               <li className="distance-stat" key={i}>
                 <span className="distance-val">
-                  {d.val}
-                  {d.unit ? <em>{d.unit}</em> : null}
+                  <EditMark path={`location.distances.${i}.val`} label={`Distance ${i + 1} · value`}>{d.val}</EditMark>
+                  {d.unit ? <em><EditMark path={`location.distances.${i}.unit`} label={`Distance ${i + 1} · unit`}>{d.unit}</EditMark></em> : null}
                 </span>
-                <span className="distance-name">{d.name}</span>
+                <span className="distance-name">
+                  <EditMark path={`location.distances.${i}.name`} label={`Distance ${i + 1} · name`}>{d.name}</EditMark>
+                </span>
               </li>
             ))}
           </ul>

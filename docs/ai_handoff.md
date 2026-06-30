@@ -92,6 +92,16 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | `api` function memory 256MiB→**1GiB** + 120s timeout — video upload OOM-killed at 256MiB; busboy chunks concatenated once (was twice) | `server/index.js`, `server/routes/cms.js` | ADR-8.7 |
 | Storage uploads set `Cache-Control: public, max-age=31536000, immutable` — was `private, max-age=0`, so iOS re-downloaded ranges on every scrub seek (3+ min "load") | `server/routes/cms.js` | ADR-8.8 |
 
+### UI + CMS updates (2026-06-30)
+
+| Change | Files | ADR |
+|---|---|---|
+| Reverted CSS split partition (Regex bug caused light-theme rules to bundle incorrectly) | `global.css` | ADR-9.1 |
+| Amenities header: bottom-aligned right-side text to match heading baseline | `global.css` | — |
+| Translated "Book A Visit" button to "Visit Site plan" / "Visitar plano del sitio" | `en.js`, `es.js` | — |
+| Footer: Replaced Twitter logo with inline X SVG logo | `Footer.jsx` | ADR-9.2 |
+| CMS: Added editable URL fields for footer social links (Instagram, Facebook, X) | `textSchema.js`, `en.js`, `es.js`, `Footer.jsx` | ADR-9.2 |
+
 ### What's next
 
 Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
@@ -184,3 +194,9 @@ npx firebase-tools@latest deploy --only functions:api
 # Tail function logs (debug uploads/errors)
 npx firebase-tools@latest functions:log --only api
 ```
+
+## In-context text editor (cms-upgrade branch)
+- Entry: Dashboard → **Text** tab → **✏️ Edit on live site** (sets `sessionStorage.yb_edit`, needs `yb_admin`).
+- `EditModeProvider` wraps `LanguageProvider` in `App.jsx`; `LanguageContext` previews the live draft when editing.
+- New files: `utils/textMerge.js`, `context/EditModeContext.jsx`, `components/cms/EditMark.jsx`, `components/cms/InlineTextEditor.jsx`.
+- Save needs the back-end (PATCH `/api/cms/assets` section `translations`). Same data store as the field panel.

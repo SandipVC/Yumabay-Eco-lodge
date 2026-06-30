@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 import SplitText from '../ui/SplitText.jsx';
+import EditMark from '../cms/EditMark.jsx';
 
 export default function Lounge() {
   const { t }      = useLang();
@@ -20,21 +21,25 @@ export default function Lounge() {
       <div className="lounge-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
       <div className="lounge-inner wrap">
         <div className="lounge-head reveal">
-          <SplitText
-            text={title}
-            className="section-title"
-            delay={10}
-            duration={0.25}
-            ease="power3.out"
-            splitType="chars"
-            tag="h2"
-            textAlign="left"
-          />
+          <EditMark as="div" path={['lounge.title', 'lounge.titleEm']} label="Lounge heading">
+            <SplitText
+              text={title}
+              className="section-title"
+              delay={10}
+              duration={0.25}
+              ease="power3.out"
+              splitType="chars"
+              tag="h2"
+              textAlign="left"
+            />
+          </EditMark>
         </div>
         <div className="lounge-side reveal rd1">
-          <p className="section-body">{l.body}</p>
+          <p className="section-body">
+            <EditMark path="lounge.body" label="Lounge body">{l.body}</EditMark>
+          </p>
           <button className="btn-dark" onClick={() => navigate('/sitemap')}>
-            {l.bookBtn}
+            <EditMark path="lounge.bookBtn" label="Book a Visit button">{l.bookBtn}</EditMark>
           </button>
         </div>
       </div>

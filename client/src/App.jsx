@@ -1,11 +1,13 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { useEffect, lazy, Suspense } from 'react';
 import { LanguageProvider } from './context/LanguageContext.jsx';
+import { EditModeProvider } from './context/EditModeContext.jsx';
 import { useAssets } from './hooks/useAssets.js';
 import Layout from './components/layout/Layout.jsx';
 import Home from './pages/Home.jsx';
 import Contact from './pages/Contact.jsx';
 import Preloader from './components/ui/Preloader.jsx';
+import InlineTextEditor from './components/cms/InlineTextEditor.jsx';
 
 const SiteMap   = lazy(() => import('./pages/SiteMap.jsx'));
 const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
@@ -36,20 +38,23 @@ function FaviconSync() {
 
 export default function App() {
   return (
-    <LanguageProvider>
-      <FaviconSync />
-      <Preloader />
-      <ScrollReset />
-      <Suspense fallback={null}>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/sitemap" element={<SiteMap />} />
-          </Route>
-          <Route path="/dashboard" element={<Dashboard />} />
-        </Routes>
-      </Suspense>
-    </LanguageProvider>
+    <EditModeProvider>
+      <LanguageProvider>
+        <FaviconSync />
+        <Preloader />
+        <ScrollReset />
+        <Suspense fallback={null}>
+          <Routes>
+            <Route element={<Layout />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/sitemap" element={<SiteMap />} />
+            </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </Suspense>
+        <InlineTextEditor />
+      </LanguageProvider>
+    </EditModeProvider>
   );
 }

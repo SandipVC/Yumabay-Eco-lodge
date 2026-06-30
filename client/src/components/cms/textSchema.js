@@ -207,8 +207,11 @@ export const TEXT_SECTIONS = [
       { key: 'phone', label: 'Phone', kind: 'text' },
       { key: 'copyright', label: 'Copyright line', kind: 'text' },
       { key: 'instagram', label: 'Instagram link label', kind: 'text' },
+      { key: 'instagramUrl', label: 'Instagram URL', kind: 'text' },
       { key: 'facebook', label: 'Facebook link label', kind: 'text' },
-      { key: 'whatsapp', label: 'WhatsApp link label', kind: 'text' },
+      { key: 'facebookUrl', label: 'Facebook URL', kind: 'text' },
+      { key: 'xLabel', label: 'X link label', kind: 'text' },
+      { key: 'xUrl', label: 'X URL', kind: 'text' },
     ],
   },
   {

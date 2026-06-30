@@ -177,3 +177,26 @@ timestamp-prefixed → safe to cache forever). Applies to images, PDFs, video. E
 keep old headers until re-uploaded (or patched via a one-off admin `setMetadata`).
 **Separate, owner-side:** encode scrub videos with `-movflags +faststart` so iOS doesn't need the
 whole file before it can seek.
+
+### ADR-9.1 — Retain monolithic global.css
+A script-based attempt to partition `global.css` into smaller modules (e.g. `hero.css`, `base.css`) failed because the regex parser did not account for variable lengths of comment headers (e.g., `/* ── Footer ────────── */`). This caused critical light-theme and baseline styles at the bottom of the file to be miscategorized, breaking the CSS cascade and turning the site entirely black.
+**Decision:** Rolled back the changes to keep the monolithic `global.css`. Given the heavy reliance on cascade order (especially for responsive and light-theme overrides), partitioning it automatically is too fragile.
+
+### ADR-9.2 — Footer social links are CMS driven
+The footer social links (Instagram, Facebook, X) were originally hardcoded placeholders.
+**Decision:** We have added `instagramUrl`, `facebookUrl`, and `xUrl` fields to the `footer` section in the CMS `textSchema.js`. The Footer component reads these fields directly from `useLang()` (via translations/CMS sync), allowing admins to update the `href` destinations without code changes. The Twitter bird logo was also replaced with an inline SVG for X.
+
+### ADR-10 — In-context (WYSIWYG) CMS text editing
+Operators struggled to map CMS text fields to where they appear on the site.
+**Decision:** Added a hybrid in-context editor. A passive `<EditMark path="…">` wrapper
+(`client/src/components/cms/EditMark.jsx`) tags visible body text across the section
+components, Navbar and Footer. It is a **no-op outside edit mode** (renders children
+unchanged → public site byte-identical). Admins enter edit mode from Dashboard → Text tab
+("Edit on live site"); `EditModeContext` holds a per-language draft layered over CMS
+overrides + defaults via the shared `deepMerge` (`client/src/utils/textMerge.js`), so the page
+previews live. Clicking highlighted text opens `InlineTextEditor`'s popover with EN + ES inputs;
+Save PATCHes the full `translations` section (mirrors `TextContentSection`).
+**Kept the field-based `TextContentSection`** for invisible/long-tail strings (cms*, dashboard,
+placeholders, state strings) that have no on-screen anchor.
+**Note:** `.yb-em { pointer-events:auto }` under `body.yb-editing` re-enables clicks inside
+non-interactive parents (e.g. the hero wordmark uses `pointer-events:none` for its scroll-fade).

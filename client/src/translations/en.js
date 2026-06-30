@@ -97,7 +97,7 @@ export const en = {
     title: 'More than a place to stay.',
     titleEm: 'More than an investment.',
     body: 'A destination where lifestyle, quality, community, and Caribbean freedom come together naturally.',
-    bookBtn: 'Book a Visit',
+    bookBtn: 'Visit Site plan',
   },
   amenities: {
     label: 'Amenities',
@@ -177,8 +177,11 @@ export const en = {
     phone: '+1 (809) 000-0000',
     copyright: '© 2025 Yuma Bay Eco Lodge. All rights reserved.',
     instagram: 'Instagram',
+    instagramUrl: '#',
     facebook: 'Facebook',
-    whatsapp: 'WhatsApp',
+    facebookUrl: '#',
+    xLabel: 'X',
+    xUrl: '#',
   },
   dashboard: {
     eyebrow: 'Yuma Bay',
