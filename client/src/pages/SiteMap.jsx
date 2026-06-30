@@ -9,8 +9,8 @@ import ZoneIcon from '../components/sitemap/ZoneIcon.jsx';
 
 const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
-  masterPdf: '/pdf/MASTER PLAN YUMA BAY.pdf',
-  villasPdf: '/pdf/PARCELAS VILLAS  YUMA BAY.pdf',
+  masterPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FMASTER_PLAN_YUMA_BAY.pdf?alt=media',
+  villasPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media',
   brochurePdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media',
   amenitiesPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media',
 };

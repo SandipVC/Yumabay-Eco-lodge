@@ -3,22 +3,26 @@ import react from '@vitejs/plugin-react';
 import { rm } from 'node:fs/promises';
 import path from 'node:path';
 
-// Vite copies the whole public/ dir into dist/. The local public/video/ holds
-// 100+MB of source media that must NOT ship in the deploy — the hero scrub video
-// is served from the CMS (Firebase Storage) instead. Strip dist/video after the
-// build so it's never uploaded to hosting.
-function stripBundledVideo() {
+// Vite copies the whole public/ dir into dist/. The local public/{images,video,
+// pdf}/ folders hold 160+MB of source media that must NOT ship in the deploy —
+// ALL content media (images, video, PDFs) is served by URL from the CMS
+// (Firebase Storage) instead. Strip those dirs from dist after the build so they
+// are never uploaded to hosting. Brand chrome kept in the bundle: favicon.svg and
+// logo-yb.svg (the CMS-branding fallback) + font/.
+function stripBundledMedia() {
   return {
-    name: 'strip-bundled-video',
+    name: 'strip-bundled-media',
     apply: 'build',
     async closeBundle() {
-      await rm(path.resolve('dist/video'), { recursive: true, force: true });
+      for (const dir of ['images', 'video', 'pdf']) {
+        await rm(path.resolve('dist', dir), { recursive: true, force: true });
+      }
     },
   };
 }
 
 export default defineConfig({
-  plugins: [react(), stripBundledVideo()],
+  plugins: [react(), stripBundledMedia()],
   server: {
     port: process.env.PORT ? Number(process.env.PORT) : 5173,  // honor PORT env (preview-tool autoPort); fall back to 5173
     host: '0.0.0.0',   // expose to LAN — accessible at http://<your-ip>:5173
