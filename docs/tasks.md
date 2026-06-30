@@ -1,11 +1,11 @@
 # Tasks — Yuma Bay Eco Lodge Website
 
-_Updated: 2026-06-29_
+_Updated: 2026-06-30_
 
 ## Current branch: `text-changes-client`
 
 Branched from `drishti-new-design` on 2026-06-29.  
-Purpose: client feedback implementation — Tiers A (text) + B (structural) complete; latest commit `1d1634e`.
+Purpose: client feedback implementation — Tiers A (text) + B (structural) + mobile hardening; latest commit `eb345e5`.
 
 ---
 
@@ -69,11 +69,36 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) comp
 
 ---
 
+## Recently completed (mobile hardening + media-from-CMS, 2026-06-30)
+
+| Task | Files | Done |
+|---|---|---|
+| Footer: white circle plate behind logo on dark bg | `global.css` | ✅ |
+| Cross-browser blur fix (drop hand-written `-webkit-backdrop-filter`; lightningcss autoprefixes) — Firefox lost blur on built site | `global.css` | ✅ |
+| About (mobile): stop `.about-side` overlapping the image (reset `translateY`) | `global.css` | ✅ |
+| `.stat-num` font-size + `.about-stats .stat` height matched to `.distance-*` cards | `global.css` | ✅ |
+| Hero (mobile): pin at mount (no free-scroll), `100lvh` + `ignoreMobileResize` (no URL-bar reflow / white strip), `anticipatePin` | `Hero.jsx`, `global.css` | ✅ |
+| Preloader responsive (clamp sizing, overlay padding, no h-overflow) | `Preloader.css` | ✅ |
+| Lock horizontal scroll (`overflow-x: clip` on html+body) | `global.css` | ✅ |
+| Hero scrub video → CMS-only with static-poster fallback | `Hero.jsx` | ✅ |
+| Build ships zero content media (`strip-bundled-media` plugin; dist 62MB→1.8MB); SiteMap PDF defaults → Storage URLs | `vite.config.js`, `SiteMap.jsx` | ✅ |
+| Fix CMS video upload 500 (api memory 256MiB→1GiB, +120s; concat busboy chunks once) | `server/index.js`, `server/routes/cms.js` | ✅ |
+| Storage uploads set `Cache-Control: public, max-age=31536000, immutable` — was `private, max-age=0`, so iOS re-downloaded ranges on every scrub seek (3+ min "load") | `server/routes/cms.js` | ADR-8.8 |
+| Re-encoded hero scrub video from 4k source to 1080p with `-movflags +faststart`, `-g 1` (keyframe every frame), and `-crf 23`. Re-uploaded directly to Storage to bypass CMS memory limit | `tmp_video/intro.mp4`, `server/scripts/upload-assets.mjs` | ✅ |
+| `Hero.jsx`: removed redundant `requestAnimationFrame` throttle from scroll handler to fix stuttering video seek on Android | `Hero.jsx` | ✅ |
+| Tilted card: removed light-theme white gradient overlay on mobile screens (`display: none` for `<= 768px`) | `global.css` | ✅ |
+| Tilted card: resized `about.main` image to fit within max `529x620` and uploaded directly to Storage | `server/scripts/upload-assets.mjs` | ✅ |
+| Bundled images cleanup: uploaded `logo-yb.svg` and `favicon.svg` to Storage, updated component fallback references to use remote URLs, and deleted from `client/public/` | `global.css`, `Navbar.jsx`, `Footer.jsx`, `Preloader.jsx`, `CmsPanel.jsx`, `index.html` | ✅ |
+| CTA Circle: fixed iOS Safari wobbling rotation bug by moving CSS spin animation from `<text>` SVG node to outer `<svg>` container | `global.css` | ✅ |
+
+---
+
 ## Pending / upcoming
 
 | Task | Priority | Notes |
 |---|---|---|
 | Merge `text-changes-client` → `drishti-new-design` → `firebase` | Medium | When sign-off received |
+| Direct browser→Storage upload for media > 30MB | Low | Only if hosting large videos; bypasses 32MB Functions request cap |
 | Tag untagged gallery images via the new per-thumb category select | Low | Admin task, no code needed |
 
 ---

@@ -118,3 +118,62 @@ dashboard EN/ES toggle. Fixed by routing **all** visible strings through transla
   the public gallery filters / property cards) and the `SiteMapZoneEditor` sub-tool.
 **Rule:** any new CMS-panel string must be added as a `cms*` key in en.js **and** es.js (and
 usually textSchema.js), never hardcoded in `CmsPanel.jsx`.
+
+### ADR-8.1 — Build ships zero content media (enforces ADR-1.1 at build time)
+ADR-1.1 declared "zero local media," but `client/public/{images,video,pdf}/` (~167MB, gitignored)
+was still being copied into `dist/` by Vite and uploaded on every deploy. A `strip-bundled-media`
+plugin in `vite.config.js` (`apply: 'build'`, `closeBundle`) deletes `dist/{images,video,pdf}`
+after build → dist dropped 62MB→1.8MB. All content media is served by URL from Firebase Storage.
+**Kept in the bundle (not content media):** `favicon.svg`, `logo-yb.svg` (the CMS-branding
+fallback, ADR-7.1), `font/`. **Rule:** never reference local `/images|/video|/pdf` paths in code —
+use CMS/Storage URLs (the two SiteMap PDF defaults were the last offenders, now Storage URLs).
+
+### ADR-8.2 — Hero scrub video is CMS-only, static-poster fallback
+No video bundled. `Hero.jsx` reads `assets.hero.video`; empty → renders a static `.hero-img`
+poster with **no pin/scrub** (and reveals the navbar immediately) so the page still works.
+Upload a scrub clip in CMS → Media Manager → Hero to enable the scroll-scrub hero.
+
+### ADR-8.3 — Hero ScrollTrigger pin is created at mount, not on metadata
+The pin used to be built inside `setup()` gated on the video `loadedmetadata` event. On slower
+mobile networks metadata lands after first paint, so the hero free-scrolled (video visibly slid
+up) until the pin snapped in mid-scroll. Now the pin is created at mount with a **dynamic runway**
+(one viewport until `video.duration` is known, then `ScrollTrigger.refresh()` expands it);
+`anticipatePin: 1` removes the engage jump. Seeks are still rAF-throttled.
+
+### ADR-8.4 — Mobile viewport: `100lvh` + `ignoreMobileResize`
+Full-screen pinned hero on mobile fought the URL-bar dance two ways: `100vh` mismatched the pin
+viewport (white strip below the video), and the bar show/hide fired resizes that re-pinned
+mid-scroll. Fix: `#hero { height: 100lvh }` (largest viewport, `100vh` fallback) + a one-time
+`ScrollTrigger.config({ ignoreMobileResize: true })` at module load. Do **not** reintroduce
+JS `innerHeight` sizing — it captures the short (bar-visible) viewport and reopens the gap.
+
+### ADR-8.5 — Horizontal-scroll lock uses `overflow-x: clip`, not `hidden`
+Reveal/slide-in transforms (`.prop-*` rows) pushed the doc wider than the viewport on mobile.
+`overflow-x: hidden` on the scroll root would turn the page into a scroll container and break the
+GSAP pin; `overflow-x: clip` clips without that side effect. Applied to **both** `html` and `body`
+(html is the scroll root) + `max-width: 100%` on body.
+
+### ADR-8.6 — Don't hand-write `-webkit-backdrop-filter` (lightningcss quirk)
+rolldown-vite minifies CSS with lightningcss. When source explicitly writes
+`-webkit-backdrop-filter`, lightningcss treats it as authoritative and **drops the standard
+`backdrop-filter`** sibling → non-WebKit engines (Firefox) lost the blur on the built site (dev
+served raw CSS, so it only showed after deploy). **Rule:** author only the standard
+`backdrop-filter`; lightningcss autoprefixes both. `css.lightningcss.targets` / `build.cssTarget`
+are **ignored** by rolldown-vite, and `cssMinify: 'esbuild'` errors (esbuild isn't installed).
+
+### ADR-8.7 — `api` function memory 1GiB; uploads capped at ~30MB
+CMS video upload 500'd: function logs showed `Memory limit of 256 MiB exceeded with 286 MiB used`
+— the default 256MiB function buffered a 26MB video several times (rawBody + busboy chunks +
+a double `Buffer.concat` + the Storage upload buffer). Fix: `onRequest({ memory: '1GiB',
+timeoutSeconds: 120 })` and concat busboy chunks once. **Hard limit:** Firebase Hosting →
+Functions caps the request body at **32MB**, so CMS uploads must stay under ~30MB regardless of
+memory; larger media needs a direct browser→Storage upload (not yet built).
+
+### ADR-8.8 — Storage uploads set long immutable `Cache-Control`
+Uploads passed no `cacheControl`, so Storage served `private, max-age=0`. The scroll-scrub hero
+issues many Range requests; with no caching iOS Safari re-downloaded byte ranges on every seek
+(3+ min "load"). Uploads now set `public, max-age=31536000, immutable` (filenames are
+timestamp-prefixed → safe to cache forever). Applies to images, PDFs, video. Existing objects
+keep old headers until re-uploaded (or patched via a one-off admin `setMetadata`).
+**Separate, owner-side:** encode scrub videos with `-movflags +faststart` so iOS doesn't need the
+whole file before it can seek.

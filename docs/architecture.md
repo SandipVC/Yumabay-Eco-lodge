@@ -54,10 +54,38 @@ Non-file update: PATCH /api/cms/assets { section, data } (Bearer auth)
 
 ## Media model
 
-**All media served from Firebase Storage URLs.** No `client/public/images/*` in repo.  
-URL map: `client/src/assetsUrls.json` (21 entries).  
-Local placeholder: `data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7`  
-**Exception:** `client/public/font/` (Aptos + Merzalina) — fonts tracked in repo.
+**All content media served from Firebase Storage URLs** — images, video, **and PDFs**.  
+URL map (Figma chrome): `client/src/assetsUrls.json` (→ Storage). Section media (hero/about/
+properties/gallery/lounge/sitemap) comes from `assets.*` (Firestore, Storage URLs).  
+Local placeholder: `data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7`
+
+**Build ships zero content media (ADR-8.1).** `client/public/{images,video,pdf}/` is gitignored
+(local dev source only) and **stripped from `dist/` after build** by the `strip-bundled-media`
+Vite plugin — so it never deploys. `dist` ≈ 1.8MB. Never reference local `/images|/video|/pdf`
+paths in code; use CMS/Storage URLs.  
+**Kept in bundle:** `favicon.svg`, `logo-yb.svg` (CMS-branding fallback, ADR-7.1), `public/font/`
+(Aptos + Merzalina).  
+**Upload caching (ADR-8.8):** CMS uploads set `Cache-Control: public, max-age=31536000, immutable`.  
+**Upload size cap:** Hosting→Functions limits the request body to **32MB** → CMS uploads must stay
+under ~30MB (ADR-8.7).
+
+## Deployment (Firebase)
+
+Live at `vessel-contianer.web.app` / `.firebaseapp.com`.
+
+| Target | Source | Command |
+|---|---|---|
+| Hosting (static front-end) | `client/dist` | `firebase deploy --only hosting` |
+| Cloud Function `api` | `server/` (`index.js` → `onRequest`, Node 22, 2nd gen) | `firebase deploy --only functions:api` |
+
+- `firebase.json` rewrites `/api/**` → function `api`; everything else → `/index.html` (SPA).
+- `server/index.js` is **both** the local Express server (`app.listen`, port 3001) **and** the
+  Functions entry (`export const api = onRequest({ memory:'1GiB', timeoutSeconds:120, ... }, app)`).
+- **Function deploys do not create a Hosting release** — the Hosting console timestamp only moves
+  when `client/dist` is deployed.
+- On Functions, multipart uploads arrive as `req.rawBody`; `cms.js` parses with busboy (the local
+  Express path uses multer). Firebase enabled via `FIREBASE_CONFIG` in prod / `service-account.json`
+  locally (see `server/firebase.js`).
 
 ## CMS-first content pipeline
 

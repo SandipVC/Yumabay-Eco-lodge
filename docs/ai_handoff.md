@@ -2,9 +2,16 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge  
 **Local path:** `C:\Yumabay-Eco-lodge`  
-**Last updated:** 2026-06-29  
-**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · latest commit `c73d2e9`  
+**Last updated:** 2026-06-30  
+**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · latest commit `eb345e5`  
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
+
+> **Deploy note:** This site is live on **Firebase** — Hosting (`client/dist`) + a single
+> Cloud Function `api` (`server/index.js` exported via `onRequest`) behind the `/api/**`
+> rewrite. URLs: `vessel-contianer.web.app` / `.firebaseapp.com`.
+> `firebase deploy --only hosting` ships the front-end; `--only functions:api` ships the
+> server. **Function changes do NOT create a Hosting release** — that's why the Hosting
+> console can show an "old" timestamp while the API is freshly deployed.
 
 ---
 
@@ -69,9 +76,27 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | New logo wired everywhere + CMS-managed: bundled `/logo-yb.svg` default; header/footer/preloader read `assets.branding?.logo \|\| '/logo-yb.svg'`; favicon = `/logo-yb.svg` synced from CMS via `FaviconSync` in `App.jsx`. New Media Manager → Branding section (section `branding`, slot `logo`); server now accepts SVG (skips sharp resize). See ADR-7.1 | `public/logo-yb.svg`, `Navbar.jsx`, `Footer.jsx`, `Preloader.jsx`, `App.jsx`, `index.html`, `CmsPanel.jsx`, `server/routes/cms.js`, `server/data/assets.json` |
 | CMS Media Manager fully i18n'd: every hardcoded English string in `CmsPanel.jsx` now reads `t.dashboard.cms*` via `useLang()` (each sub-component calls it). Panel follows the dashboard EN/ES toggle. ~95 keys added to en.js + es.js and exposed in Text Content → Dashboard section (editable). See ADR-7.2. NOT translated (intentional): `GALLERY_CATS`/`PROPERTY_NAMES` (data identifiers mirroring public filters) and the `SiteMapZoneEditor` sub-tool strings | `CmsPanel.jsx`, `translations/en.js`, `translations/es.js`, `textSchema.js` |
 
+### Mobile hardening + media-from-CMS (2026-06-30, commits `a3367fb`→`eb345e5`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Footer: white circle plate behind logo for legibility on dark bg | `global.css` | — |
+| Cross-browser blur: drop hand-written `-webkit-backdrop-filter` so lightningcss autoprefixes both (Firefox lost blur on the built site — minifier kept only the prefixed prop) | `global.css` | ADR-8.6 |
+| About (mobile): reset `translateY` transform so `.about-side` text stacks below the image instead of overlapping | `global.css` | — |
+| `.stat-num` font-size matched to `.distance-val` (`clamp(32px,1.5vw,56px)`); `.about-stats .stat` height made padding-based to match `.distance-stat` | `global.css` | — |
+| Hero (mobile): pin created **at mount** (was gated on video `loadedmetadata` → free-scroll before pin); `ignoreMobileResize` + `100lvh` kill the URL-bar reflow + white strip; `anticipatePin` removes engage jump | `Hero.jsx`, `global.css` | ADR-8.3, ADR-8.4 |
+| Preloader responsive: `clamp()` title/subtitle/logo + overlay padding + `overflow:hidden` (was overflowing narrow viewports) | `Preloader.css` | — |
+| Lock horizontal scroll: `overflow-x: clip` on `html`+`body` (clip, not hidden — hidden breaks the ScrollTrigger pin) | `global.css` | ADR-8.5 |
+| Hero scrub video now CMS-only (`assets.hero.video`); no bundled fallback; renders static poster when unset | `Hero.jsx` | ADR-8.2 |
+| Build ships **zero content media**: `strip-bundled-media` Vite plugin removes `dist/{images,video,pdf}` post-build (dist 62MB→1.8MB). SiteMap PDF defaults repointed to Storage URLs | `vite.config.js`, `SiteMap.jsx` | ADR-8.1 |
+| `api` function memory 256MiB→**1GiB** + 120s timeout — video upload OOM-killed at 256MiB; busboy chunks concatenated once (was twice) | `server/index.js`, `server/routes/cms.js` | ADR-8.7 |
+| Storage uploads set `Cache-Control: public, max-age=31536000, immutable` — was `private, max-age=0`, so iOS re-downloaded ranges on every scrub seek (3+ min "load") | `server/routes/cms.js` | ADR-8.8 |
+
 ### What's next
 
 Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
+
+**Note:** The hero scrub video iOS/Android buffering bug and touch-scroll keyframing issue have both been fully resolved. The video was re-encoded with `-movflags +faststart` and `-g 1`, and `Hero.jsx` was updated with `autoPlay` and a `touchstart` unlocker.
 
 ---
 
@@ -132,7 +157,6 @@ After editing defaults: check if Firestore has a stale override for the same key
 |---|---|---|
 | 1 | Hardcoded admin secret fallback in Dashboard (dev only, security risk) | `Dashboard.jsx` |
 | 2 | `useAssets` 30s cache means CMS edits take up to 30s to appear | `hooks/useAssets.js` |
-| 3 | `AGENTS.md` at repo root is untracked | repo root |
 
 ---
 
@@ -150,4 +174,13 @@ node server/scripts/strip-stale-overrides.mjs
 
 # Upload media to Firebase Storage
 node server/scripts/upload-assets.mjs <folder> [storage-prefix]
+
+# Deploy front-end (Hosting)        — after client/ changes
+npx firebase-tools@latest deploy --only hosting
+
+# Deploy API (Cloud Function)       — after server/ changes
+npx firebase-tools@latest deploy --only functions:api
+
+# Tail function logs (debug uploads/errors)
+npx firebase-tools@latest functions:log --only api
 ```

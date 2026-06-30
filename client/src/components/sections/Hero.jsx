@@ -69,20 +69,9 @@ export default function Hero() {
       return d > 0 ? Math.max(window.innerHeight, d * PX_PER_SECOND) : window.innerHeight;
     };
 
-    // rAF-throttled seek — coalesces many ScrollTrigger updates per frame into
-    // one currentTime write per repaint, which is what the H.264 decoder can keep
-    // up with on mobile.
-    let targetTime = 0;
-    let pendingFrame = 0;
-    const flush = () => {
-      pendingFrame = 0;
-      if (Math.abs(video.currentTime - targetTime) > 0.02) {
-        try { video.currentTime = targetTime; } catch { /* noop */ }
-      }
-    };
-
-    // Logo: fades + drifts up over the first half of the scrub. Header stays
-    // hidden until the scrub is (almost) complete, then the Navbar drops in.
+    // Directly set currentTime on GSAP's tick. ScrollTrigger's onUpdate is already
+    // synchronized with requestAnimationFrame, so a secondary rAF here causes 
+    // frame drops and stuttering on Android.
     const applyProgress = (p) => {
       const logo = logoRef.current;
       if (logo) {
@@ -118,8 +107,10 @@ export default function Hero() {
           applyProgress(self.progress);
           const d = getDuration();
           if (d <= 0 || video.readyState < 1) return;
-          targetTime = self.progress * d;
-          if (!pendingFrame) pendingFrame = requestAnimationFrame(flush);
+          const targetTime = self.progress * d;
+          if (Math.abs(video.currentTime - targetTime) > 0.02) {
+            try { video.currentTime = targetTime; } catch { /* noop */ }
+          }
         },
       });
     }
@@ -134,13 +125,23 @@ export default function Hero() {
     if (video.readyState >= 1) onMeta();
     else video.addEventListener('loadedmetadata', onMeta, { once: true });
 
+    // Android/iOS sometimes refuse to seek via JS unless the video has been explicitly 
+    // played via a user interaction. This unlocks the media engine on the first touch.
+    const unlockVideo = () => {
+      video.play().then(() => {
+        video.pause();
+      }).catch(() => {});
+      window.removeEventListener('touchstart', unlockVideo);
+    };
+    window.addEventListener('touchstart', unlockVideo);
+
     return () => {
       // kill(true) reverts the pin: removes the generated pin-spacer and moves
       // #hero back into its original React parent BEFORE React unmounts the tree.
       // Without revert, React's removeChild(#hero) fails (node lives in pin-spacer).
       trigger?.kill(true);
-      if (pendingFrame) cancelAnimationFrame(pendingFrame);
       video.removeEventListener('loadedmetadata', onMeta);
+      window.removeEventListener('touchstart', unlockVideo);
     };
   }, [videoSrc]);
 
@@ -155,6 +156,7 @@ export default function Hero() {
           poster={poster}
           muted
           playsInline
+          autoPlay
           preload="auto"
           aria-label="Yuma Bay Eco Lodge intro"
         />

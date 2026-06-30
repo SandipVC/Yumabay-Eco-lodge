@@ -255,7 +255,7 @@ function BrandingSection({ assets, token, refresh }) {
         <div className="cms-slot">
           <p className="cms-slot-label">{c.cmsBrandingLogo}</p>
           <AssetThumb
-            src={logo || '/logo-yb.svg'}
+            src={logo || 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media'}
             label={logo ? '' : c.cmsBrandingDefault}
             replacing={busy}
             onReplace={file => handleUpload(file)}

@@ -6,7 +6,7 @@ import assetsUrls from '../../assetsUrls.json';
 
 const menuIcon = assetsUrls['menu-lines.svg'];
 // Local bundled logo — CMS can override via assets.branding.logo
-const DEFAULT_LOGO = '/logo-yb.svg';
+const DEFAULT_LOGO = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media';
 
 export default function Navbar() {
   const { t, lang, toggle } = useLang();

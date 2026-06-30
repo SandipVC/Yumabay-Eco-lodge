@@ -85,7 +85,9 @@
       "Bash(curl -s -o /dev/null -w \"cms/assets: %{http_code}\\\\n\" http://localhost:3001/api/cms/assets)",
       "mcp__d195d8b0-c206-48a3-b227-a456d0da3ec1__get_design_context",
       "Bash(node -e \"JSON.parse\\(require\\('fs'\\).readFileSync\\('C:/Yumabay-Eco-lodge/server/data/assets.json','utf8'\\)\\); console.log\\('OK'\\)\")",
-      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/api/cms/assets)"
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:3001/api/cms/assets)",
+      "PowerShell(Copy-Item \"C:\\\\Yumabay-Eco-lodge\\\\ignoreGitFolder\\\\Frame 1948756645 1.png\" \"C:\\\\Yumabay-Eco-lodge\\\\client\\\\public\\\\images\\\\palm-band-lounge.png\" -Force)",
+      "mcp__playwright__browser_snapshot"
     ]
   }
 }

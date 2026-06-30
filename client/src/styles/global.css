@@ -331,7 +331,7 @@ a  { color: inherit; }
 .section-title {
   font-family: 'Merzalina', 'Cormorant Garamond', serif;
   font-size: clamp(38px, 3.33vw, 64px); font-weight: 400;
-  line-height: 1.15; margin-bottom: 26px;
+  line-height: 1.15; 
 }
 .section-title em { font-style: normal; color: inherit; }
 .section-body {
@@ -693,10 +693,10 @@ a  { color: inherit; }
 }
 .lounge-inner {
   position: relative; display: flex; align-items: center;
-  justify-content: space-between; gap: clamp(40px, 7.8vw, 150px);
+  justify-content: space-between; 
   flex-wrap: wrap;
 }
-.lounge-head { max-width: 690px; }
+.lounge-head { max-width: 690px; margin-bottom: 10px; }.lounge-head
 .lounge-head .section-title { max-width: 563px; margin-bottom: 0; line-height: 1.07; font-size: clamp(34px, 3.75vw, 72px); }
 .lounge-side {
   max-width: 571px; display: flex; flex-direction: column;
@@ -897,14 +897,17 @@ a  { color: inherit; }
   width: 100%;
   height: 100%;
   overflow: visible;
+  animation: spin-clockwise 20s linear infinite;
+  transform-origin: 50% 50%;
 }
 .cta-bg-circle {
   transition: opacity .4s cubic-bezier(0.25, 1, 0.5, 1), transform .4s cubic-bezier(0.25, 1, 0.5, 1);
   transform-origin: center;
 }
 .cta-circle-text-svg {
-  animation: spin-clockwise 20s linear infinite;
-  transform-origin: center;
+  /* Safari iOS bug: animating transforms on SVG text elements causes wobbling
+     because it re-calculates the bounding box center every frame.
+     We moved the animation to .cta-svg instead! */
 }
 .cta-circle-arrow {
   position: absolute;
@@ -2206,7 +2209,7 @@ footer { background: var(--dark); padding: 80px 0 50px; }
     font-size: 18px; padding: 16px 28px;
   }
 
-  #about, #properties, #gallery, #amenities { padding-top: 90px; padding-bottom: 90px; }
+  #about, #properties, #gallery, #amenities { padding-top: 60px; padding-bottom: 60px; }
   #about, #gallery { padding-bottom: 0; }
   .about-stats { flex-direction: column; }
   /* match background height to .distance-stat: padding-based, not fixed height */
@@ -2579,6 +2582,10 @@ body { background: var(--bg); color: var(--ink); }
     rgba(255,255,255,0)   70%);
 }
 
+@media (max-width: 768px) {
+  .about-card::after { display: none; }
+}
+
 /* ── Properties ──────────────────────────────────────────────── */
 #properties { background: var(--bg); }
 .props-sub { color: var(--ink-soft); }
@@ -2590,14 +2597,8 @@ body { background: var(--bg); color: var(--ink); }
 .prop-feat {
   color: var(--ink-soft);
   background: linear-gradient(180deg, #F8F7F5 0%, #EAEAE6 100%);
-  border: 1px solid rgba(0,0,0,.06);
   padding: 8px 30px;
   font-size: 16px;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -1px 0 rgba(0,0,0,.06),
-    0 4px 10px rgba(0,0,0,.10),
-    0 1px 2px rgba(0,0,0,.06);
 }
 .prop-enquire {
   color: var(--teal);
@@ -2739,10 +2740,6 @@ footer { background: var(--teal); color: var(--white); }
 .btn-outline { color: var(--teal); border-color: var(--teal); }
 .btn-outline:hover { background: var(--teal); color: var(--white); border-color: var(--teal); }
 
-/* ── Nav logo: always tinted dark teal (white-art over light bg) ── */
-.nav-logo img {
-  filter: brightness(0) saturate(100%) invert(20%) sepia(48%) saturate(593%) hue-rotate(150deg) brightness(94%) contrast(92%);
-}
 
 /* ── Nav burger (3 staggered lines per Figma menu-lines.svg) ── */
 .nav-menu-btn {
@@ -2792,7 +2789,7 @@ footer { background: var(--teal); color: var(--white); }
 /* ── Amenities re-layout: 2-col grid on white ────────────────── */
 #amenities {
   background: var(--bg);
-  padding: 120px 0;
+  padding: 90px 0px 60px 0px;
 }
 .amenities-bg { display: none; }
 .amenities-header { margin-bottom: 64px; }
