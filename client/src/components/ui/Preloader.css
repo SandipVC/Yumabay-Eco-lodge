@@ -6,6 +6,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;            /* keep content off the screen edges on narrow phones */
+  box-sizing: border-box;
+  overflow: hidden;         /* never let content force horizontal scroll */
   opacity: 1;
   transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   pointer-events: all;
@@ -23,8 +26,9 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  max-width: 400px;
-  width: 90%;
+  width: 100%;
+  max-width: 360px;
+  box-sizing: border-box;
 }
 
 .preloader-logo-wrap {
@@ -33,29 +37,31 @@
 }
 
 .preloader-logo {
-  height: 60px;
+  height: clamp(44px, 12vw, 60px);
   width: auto;
+  max-width: 100%;
   display: block;
 }
 
 .preloader-title {
   font-family: 'Merzalina', 'Cormorant Garamond', serif;
-  font-size: 40px;
+  font-size: clamp(28px, 8vw, 40px);
   font-weight: 400;
-  letter-spacing: 0.25em;
+  letter-spacing: 0.22em;
   color: #0A2229; /* ink */
   margin: 0;
-  padding-left: 0.25em; /* offset for letter-spacing centering */
+  padding-left: 0.22em; /* offset for letter-spacing centering */
+  white-space: nowrap;
 }
 
 .preloader-subtitle {
   font-family: 'Aptos Narrow', 'Jost', sans-serif;
-  font-size: 14px;
-  letter-spacing: 0.3em;
+  font-size: clamp(10px, 3vw, 14px);
+  letter-spacing: 0.22em;
   text-transform: uppercase;
   color: #0A4C58; /* teal — readable on light */
   margin: 0;
-  padding-left: 0.3em;
+  padding-left: 0.22em;
   opacity: 1;
 }
 
