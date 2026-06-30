@@ -40,6 +40,16 @@ export default function Hero() {
 
     let trigger;
 
+    // Pin the hero to the EXACT pin viewport. ScrollTrigger pins using
+    // window.innerHeight, but CSS `height:100vh` resolves to a different value on
+    // mobile (the URL-bar dance). The mismatch left a white strip below the video
+    // while pinned. Locking the section height to innerHeight (re-synced on every
+    // refresh) keeps the video filling the pinned viewport — no gap, scrub from the
+    // first pixel of scroll.
+    const sizeHero = () => { section.style.height = `${window.innerHeight}px`; };
+    sizeHero();
+    ScrollTrigger.addEventListener('refreshInit', sizeHero);
+
     const setup = () => {
       const duration = video.duration;
       if (!duration || !isFinite(duration)) return;
@@ -117,6 +127,7 @@ export default function Hero() {
       // #hero back into its original React parent BEFORE React unmounts the tree.
       // Without revert, React's removeChild(#hero) fails (node lives in pin-spacer).
       trigger?.kill(true);
+      ScrollTrigger.removeEventListener('refreshInit', sizeHero);
       video.removeEventListener('loadedmetadata', setup);
     };
   }, [videoSrc]);
