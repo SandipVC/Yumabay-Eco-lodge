@@ -3,7 +3,7 @@ import { useLang }    from '../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useAssets }  from '../hooks/useAssets.js';
 import { BACKDROP_URL } from '../components/sitemap/SiteMapBackdrop.jsx';
-import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
+import { ZONE_DEFAULTS, AVAIL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 import UnitGrid from '../components/sitemap/UnitGrid.jsx';
 import ZoneIcon from '../components/sitemap/ZoneIcon.jsx';
 

@@ -274,6 +274,10 @@
       "fillColor": "#b21f1f"
     }
   ],
+  "translations": {
+    "es": {},
+    "en": {}
+  },
   "inventory": {
     "schemaVersion": 1,
     "updatedAt": "2026-04-07",
@@ -1412,9 +1416,5 @@
     [],
     [],
     []
-  ],
-  "translations": {
-    "en": {},
-    "es": {}
-  }
+  ]
 }
