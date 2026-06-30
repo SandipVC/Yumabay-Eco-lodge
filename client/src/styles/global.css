@@ -149,7 +149,12 @@ a  { color: inherit; }
 }
 .nav-logo img {
   height: clamp(40px, 3.5vw, 55px);
-  width: auto;
+  width: clamp(40px, 3.5vw, 55px);
+  background: #fff;
+  border-radius: 50%;
+  padding: 2px;
+  object-fit: contain;
+  box-sizing: content-box;
   display: block;
 }
 .nav-right { display: flex; align-items: center; gap: clamp(16px, 1.6vw, 30px); }
@@ -564,7 +569,7 @@ a  { color: inherit; }
   gap: 40px; flex-wrap: wrap; margin-bottom: 60px;
 }
 .gallery-head .section-title { margin-bottom: 0; }
-.gallery-filters { display: flex; gap: 8px; flex-wrap: wrap; }
+.gallery-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
 .filter-btn {
   font-size: 16px; line-height: 1.6; text-transform: capitalize;
   color: rgba(255,255,255,.6); background: none;
@@ -2181,7 +2186,7 @@ footer { background: var(--dark); padding: 80px 0 50px; }
   .prop-row.flip .prop-feats { justify-content: flex-start; }
   .prop-view { width: 88px; height: 88px; }
 
-  .amenities-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .amenities-header { flex-direction: column; align-items: flex-start; gap: 20px; margin-bottom: 32px; }
   .amenities-header-right { width: 100%; }
   .amenity-row-inner { flex-direction: column; align-items: flex-start; gap: 12px; padding-top: 14px; padding-bottom: 14px; }
   .amenity-right { width: 100%; }
@@ -2198,7 +2203,7 @@ footer { background: var(--dark); padding: 80px 0 50px; }
 @media (max-width: 768px) {
   #nav { padding: 18px 24px 0; }
   #nav.scrolled { padding: 12px 24px; }
-  .nav-menu-btn img { width: 32px; height: 22px; }
+  .nav-menu-btn img { width: 26px; height: 18px; }
 
   #hero { min-height: 560px; }
   .hero-content { bottom: 40px; gap: 28px; }
@@ -2211,13 +2216,17 @@ footer { background: var(--dark); padding: 80px 0 50px; }
 
   #about, #properties, #gallery, #amenities { padding-top: 60px; padding-bottom: 60px; }
   #about, #gallery { padding-bottom: 0; }
+  #amenities { padding-bottom: 30px; }
+  #gallery { padding-top: 30px; }
   .about-stats { flex-direction: column; }
   /* match background height to .distance-stat: padding-based, not fixed height */
   .about-stats .stat { max-width: none; width: 100%; height: auto; flex: none; padding: clamp(20px, 2vw, 32px) clamp(20px, 2vw, 28px); }
   .stat + .stat { border-left: none; border-top: 1px solid rgba(255,255,255,.1); }
 
-  .props-list { gap: 40px; }
-  .prop-row { padding-bottom: 40px; }
+  .props-list { gap: 10px; }
+  .prop-row { padding-bottom: 10px; }
+  .props-divider { padding-top: 20px; }
+  .location-card { aspect-ratio: 1 / 1; }
   .prop-price { margin-top: 16px; }
 
   .gallery-head { margin-bottom: 32px; }
