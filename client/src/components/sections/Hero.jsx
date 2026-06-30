@@ -15,9 +15,10 @@ gsap.registerPlugin(ScrollTrigger);
 // resizes keeps the pin locked from the first pixel of scroll.
 ScrollTrigger.config({ ignoreMobileResize: true });
 
-// All-keyframe re-encode (every frame is an I-frame) → instant seek on scrub.
-// Used as the fallback when no CMS video is set (assets.hero.video).
-const VIDEO_SRC = '/video/intro-scrub.mp4';
+// The scrub video is supplied entirely via the CMS (assets.hero.video) — upload
+// an all-keyframe (every frame an I-frame) re-encode for instant seeking. No
+// video is bundled with the app (kept the 100+MB of media out of the deploy).
+// When no CMS video is set the hero falls back to a static poster (no scrub).
 const POSTER_FALLBACK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
 // Scroll runway per second of video. Higher = slower scrub, more scroll required.
 const PX_PER_SECOND = 150;
@@ -32,8 +33,9 @@ export default function Hero() {
 
   // CMS poster acts as a still while the video buffers / on reduced-data clients.
   const poster = assets?.hero?.poster || POSTER_FALLBACK;
-  // CMS-uploaded video wins; falls back to the bundled scroll-scrub encode.
-  const videoSrc = assets?.hero?.video || VIDEO_SRC;
+  // Scrub video comes only from the CMS. Empty string → static poster hero.
+  const videoSrc = assets?.hero?.video || '';
+  const hasVideo = Boolean(videoSrc);
 
   // useLayoutEffect (not useEffect): its cleanup runs during React's mutation
   // phase, BEFORE React removes #hero on unmount. That lets trigger.kill(true)
@@ -41,8 +43,18 @@ export default function Hero() {
   // so React's removeChild(#hero) doesn't throw NotFoundError.
   useLayoutEffect(() => {
     const section = sectionRef.current;
-    const video   = videoRef.current;
-    if (!section || !video) return;
+    if (!section) return;
+
+    // No CMS video → static poster hero: no pin, no scrub. Keep the centre logo
+    // visible and reveal the header immediately so the page behaves normally.
+    if (!hasVideo) {
+      if (logoRef.current) { logoRef.current.style.opacity = ''; logoRef.current.style.transform = ''; }
+      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
+      return;
+    }
+
+    const video = videoRef.current;
+    if (!video) return;
 
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -135,16 +147,20 @@ export default function Hero() {
   return (
     <section id="hero" ref={sectionRef}>
       <div className="hero-bg" />
-      <video
-        ref={videoRef}
-        className="hero-video"
-        src={videoSrc}
-        poster={poster}
-        muted
-        playsInline
-        preload="auto"
-        aria-label="Yuma Bay Eco Lodge intro"
-      />
+      {hasVideo ? (
+        <video
+          ref={videoRef}
+          className="hero-video"
+          src={videoSrc}
+          poster={poster}
+          muted
+          playsInline
+          preload="auto"
+          aria-label="Yuma Bay Eco Lodge intro"
+        />
+      ) : (
+        <img className="hero-img" src={poster} alt="Yuma Bay Eco Lodge" />
+      )}
       <div className="hero-overlay" />
       <div className="hero-logo-center" ref={logoRef}>
         <h1 className="hero-title grad-text">{h.title} {h.titleEm}</h1>
