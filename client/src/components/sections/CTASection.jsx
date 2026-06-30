@@ -1,15 +1,19 @@
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
 import assetsUrls from '../../assetsUrls.json';
 import SplitText from '../ui/SplitText.jsx';
+import EditMark from '../cms/EditMark.jsx';
 
-const patternUrl = assetsUrls['palm-band-cta.png'];
-const arrowUrl   = assetsUrls['arrow.svg'];
+const arrowUrl = assetsUrls['arrow.svg'];
 
 export default function CTASection() {
   const { t } = useLang();
   const c = t.cta;
   const navigate = useNavigate();
+  const { assets } = useAssets();
+
+  const patternUrl = assets?.decor?.ctaPattern || assetsUrls['palm-band-cta.png'];
 
   // Figma renders the heading as one flowing block.
   const title = `${c.title.replace(/\n/g, ' ')} ${c.titleEm}`;
@@ -19,16 +23,18 @@ export default function CTASection() {
       <div className="cta-pattern" style={{ '--pattern': `url(${patternUrl})` }} />
       <div className="cta-inner wrap">
         <div>
-          <SplitText
-            text={title}
-            className="cta-title"
-            delay={10}
-            duration={0.25}
-            ease="power3.out"
-            splitType="chars"
-            tag="h2"
-            textAlign="left"
-          />
+          <EditMark as="div" path={['cta.title', 'cta.titleEm']} label="CTA heading">
+            <SplitText
+              text={title}
+              className="cta-title"
+              delay={10}
+              duration={0.25}
+              ease="power3.out"
+              splitType="chars"
+              tag="h2"
+              textAlign="left"
+            />
+          </EditMark>
         </div>
         <button
           className="cta-circle reveal rd2"

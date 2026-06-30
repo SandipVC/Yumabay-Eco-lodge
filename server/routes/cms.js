@@ -27,6 +27,8 @@ function auth(req, res, next) {
 // ── Image resize ─────────────────────────────────────────────────────────────
 async function resizeIfNeeded(buffer, mimetype) {
   if (!/image\//i.test(mimetype)) return buffer;
+  // SVGs are vector — never rasterize/resize them.
+  if (/svg/i.test(mimetype)) return buffer;
   const meta = await sharp(buffer).metadata();
   if ((meta.width || 0) <= 1920 && (meta.height || 0) <= 1080) return buffer;
   return sharp(buffer)
@@ -132,10 +134,10 @@ const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB (videos)
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
+    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images (jpg, png, webp, gif), videos (mp4, webm), and PDFs are allowed.'));
+      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
     }
   },
 });
@@ -167,9 +169,9 @@ function multipartParser(req, res, next) {
       bb.on('file', (fieldname, file, info) => {
         const { filename, encoding, mimeType } = info;
         
-        if (!/\.(jpg|jpeg|png|webp|gif|mp4|webm|mov|pdf)$/i.test(filename)) {
+        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(filename)) {
           file.resume();
-          return next(new Error('Only images (jpg, png, webp, gif), videos (mp4, webm), and PDFs are allowed.'));
+          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
         }
 
         const chunks = [];
@@ -178,13 +180,14 @@ function multipartParser(req, res, next) {
         });
 
         file.on('end', () => {
+          const buffer = Buffer.concat(chunks);   // concat once, not twice
           req.file = {
             fieldname,
             originalname: filename,
             encoding,
             mimetype: mimeType,
-            buffer: Buffer.concat(chunks),
-            size: Buffer.concat(chunks).length,
+            buffer,
+            size: buffer.length,
           };
         });
       });
@@ -258,7 +261,14 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       const bucket = storage.bucket();
       const file = bucket.file(storagePath);
       await file.save(req.file.buffer, {
-        metadata: { contentType: req.file.mimetype },
+        metadata: {
+          contentType: req.file.mimetype,
+          // Without this, Storage serves `Cache-Control: private, max-age=0`, so
+          // browsers re-fetch on every request. For the scroll-scrub hero video
+          // that means iOS Safari re-downloads byte ranges on every seek → minutes
+          // to load. Filenames are timestamp-prefixed (immutable), so cache hard.
+          cacheControl: 'public, max-age=31536000, immutable',
+        },
       });
 
       filePath = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(storagePath)}?alt=media`;
@@ -283,8 +293,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     return res.status(500).json({ error: 'Failed to upload file.' });
   }
 
-  const label = (req.body.label || req.file.originalname.replace(/\.[^.]+$/, '')).trim();
-  const cat   = req.body.cat || 'Exterior';
+  const labelEn = (req.body.labelEn || req.body.label || req.file.originalname.replace(/\.[^.]+$/, '')).trim();
+  const labelEs = (req.body.labelEs || '').trim();
+  const cat     = req.body.cat || 'Exterior';
 
   const assets = await readAssets();
 
@@ -301,17 +312,6 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       const key = slot === 'accent' ? 'accent' : 'main';
       await deletePhysical(assets.about[key]);
       assets.about[key] = filePath;
-      break;
-    }
-    case 'properties': {
-      if (!Array.isArray(assets.properties)) assets.properties = [];
-      const idx = parseInt(slot, 10);
-      if (!isNaN(idx) && idx >= 0 && idx <= 9) {
-        await deletePhysical(assets.properties[idx]);
-        assets.properties[idx] = filePath;
-      } else {
-        assets.properties.push(filePath);
-      }
       break;
     }
     case 'propertyImages': {
@@ -342,7 +342,7 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     }
     case 'gallery': {
       if (!Array.isArray(assets.gallery)) assets.gallery = [];
-      assets.gallery.push({ src: filePath, label, cat });
+      assets.gallery.push({ src: filePath, labelEn, labelEs, cat });
       break;
     }
     case 'lounge': {
@@ -358,19 +358,41 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
     }
     case 'sitemap': {
       if (!assets.sitemap) assets.sitemap = {};
-      const wantsPdf = slot === 'masterPdf' || slot === 'villasPdf';
+      const PDF_SLOTS = ['masterPdf', 'villasPdf', 'brochurePdf', 'amenitiesPdf'];
+      const IMG_SLOTS = ['planImage', 'backdrop'];
+      const wantsPdf = PDF_SLOTS.includes(slot);
+      const wantsImg = IMG_SLOTS.includes(slot);
       // Validate file type matches the slot
       if (wantsPdf && !isPdf) {
         await deletePhysical(filePath); // remove the just-saved wrong-type file
         return res.status(400).json({ error: 'This slot requires a PDF file.' });
       }
-      if (slot === 'planImage' && isPdf) {
+      if (wantsImg && isPdf) {
         await deletePhysical(filePath);
-        return res.status(400).json({ error: 'The plan image slot requires an image file.' });
+        return res.status(400).json({ error: 'This slot requires an image file.' });
       }
-      const key = wantsPdf ? slot : 'planImage';
+      const key = (wantsPdf || wantsImg) ? slot : 'planImage';
       await deletePhysical(assets.sitemap[key]);
       assets.sitemap[key] = filePath;
+      break;
+    }
+    case 'decor': {
+      // Decorative band patterns / overlays shown across sections.
+      if (!assets.decor) assets.decor = {};
+      const allowed = ['aboutPalms', 'loungePattern', 'ctaPattern'];
+      if (!allowed.includes(slot)) {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: `Invalid decor slot: ${slot}` });
+      }
+      await deletePhysical(assets.decor[slot]);
+      assets.decor[slot] = filePath;
+      break;
+    }
+    case 'branding': {
+      // Site logo — used in header, footer, preloader and favicon.
+      if (!assets.branding) assets.branding = {};
+      await deletePhysical(assets.branding.logo);
+      assets.branding.logo = filePath;
       break;
     }
     default:
@@ -405,14 +427,6 @@ router.delete('/assets/:section', auth, async (req, res) => {
       if (assets.about) assets.about[key] = null;
       break;
     }
-    case 'properties': {
-      const idx = parseInt(slot, 10);
-      if (!isNaN(idx) && assets.properties?.[idx]) {
-        await deletePhysical(assets.properties[idx]);
-        assets.properties[idx] = null;
-      }
-      break;
-    }
     case 'propertyImages': {
       // Body: { propIdx: number, imgIdx: number }
       const { propIdx, imgIdx } = req.body || {};
@@ -444,9 +458,23 @@ router.delete('/assets/:section', auth, async (req, res) => {
       break;
     }
     case 'sitemap': {
-      const key = slot === 'masterPdf' || slot === 'villasPdf' ? slot : 'planImage';
+      const KNOWN = ['masterPdf', 'villasPdf', 'brochurePdf', 'amenitiesPdf', 'planImage', 'backdrop'];
+      const key = KNOWN.includes(slot) ? slot : 'planImage';
       await deletePhysical(assets.sitemap?.[key]);
       if (assets.sitemap) assets.sitemap[key] = null;
+      break;
+    }
+    case 'decor': {
+      const allowed = ['aboutPalms', 'loungePattern', 'ctaPattern'];
+      if (allowed.includes(slot)) {
+        await deletePhysical(assets.decor?.[slot]);
+        if (assets.decor) assets.decor[slot] = null;
+      }
+      break;
+    }
+    case 'branding': {
+      await deletePhysical(assets.branding?.logo);
+      if (assets.branding) assets.branding.logo = null;
       break;
     }
     default:

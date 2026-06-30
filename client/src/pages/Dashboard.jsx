@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CmsPanel from '../components/cms/CmsPanel.jsx';
 import TextContentSection from '../components/cms/TextContentSection.jsx';
 import InventoryStatusBadge from '../components/cms/InventoryStatusBadge.jsx';
 import { useAssets } from '../hooks/useAssets.js';
 import { useLang } from '../context/LanguageContext.jsx';
+import { useEditMode } from '../context/EditModeContext.jsx';
 
 const safeSessionStorage = {
   getItem(key) {
@@ -84,6 +86,19 @@ export default function Dashboard() {
   const { lang, toggle: toggleLang, t } = useLang();
   const d = t.dashboard;
   const { assets, refresh } = useAssets();
+  const navigate = useNavigate();
+  const editMode = useEditMode();
+
+  // Force light background on body/html for the whole dashboard page.
+  useEffect(() => {
+    const prev = document.body.style.background;
+    document.documentElement.style.background = '#F0EDE8';
+    document.body.style.background = '#F0EDE8';
+    return () => {
+      document.documentElement.style.background = '';
+      document.body.style.background = prev;
+    };
+  }, []);
   const [token, setToken]     = useState(safeSessionStorage.getItem('yb_admin') || '');
   const [tab,   setTab]       = useState('leads'); // 'leads' | 'cms' | 'text'
   const [leads, setLeads]     = useState([]);
@@ -125,12 +140,12 @@ export default function Dashboard() {
     fetchLeads();
   };
 
-  if (!token) return <div style={{ background: 'var(--dark)', minHeight: '100vh' }}><LoginForm onLogin={handleLogin} /></div>;
+  if (!token) return <div className="dash-light" style={{ minHeight: '100vh' }}><LoginForm onLogin={handleLogin} /></div>;
 
   const newCount = leads.filter(l => l.status === 'new').length;
 
   return (
-    <div style={{ background: 'var(--dark)', minHeight: '100vh' }}>
+    <div className="dash-light" style={{ minHeight: '100vh' }}>
       <div className="dashboard-page">
         <div className="dashboard-header">
           <div>
@@ -177,7 +192,18 @@ export default function Dashboard() {
         {tab === 'cms'  && <CmsPanel token={token} />}
         {tab === 'text' && (
           <>
-            <InventoryStatusBadge />
+            <div className="cms-inline-cta">
+              <div>
+                <strong>Edit text directly on the live site</strong>
+                <p>See each text in its real place and edit English + Spanish inline. Opens the home page in edit mode.</p>
+              </div>
+              <button
+                className="btn-primary"
+                onClick={() => { editMode?.enterEdit(); navigate('/'); }}
+              >
+                ✏️ Edit on live site
+              </button>
+            </div>
             <TextContentSection token={token} />
           </>
         )}
@@ -220,21 +246,22 @@ export default function Dashboard() {
               <tbody>
                 {leads.map(lead => (
                   <tr key={lead.id}>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: 11 }}>
+                    <td style={{ whiteSpace: 'nowrap', fontSize: 14 }}>
                       {new Date(lead.createdAt).toLocaleDateString()}
                     </td>
-                    <td style={{ fontWeight: 400, color: 'var(--white)' }}>{lead.name}</td>
+                    <td style={{ fontWeight: 500 }} className="lead-name">{lead.name}</td>
                     <td>
                       <a href={`mailto:${lead.email}`}
-                        style={{ color: 'var(--gold)', textDecoration: 'none', fontSize: 12 }}>
+                        className="lead-email"
+                        style={{ textDecoration: 'none', fontSize: 14 }}>
                         {lead.email}
                       </a>
                     </td>
                     <td>{lead.phone || '—'}</td>
                     <td>{lead.propertyInterest || '—'}</td>
                     <td style={{ fontWeight: '600', color: 'var(--gold)' }}>{lead.unitCode || '—'}</td>
-                    <td style={{ textTransform: 'uppercase', fontSize: 10 }}>{lead.language}</td>
-                    <td style={{ maxWidth: 240, fontSize: 12, lineHeight: 1.5 }}>
+                    <td style={{ textTransform: 'uppercase', fontSize: 13 }}>{lead.language}</td>
+                    <td style={{ maxWidth: 240, fontSize: 14, lineHeight: 1.5 }}>
                       {lead.message}
                     </td>
                     <td>
@@ -254,7 +281,7 @@ export default function Dashboard() {
                       <div style={{ marginTop: 8, display: 'flex', gap: 6 }}>
                         <input
                           type="text" className="form-input"
-                          style={{ padding: '4px 8px', fontSize: 11, width: 140 }}
+                          style={{ padding: '4px 8px', fontSize: 13, width: 140 }}
                           placeholder={d.notePlaceholder}
                           value={noteMap[lead.id] || ''}
                           onChange={e => setNoteMap(m => ({ ...m, [lead.id]: e.target.value }))}
@@ -267,7 +294,7 @@ export default function Dashboard() {
                         </button>
                       </div>
                       {lead.notes && (
-                        <p style={{ fontSize: 10, color: 'rgba(255,255,255,.35)', marginTop: 4 }}>
+                        <p className="lead-note-line" style={{ fontSize: 12, marginTop: 4 }}>
                           {d.notePrefix}: {lead.notes}
                         </p>
                       )}

@@ -6,8 +6,7 @@ import assetsUrls from '../../assetsUrls.json';
 import TiltedCard from '../ui/TiltedCard.jsx';
 import CountUp from '../ui/CountUp.jsx';
 import SplitText from '../ui/SplitText.jsx';
-
-const palmsUrl = assetsUrls['palms-about.png'];
+import EditMark from '../cms/EditMark.jsx';
 
 const DEFAULTS = {
   main:   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
@@ -22,7 +21,8 @@ export default function About() {
   const statsRef = useRef(null);
   const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
-  const mainImg = assets?.about?.main || DEFAULTS.main;
+  const mainImg  = assets?.about?.main || DEFAULTS.main;
+  const palmsUrl = assets?.decor?.aboutPalms || assetsUrls['palms-about.png'];
 
   // Figma sets the heading as one flowing line over the image card.
   const title = `${a.title.replace(/\n/g, ' ')} ${a.titleEm}`;
@@ -41,17 +41,21 @@ export default function About() {
 
       <div className="about-inner">
         <div className="about-head">
-          <p className="section-label reveal">{a.label}</p>
-          <SplitText
-            text={title}
-            className="section-title"
-            delay={10}
-            duration={0.25}
-            ease="power3.out"
-            splitType="chars"
-            tag="h2"
-            textAlign="left"
-          />
+          <p className="section-label reveal">
+            <EditMark path="about.label" label="About label">{a.label}</EditMark>
+          </p>
+          <EditMark as="div" path={['about.title', 'about.titleEm']} label="About heading">
+            <SplitText
+              text={title}
+              className="section-title"
+              delay={10}
+              duration={0.25}
+              ease="power3.out"
+              splitType="chars"
+              tag="h2"
+              textAlign="left"
+            />
+          </EditMark>
         </div>
 
         {/* Figma stacks the base render under the coastline aerial */}
@@ -72,9 +76,11 @@ export default function About() {
         </div>
 
         <div className="about-side">
-          {a.body.split('\n\n').map((para, i) => (
-            <p key={i} className="section-body reveal rd2">{para}</p>
-          ))}
+          <EditMark as="div" path="about.body" label="About body">
+            {a.body.split('\n\n').map((para, i) => (
+              <p key={i} className="section-body reveal rd2">{para}</p>
+            ))}
+          </EditMark>
         </div>
       </div>
 
@@ -86,16 +92,20 @@ export default function About() {
           return (
             <div className="stat" key={i}>
               <div className="stat-num">
-                <CountUp
-                  from={0}
-                  to={val}
-                  duration={2}
-                  separator=","
-                  startWhen={statsInView}
-                />
-                {suffix}
+                <EditMark path={`about.stat${i + 1}Num`} label={`Stat ${i + 1} number`}>
+                  <CountUp
+                    from={0}
+                    to={val}
+                    duration={2}
+                    separator=","
+                    startWhen={statsInView}
+                  />
+                  {suffix}
+                </EditMark>
               </div>
-              <div className="stat-lbl">{s.lbl}</div>
+              <div className="stat-lbl">
+                <EditMark path={`about.stat${i + 1}Lbl`} label={`Stat ${i + 1} label`}>{s.lbl}</EditMark>
+              </div>
             </div>
           );
         })}

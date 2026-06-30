@@ -35,6 +35,7 @@ const CONTENT_TYPES = {
   '.svg': 'image/svg+xml',
   '.webp': 'image/webp',
   '.gif': 'image/gif',
+  '.mp4': 'video/mp4',
 };
 
 const app = initializeApp({
