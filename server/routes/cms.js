@@ -261,7 +261,14 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       const bucket = storage.bucket();
       const file = bucket.file(storagePath);
       await file.save(req.file.buffer, {
-        metadata: { contentType: req.file.mimetype },
+        metadata: {
+          contentType: req.file.mimetype,
+          // Without this, Storage serves `Cache-Control: private, max-age=0`, so
+          // browsers re-fetch on every request. For the scroll-scrub hero video
+          // that means iOS Safari re-downloads byte ranges on every seek → minutes
+          // to load. Filenames are timestamp-prefixed (immutable), so cache hard.
+          cacheControl: 'public, max-age=31536000, immutable',
+        },
       });
 
       filePath = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(storagePath)}?alt=media`;
