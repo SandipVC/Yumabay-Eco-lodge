@@ -188,7 +188,10 @@ a  { color: inherit; }
 
 /* ── Hero (Figma: render bg, giant gradient wordmark, CTAs right) ── */
 #hero {
-  position: relative; height: 100vh; min-height: 640px;
+  position: relative;
+  height: 100vh;
+  height: 100lvh;   /* largest viewport: covers even when the mobile URL bar hides → no white strip below the pinned scrub video */
+  min-height: 640px;
   overflow: hidden; background: var(--panel);
 }
 .hero-bg { position: absolute; inset: 0; background: #0C0C0C; }
@@ -2482,6 +2485,7 @@ body { background: var(--bg); color: var(--ink); }
 #hero {
   position: relative;
   height: 100vh;
+  height: 100lvh;   /* largest viewport — see note above */
   min-height: 640px;
   overflow: hidden;
   background: var(--bg);

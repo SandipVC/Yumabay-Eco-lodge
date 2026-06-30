@@ -9,6 +9,12 @@ export const NAV_REVEAL_AT = 0.98;
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Mobile browsers fire a resize when the URL bar shows/hides during scroll.
+// Without this, ScrollTrigger re-pins mid-scroll — the hero scrolls a little,
+// then snaps into the scrub (with a white strip below). Ignoring those bar-only
+// resizes keeps the pin locked from the first pixel of scroll.
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 // All-keyframe re-encode (every frame is an I-frame) → instant seek on scrub.
 // Used as the fallback when no CMS video is set (assets.hero.video).
 const VIDEO_SRC = '/video/intro-scrub.mp4';
@@ -39,16 +45,6 @@ export default function Hero() {
     if (!section || !video) return;
 
     let trigger;
-
-    // Pin the hero to the EXACT pin viewport. ScrollTrigger pins using
-    // window.innerHeight, but CSS `height:100vh` resolves to a different value on
-    // mobile (the URL-bar dance). The mismatch left a white strip below the video
-    // while pinned. Locking the section height to innerHeight (re-synced on every
-    // refresh) keeps the video filling the pinned viewport — no gap, scrub from the
-    // first pixel of scroll.
-    const sizeHero = () => { section.style.height = `${window.innerHeight}px`; };
-    sizeHero();
-    ScrollTrigger.addEventListener('refreshInit', sizeHero);
 
     const setup = () => {
       const duration = video.duration;
@@ -127,7 +123,6 @@ export default function Hero() {
       // #hero back into its original React parent BEFORE React unmounts the tree.
       // Without revert, React's removeChild(#hero) fails (node lives in pin-spacer).
       trigger?.kill(true);
-      ScrollTrigger.removeEventListener('refreshInit', sizeHero);
       video.removeEventListener('loadedmetadata', setup);
     };
   }, [videoSrc]);
