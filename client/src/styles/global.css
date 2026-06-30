@@ -50,7 +50,7 @@
   --grad-btn: linear-gradient(to right, #A78F77, var(--burnt));
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; }
 
 body {
   font-family: 'Aptos Narrow', 'Jost', sans-serif;
@@ -58,7 +58,12 @@ body {
   color: var(--white);
   font-size: 18px;        /* base bumped from 16px for readability */
   line-height: 1.5;
-  overflow-x: hidden;
+  /* clip (not hidden): locks horizontal scroll without turning the page into a
+     scroll container, which would break the GSAP ScrollTrigger hero pin. Applied
+     to html too since html is the scroll root. Stops reveal/slide-in transforms
+     (e.g. .prop-* rows) from pushing the doc wider than the viewport on mobile. */
+  overflow-x: clip;
+  max-width: 100%;
   -webkit-font-smoothing: antialiased;
 }
 
