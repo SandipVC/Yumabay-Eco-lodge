@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useAssets } from '../../hooks/useAssets.js';
-import assetsUrls from '../../assetsUrls.json';
 import './Preloader.css';
 
-const logoUrl = assetsUrls['logo.png'];
+// Local bundled logo — CMS can override via assets.branding.logo
+const DEFAULT_LOGO = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media';
 
 export default function Preloader() {
   const { assets, loading } = useAssets();
+  const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
   const [percent, setPercent] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);
@@ -22,7 +23,6 @@ export default function Preloader() {
 
     // Identify critical images to preload
     const criticalImages = [];
-    if (assets.hero?.image) criticalImages.push(assets.hero.image);
     if (assets.hero?.poster) criticalImages.push(assets.hero.poster);
     if (assets.about?.main) criticalImages.push(assets.about.main);
     if (assets.about?.accent) criticalImages.push(assets.about.accent);

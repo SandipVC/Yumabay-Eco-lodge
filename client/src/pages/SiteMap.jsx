@@ -3,13 +3,16 @@ import { useLang }    from '../context/LanguageContext.jsx';
 import { useNavigate } from 'react-router-dom';
 import { useAssets }  from '../hooks/useAssets.js';
 import { BACKDROP_URL } from '../components/sitemap/SiteMapBackdrop.jsx';
-import { ZONE_DEFAULTS, AVAIL, AVAIL_LABEL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
+import { ZONE_DEFAULTS, AVAIL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 import UnitGrid from '../components/sitemap/UnitGrid.jsx';
+import ZoneIcon from '../components/sitemap/ZoneIcon.jsx';
 
 const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
-  masterPdf: '/pdf/MASTER PLAN YUMA BAY.pdf',
-  villasPdf: '/pdf/PARCELAS VILLAS  YUMA BAY.pdf',
+  masterPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FMASTER_PLAN_YUMA_BAY.pdf?alt=media',
+  villasPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media',
+  brochurePdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media',
+  amenitiesPdf: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media',
 };
 
 // Brighten an rgba() fill by multiplying its alpha (clamped to 1)
@@ -30,9 +33,11 @@ export default function SiteMap() {
   const [inlineErrors, setInlineErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState('idle');
 
-  const planImage = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
-  const masterPdf = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
-  const villasPdf = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
+  const planImage    = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
+  const masterPdf    = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
+  const villasPdf    = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
+  const brochurePdf  = assets?.sitemap?.brochurePdf || SITEMAP_DEFAULTS.brochurePdf;
+  const amenitiesPdf = assets?.sitemap?.amenitiesPdf || SITEMAP_DEFAULTS.amenitiesPdf;
 
   // Zones are CMS-configurable (assets.sitemapZones). An explicit saved array
   // is authoritative — even an empty one — so the public view always matches
@@ -159,11 +164,6 @@ export default function SiteMap() {
       <h1 className="section-title reveal rd1">
         {s.title} <em>{s.titleEm}</em>
       </h1>
-      <p className="section-body reveal rd2" style={{ maxWidth: 600 }}>{s.subtitle}</p>
-
-      <p className="section-label reveal" style={{ marginTop: 24, marginBottom: 0 }}>
-        {s.phase === 'Phase' ? 'Interactive Zone Map' : 'Mapa de Zonas Interactivo'}
-      </p>
 
       <div className="sitemap-layout">
         {/* ── Interactive SVG ── */}
@@ -331,28 +331,13 @@ export default function SiteMap() {
             )}
           </svg>
 
-          {/* ── Legend ── */}
-          <div className="sitemap-legend">
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(26,107,138,.7)' }} />
-              {s.available}
-            </div>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(201,168,76,.7)' }} />
-              {s.limited}
-            </div>
-            <div className="legend-item">
-              <div className="legend-dot" style={{ background: 'rgba(224,122,95,.6)' }} />
-              {s.soldOut}
-            </div>
-          </div>
         </div>
 
         {/* ── Info Panel ── */}
         <div className={`sitemap-info-panel${activeZone ? ' has-zone' : ''}`}>
           {!activeZone ? (
             <div className="sitemap-panel-empty">
-              <div className="sitemap-panel-icon">🗺</div>
+              <div className="sitemap-panel-icon"><ZoneIcon name="map" size={40} /></div>
               <p className="sitemap-panel-hint-title">Interactive Master Plan</p>
               <p className="sitemap-panel-hint-body">
                 Click any building, villa, or amenity zone on the plan to view unit details and availability.
@@ -364,7 +349,9 @@ export default function SiteMap() {
                     className="sitemap-zone-pill"
                     onClick={() => setActiveId(z.id)}
                   >
-                    <span style={{ color: AVAIL[z.availability]?.badge }}>{z.icon}</span>
+                    <span className="sitemap-zone-pill-icon" style={{ color: AVAIL[z.availability]?.badge }}>
+                      <ZoneIcon zone={z} size={18} />
+                    </span>
                     {z.label}
                   </button>
                 ))}
@@ -381,10 +368,10 @@ export default function SiteMap() {
 
               {submitStatus === 'success' ? (
                 <div className="form-success" style={{ padding: '20px 0', border: 'none' }}>
-                  <h3 style={{ color: 'var(--gold)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
+                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
                     {t.contact?.successTitle || 'Enquiry received!'}
                   </h3>
-                  <p style={{ fontSize: '15px', color: 'rgba(255,255,255,.7)', lineHeight: '1.7' }}>
+                  <p style={{ fontSize: '15px', color: 'var(--ink-soft)', lineHeight: '1.7' }}>
                     {t.contact?.successBody || "Thank you for reaching out. We'll be in touch within 24–48 hours."}
                   </p>
                   <button 
@@ -459,11 +446,10 @@ export default function SiteMap() {
             <div className="sitemap-zone-card">
               <button className="sitemap-card-close" onClick={() => setActiveId(null)} aria-label="Close">✕</button>
 
-              <div className="sitemap-card-badge" style={{ background: `${AVAIL[activeZone.availability]?.badge}22`, borderColor: `${AVAIL[activeZone.availability]?.badge}55`, color: AVAIL[activeZone.availability]?.badge }}>
-                {AVAIL_LABEL[activeZone.availability]}
-              </div>
-
-              <h2 className="sitemap-card-title">{activeZone.icon} {activeZone.label}</h2>
+              <h2 className="sitemap-card-title">
+                <ZoneIcon zone={activeZone} size={22} />
+                <span style={{ marginLeft: 8 }}>{activeZone.label}</span>
+              </h2>
               <p className="sitemap-card-type">{activeZone.type}</p>
 
               {inventoryBuilding ? (
@@ -542,18 +528,22 @@ export default function SiteMap() {
             Villas Floor Plans
           </a>
         )}
-        <a
-          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media"
-          target="_blank" rel="noopener noreferrer" className="btn-ghost"
-        >
-          {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
-        </a>
-        <a
-          href="https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
-          target="_blank" rel="noopener noreferrer" className="btn-ghost"
-        >
-          {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
-        </a>
+        {brochurePdf && (
+          <a
+            href={brochurePdf}
+            target="_blank" rel="noopener noreferrer" className="btn-ghost"
+          >
+            {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
+          </a>
+        )}
+        {amenitiesPdf && (
+          <a
+            href={amenitiesPdf}
+            target="_blank" rel="noopener noreferrer" className="btn-ghost"
+          >
+            {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
+          </a>
+        )}
       </div>
     </div>
   );

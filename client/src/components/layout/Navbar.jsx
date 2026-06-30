@@ -1,15 +1,23 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../../context/LanguageContext.jsx';
+import { useAssets } from '../../hooks/useAssets.js';
+import EditMark from '../cms/EditMark.jsx';
 import assetsUrls from '../../assetsUrls.json';
 
 const menuIcon = assetsUrls['menu-lines.svg'];
-const logoUrl  = assetsUrls['logo.png'];
+// Local bundled logo — CMS can override via assets.branding.logo
+const DEFAULT_LOGO = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media';
 
 export default function Navbar() {
   const { t, lang, toggle } = useLang();
+  const { assets } = useAssets();
+  const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  // On the home page the header stays hidden over the hero scrub, then drops
+  // in from above once the intro video finishes (Hero broadcasts progress).
+  const [heroDone, setHeroDone] = useState(false);
   const { pathname } = useLocation();
   const isHome = pathname === '/';
 
@@ -18,6 +26,18 @@ export default function Navbar() {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    const onProgress = (e) => setHeroDone(e.detail >= 0.98);
+    window.addEventListener('yb-hero-progress', onProgress);
+    return () => window.removeEventListener('yb-hero-progress', onProgress);
+  }, []);
+
+  // Reset the gate whenever we land back on home (hero will re-broadcast).
+  useEffect(() => { if (isHome) setHeroDone(false); }, [isHome]);
+
+  // Header is hidden only while the home hero scrub is still running.
+  const navHidden = isHome && !heroDone;
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
@@ -39,7 +59,7 @@ export default function Navbar() {
 
   return (
     <>
-      <nav id="nav" className={scrolled || menuOpen ? 'scrolled' : ''}>
+      <nav id="nav" className={`${scrolled || menuOpen ? 'scrolled' : ''}${navHidden ? ' nav-hidden' : ''}`}>
         <Link to="/" className="nav-logo">
           <img src={logoUrl} alt="Yuma Bay Logo" />
         </Link>
@@ -52,10 +72,10 @@ export default function Navbar() {
             aria-expanded={menuOpen}
           >
             {menuOpen
-              ? <span style={{ color: '#fff', fontSize: 26, lineHeight: 1 }}>✕</span>
+              ? <span className="nav-close">✕</span>
               : <img src={menuIcon} alt="" />}
           </button>
-          <button onClick={toggle} className="lang-toggle" aria-label="Toggle language">
+          <button onClick={toggle} className="lang-box" aria-label="Toggle language">
             {lang === 'en' ? 'EN' : 'ES'}
           </button>
         </div>
@@ -63,13 +83,13 @@ export default function Navbar() {
 
       {menuOpen && (
         <div className="nav-overlay">
-          <button className="nav-overlay-link" onClick={() => scrollTo('about')}>{t.nav.about}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('properties')}>{t.nav.properties}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('gallery')}>{t.nav.gallery}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('amenities')}>{t.nav.amenities}</button>
-          <button className="nav-overlay-link" onClick={() => scrollTo('location')}>{t.nav.location}</button>
-          <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}>{t.nav.siteMap}</Link>
-          <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}>{t.nav.reserveNow}</Link>
+          <button className="nav-overlay-link" onClick={() => scrollTo('about')}><EditMark path="nav.about" label="Nav · About">{t.nav.about}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('properties')}><EditMark path="nav.properties" label="Nav · Properties">{t.nav.properties}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('gallery')}><EditMark path="nav.gallery" label="Nav · Gallery">{t.nav.gallery}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('amenities')}><EditMark path="nav.amenities" label="Nav · Amenities">{t.nav.amenities}</EditMark></button>
+          <button className="nav-overlay-link" onClick={() => scrollTo('location')}><EditMark path="nav.location" label="Nav · Location">{t.nav.location}</EditMark></button>
+          <Link className="nav-overlay-link" to="/sitemap" onClick={() => setMenuOpen(false)}><EditMark path="nav.siteMap" label="Nav · Site Map">{t.nav.siteMap}</EditMark></Link>
+          <Link className="nav-overlay-link" to="/contact" onClick={() => setMenuOpen(false)}><EditMark path="nav.reserveNow" label="Nav · Reserve Now">{t.nav.reserveNow}</EditMark></Link>
         </div>
       )}
     </>
