@@ -180,13 +180,14 @@ function multipartParser(req, res, next) {
         });
 
         file.on('end', () => {
+          const buffer = Buffer.concat(chunks);   // concat once, not twice
           req.file = {
             fieldname,
             originalname: filename,
             encoding,
             mimetype: mimeType,
-            buffer: Buffer.concat(chunks),
-            size: Buffer.concat(chunks).length,
+            buffer,
+            size: buffer.length,
           };
         });
       });

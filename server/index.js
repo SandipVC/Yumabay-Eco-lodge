@@ -66,6 +66,13 @@ if (!process.env.FIREBASE_CONFIG && !process.env.FUNCTIONS_EMULATOR) {
 
 export const api = onRequest({
   cors: true,
+  // Video/PDF uploads buffer the whole file in memory (rawBody + busboy chunks +
+  // Storage upload buffer). The default 256MiB is exceeded by a ~26MB video, so
+  // give the function headroom. timeout raised for the Storage round-trip.
+  // NOTE: Firebase Hosting → Functions has a hard 32MB request-body cap, so the
+  // CMS can only accept videos up to ~30MB via this path regardless of memory.
+  memory: '1GiB',
+  timeoutSeconds: 120,
   maxInstances: 10,
   secrets: ['ADMIN_SECRET', 'SMTP_HOST', 'SMTP_PORT', 'SMTP_SECURE', 'SMTP_USER', 'SMTP_PASS', 'FROM_EMAIL', 'FROM_NAME', 'TEAM_EMAIL'],
 }, app);
