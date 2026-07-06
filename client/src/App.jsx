@@ -36,11 +36,61 @@ function FaviconSync() {
   return null;
 }
 
+// Fixed CSS font-family names for CMS-uploaded custom fonts. Must match
+// CUSTOM_HEADING_FAMILY / CUSTOM_BODY_FAMILY in server/routes/cms.js.
+const CUSTOM_HEADING_FAMILY = 'CMSHeadingFont';
+const CUSTOM_BODY_FAMILY    = 'CMSBodyFont';
+
+// Keep the site-wide heading/body fonts in sync with the CMS selection.
+// Sets CSS custom properties on <html>, which global.css reads via
+// var(--font-heading)/var(--font-body) — so a CMS save reflects instantly
+// without a page reload, on both the public site and the dashboard.
+// If the admin uploaded a custom font file, also inject an @font-face rule
+// pointing at it (uploaded fonts aren't known ahead of time, so they can't
+// live in the static global.css).
+function FontSync() {
+  const { assets } = useAssets();
+  const headingFont     = assets?.fonts?.headingFont;
+  const bodyFont        = assets?.fonts?.bodyFont;
+  const headingFontFile = assets?.fonts?.headingFontFile;
+  const bodyFontFile    = assets?.fonts?.bodyFontFile;
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (headingFont) root.style.setProperty('--font-heading', headingFont);
+    if (bodyFont)    root.style.setProperty('--font-body', bodyFont);
+  }, [headingFont, bodyFont]);
+
+  useEffect(() => {
+    let style = document.getElementById('cms-custom-fonts');
+    if (!headingFontFile && !bodyFontFile) {
+      if (style) style.remove();
+      return;
+    }
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'cms-custom-fonts';
+      document.head.appendChild(style);
+    }
+    let css = '';
+    if (headingFontFile) {
+      css += `@font-face { font-family: '${CUSTOM_HEADING_FAMILY}'; src: url('${headingFontFile}'); font-display: swap; }\n`;
+    }
+    if (bodyFontFile) {
+      css += `@font-face { font-family: '${CUSTOM_BODY_FAMILY}'; src: url('${bodyFontFile}'); font-display: swap; }\n`;
+    }
+    style.textContent = css;
+  }, [headingFontFile, bodyFontFile]);
+
+  return null;
+}
+
 export default function App() {
   return (
     <EditModeProvider>
       <LanguageProvider>
         <FaviconSync />
+        <FontSync />
         <Preloader />
         <ScrollReset />
         <Suspense fallback={null}>

@@ -160,7 +160,13 @@ const SplitText = ({
       display: 'inline-block',
       whiteSpace: 'normal',
       wordWrap: 'break-word',
-      willChange: 'transform, opacity'
+      willChange: 'transform, opacity',
+      // overflow:hidden is required to mask the char/word slide-in, but it also
+      // clips descenders (p, g, y, ...) that render below the tight line-height
+      // used on headings. Pad the box to fit them, then pull the padding back
+      // with a negative margin so it doesn't add visible spacing.
+      paddingBottom: '0.2em',
+      marginBottom: '-0.2em'
     };
     const classes = `split-parent ${className}`;
     const Tag = tag || 'p';

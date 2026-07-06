@@ -249,6 +249,14 @@ export const en = {
     cmsTabLounge: '🍹 Lounge',         cmsTabLoungeDesc: 'Club lounge 2×2 grid',
     cmsTabDecor: '🎨 Decor',           cmsTabDecorDesc: 'Section band patterns & palms',
     cmsTabSitemap: '🗺 Site Map',      cmsTabSitemapDesc: 'Backdrop, plan image & PDFs',
+    cmsTabFonts: '🔤 Fonts',           cmsTabFontsDesc: 'Site-wide heading & body typeface',
+    // Fonts
+    cmsFontsHint: 'Choose the heading and body typefaces used across the whole site. Changes save automatically and appear instantly — no redeploy needed.',
+    cmsFontsHeading: 'Heading font',
+    cmsFontsBody: 'Body font',
+    cmsFontsUpload: 'Upload custom font',
+    cmsFontsRemove: 'Remove',
+    cmsFontsCustom: 'Custom uploaded font',
     // Branding
     cmsBrandingHint: 'The site logo appears in the header, footer, the loading screen and the browser-tab favicon. Upload a transparent SVG (best) or PNG. Leave empty to use the bundled default.',
     cmsBrandingLogo: 'Logo',

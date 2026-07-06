@@ -249,6 +249,14 @@ export const es = {
     cmsTabLounge: '🍹 Lounge',          cmsTabLoungeDesc: 'Cuadrícula 2×2 del Club Lounge',
     cmsTabDecor: '🎨 Decoración',       cmsTabDecorDesc: 'Patrones de banda y palmeras',
     cmsTabSitemap: '🗺 Plano',          cmsTabSitemapDesc: 'Fondo, plano e PDFs',
+    cmsTabFonts: '🔤 Fuentes',          cmsTabFontsDesc: 'Tipografía de títulos y cuerpo del sitio',
+    // Fuentes
+    cmsFontsHint: 'Elige la tipografía de títulos y de cuerpo usada en todo el sitio. Los cambios se guardan automáticamente y se reflejan al instante, sin necesidad de redeploy.',
+    cmsFontsHeading: 'Fuente de títulos',
+    cmsFontsBody: 'Fuente de cuerpo',
+    cmsFontsUpload: 'Subir fuente personalizada',
+    cmsFontsRemove: 'Eliminar',
+    cmsFontsCustom: 'Fuente personalizada subida',
     // Marca
     cmsBrandingHint: 'El logo del sitio aparece en el encabezado, el pie de página, la pantalla de carga y el favicon de la pestaña del navegador. Sube un SVG transparente (ideal) o PNG. Déjalo vacío para usar el predeterminado incluido.',
     cmsBrandingLogo: 'Logo',

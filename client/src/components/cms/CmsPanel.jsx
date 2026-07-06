@@ -34,7 +34,29 @@ const SECTIONS = [
   { id: 'lounge',     labelKey: 'cmsTabLounge',     descKey: 'cmsTabLoungeDesc' },
   { id: 'decor',      labelKey: 'cmsTabDecor',      descKey: 'cmsTabDecorDesc' },
   { id: 'sitemap',    labelKey: 'cmsTabSitemap',    descKey: 'cmsTabSitemapDesc' },
+  { id: 'fonts',      labelKey: 'cmsTabFonts',      descKey: 'cmsTabFontsDesc' },
 ];
+
+// Curated so every option renders correctly everywhere: brand fonts are
+// self-hosted (see @font-face in global.css), the rest are either loaded via
+// the Google Fonts <link> in index.html or universally available system fonts.
+const HEADING_FONT_OPTIONS = [
+  { value: "'Merzalina', 'Cormorant Garamond', serif", label: 'Merzalina (Brand default)' },
+  { value: "'Cormorant Garamond', Georgia, serif",     label: 'Cormorant Garamond' },
+  { value: "'Playfair Display', Georgia, serif",       label: 'Playfair Display' },
+  { value: "Georgia, 'Times New Roman', serif",        label: 'Georgia' },
+];
+const BODY_FONT_OPTIONS = [
+  { value: "'Aptos Narrow', 'Jost', sans-serif", label: 'Aptos Narrow (Brand default)' },
+  { value: "'Jost', Arial, sans-serif",          label: 'Jost' },
+  { value: "Arial, Helvetica, sans-serif",       label: 'Arial' },
+  { value: "'Segoe UI', Tahoma, sans-serif",     label: 'Segoe UI' },
+];
+
+// Must match CUSTOM_HEADING_FAMILY / CUSTOM_BODY_FAMILY in server/routes/cms.js
+// and client/src/App.jsx (FontSync), which injects the matching @font-face rule.
+const CUSTOM_HEADING_VALUE = "'CMSHeadingFont', 'Cormorant Garamond', serif";
+const CUSTOM_BODY_VALUE    = "'CMSBodyFont', 'Jost', sans-serif";
 
 // ── Shared upload helper ──────────────────────────────────────────────────────
 
@@ -1182,6 +1204,158 @@ function SiteMapSection({ assets, token, refresh }) {
   );
 }
 
+/** One heading/body font slot: preset dropdown + custom file upload + remove */
+function FontSlot({
+  label, previewText, previewClass, options, customValue,
+  value, uploadedFile, uploading, onSelect, onUpload, onRemove,
+}) {
+  const { t } = useLang();
+  const c = t.dashboard;
+  const fileRef = useRef();
+  const isCustom = value === customValue;
+
+  return (
+    <div>
+      <label className="cms-slot-label" style={{ display: 'block', marginBottom: 8 }}>
+        {label}
+      </label>
+      <select
+        className="form-input"
+        value={isCustom ? customValue : value}
+        onChange={e => onSelect(e.target.value)}
+        style={{ fontFamily: value }}
+      >
+        {options.map(opt => (
+          <option key={opt.value} value={opt.value} style={{ fontFamily: opt.value }}>
+            {opt.label}
+          </option>
+        ))}
+        {uploadedFile && (
+          <option value={customValue} style={{ fontFamily: customValue }}>
+            {c.cmsFontsCustom}
+          </option>
+        )}
+      </select>
+
+      <p className={previewClass} style={{ fontFamily: value, fontSize: previewClass ? 28 : 15, marginTop: 12 }}>
+        {previewText}
+      </p>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10 }}>
+        <button
+          type="button"
+          className="btn-ghost"
+          onClick={() => fileRef.current?.click()}
+          disabled={uploading}
+        >
+          {uploading ? c.cmsUploading : c.cmsFontsUpload}
+        </button>
+        {uploadedFile && (
+          <button type="button" className="btn-ghost" onClick={onRemove} disabled={uploading}>
+            {c.cmsFontsRemove}
+          </button>
+        )}
+        <input
+          ref={fileRef}
+          type="file"
+          accept=".woff,.woff2,.ttf,.otf"
+          style={{ display: 'none' }}
+          onChange={e => { if (e.target.files[0]) onUpload(e.target.files[0]); e.target.value = ''; }}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** Fonts section — pick the site-wide heading/body font, or upload a custom font file */
+function FontsSection({ assets, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
+  const [headingFont, setHeadingFont] = useState(
+    assets?.fonts?.headingFont || HEADING_FONT_OPTIONS[0].value
+  );
+  const [bodyFont, setBodyFont] = useState(
+    assets?.fonts?.bodyFont || BODY_FONT_OPTIONS[0].value
+  );
+  const [saving, setSaving] = useState(false);
+  const [saved,  setSaved]  = useState(false);
+  const [err,    setErr]    = useState(null);
+  const [uploadingSlot, setUploadingSlot] = useState(null); // 'heading' | 'body' | null
+
+  useEffect(() => {
+    setHeadingFont(assets?.fonts?.headingFont || HEADING_FONT_OPTIONS[0].value);
+    setBodyFont(assets?.fonts?.bodyFont || BODY_FONT_OPTIONS[0].value);
+  }, [assets?.fonts]);
+
+  async function save(next) {
+    setSaving(true); setErr(null);
+    try {
+      await patchSection({ section: 'fonts', data: next, token });
+      invalidateAssetsCache(); refresh();
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (e) { setErr(e.message); }
+    finally { setSaving(false); }
+  }
+
+  async function uploadFont(slot, file) {
+    setUploadingSlot(slot); setErr(null);
+    try {
+      await uploadFile({ file, section: 'fonts', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setUploadingSlot(null); }
+  }
+
+  async function removeFont(slot) {
+    setErr(null);
+    try {
+      await deleteAsset({ section: 'fonts', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+  }
+
+  return (
+    <div className="cms-section-body">
+      {err && <p className="cms-error">{err}</p>}
+      <p className="cms-hint">{c.cmsFontsHint}</p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 32, maxWidth: 420 }}>
+        <FontSlot
+          label={c.cmsFontsHeading}
+          previewText="Yuma Bay Eco Lodge"
+          previewClass="section-title"
+          options={HEADING_FONT_OPTIONS}
+          customValue={CUSTOM_HEADING_VALUE}
+          value={headingFont}
+          uploadedFile={assets?.fonts?.headingFontFile}
+          uploading={uploadingSlot === 'heading'}
+          onSelect={next => { setHeadingFont(next); save({ headingFont: next, bodyFont }); }}
+          onUpload={file => uploadFont('heading', file)}
+          onRemove={() => removeFont('heading')}
+        />
+
+        <FontSlot
+          label={c.cmsFontsBody}
+          previewText="The quick brown fox jumps over the lazy dog."
+          previewClass=""
+          options={BODY_FONT_OPTIONS}
+          customValue={CUSTOM_BODY_VALUE}
+          value={bodyFont}
+          uploadedFile={assets?.fonts?.bodyFontFile}
+          uploading={uploadingSlot === 'body'}
+          onSelect={next => { setBodyFont(next); save({ headingFont, bodyFont: next }); }}
+          onUpload={file => uploadFont('body', file)}
+          onRemove={() => removeFont('body')}
+        />
+
+        {saving && <p className="cms-hint">{c.cmsSavingDots}</p>}
+        {saved  && <p className="cms-hint" style={{ color: 'var(--gold)' }}>{c.cmsSaved}</p>}
+      </div>
+    </div>
+  );
+}
+
 // ── Main CmsPanel ─────────────────────────────────────────────────────────────
 
 export default function CmsPanel({ token }) {
@@ -1223,6 +1397,7 @@ export default function CmsPanel({ token }) {
             {activeSection === 'lounge'     && <LoungeSection     {...sectionProps} />}
             {activeSection === 'decor'      && <DecorSection      {...sectionProps} />}
             {activeSection === 'sitemap'    && <SiteMapSection    {...sectionProps} />}
+            {activeSection === 'fonts'      && <FontsSection      {...sectionProps} />}
           </>
         )}
       </div>

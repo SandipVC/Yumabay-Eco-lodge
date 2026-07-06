@@ -46,32 +46,10 @@ export default function Hero() {
     const section = sectionRef.current;
     if (!section) return;
 
-    // No CMS video → static poster hero: no pin, no scrub. Keep the centre logo
-    // visible and reveal the header immediately so the page behaves normally.
-    if (!hasVideo) {
-      if (logoRef.current) { logoRef.current.style.opacity = ''; logoRef.current.style.transform = ''; }
-      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
-      return;
-    }
-
-    const video = videoRef.current;
-    if (!video) return;
-
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Duration is 0 until the video reports metadata. Until then the runway is
-    // just one viewport so the pin can be created IMMEDIATELY — otherwise the
-    // hero free-scrolls (video visibly slides up) until metadata loads on slower
-    // mobile networks, then snaps into the scrub. Pinning at mount kills that.
-    const getDuration = () =>
-      (video.duration && isFinite(video.duration)) ? video.duration : 0;
-    const getRunway = () => {
-      const d = getDuration();
-      return d > 0 ? Math.max(window.innerHeight, d * PX_PER_SECOND) : window.innerHeight;
-    };
-
     // Directly set currentTime on GSAP's tick. ScrollTrigger's onUpdate is already
-    // synchronized with requestAnimationFrame, so a secondary rAF here causes 
+    // synchronized with requestAnimationFrame, so a secondary rAF here causes
     // frame drops and stuttering on Android.
     const applyProgress = (p) => {
       const logo = logoRef.current;
@@ -83,6 +61,42 @@ export default function Hero() {
       window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: p }));
     };
     applyProgress(0);
+
+    // No CMS video → static poster hero. Still pin + scrub on scroll so the
+    // title fades out first, then (per NAV_REVEAL_AT) the header slides in —
+    // same reveal choreography as the video path, just without a video to sync.
+    if (!hasVideo) {
+      if (reducedMotion) {
+        if (logoRef.current) logoRef.current.style.opacity = '0';
+        window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
+        return;
+      }
+      const trigger = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end:   () => `+=${window.innerHeight}`,
+        pin:   true,
+        pinSpacing: true,
+        scrub: true,
+        anticipatePin: 1,
+        onUpdate: (self) => applyProgress(self.progress),
+      });
+      return () => trigger.kill(true);
+    }
+
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Duration is 0 until the video reports metadata. Until then the runway is
+    // just one viewport so the pin can be created IMMEDIATELY — otherwise the
+    // hero free-scrolls (video visibly slides up) until metadata loads on slower
+    // mobile networks, then snaps into the scrub. Pinning at mount kills that.
+    const getDuration = () =>
+      (video.duration && isFinite(video.duration)) ? video.duration : 0;
+    const getRunway = () => {
+      const d = getDuration();
+      return d > 0 ? Math.max(window.innerHeight, d * PX_PER_SECOND) : window.innerHeight;
+    };
 
     let trigger;
 
@@ -126,7 +140,7 @@ export default function Hero() {
     if (video.readyState >= 1) onMeta();
     else video.addEventListener('loadedmetadata', onMeta, { once: true });
 
-    // Android/iOS sometimes refuse to seek via JS unless the video has been explicitly 
+    // Android/iOS sometimes refuse to seek via JS unless the video has been explicitly
     // played via a user interaction. This unlocks the media engine on the first touch.
     const unlockVideo = () => {
       video.play().then(() => {

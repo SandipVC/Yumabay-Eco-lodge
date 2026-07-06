@@ -119,7 +119,8 @@ async function deletePhysical(filePath) {
     const isCms   = filePath.includes('/images/cms/');
     const isVideo = filePath.startsWith('/video/');
     const isPdf   = filePath.startsWith('/pdf/');
-    if (!isCms && !isVideo && !isPdf) return;
+    const isFont  = filePath.startsWith('/fonts/');
+    if (!isCms && !isVideo && !isPdf && !isFont) return;
     const abs = join(PUBLIC_DIR, filePath);
     if (existsSync(abs)) { try { unlinkSync(abs); } catch {} }
   }
@@ -128,16 +129,22 @@ async function deletePhysical(filePath) {
 // ── Multer storage ────────────────────────────────────────────────────────────
 const isVideoFile = (name) => /\.(mp4|webm|mov)$/i.test(name);
 const isPdfFile   = (name) => /\.pdf$/i.test(name);
+const isFontFile  = (name) => /\.(woff2?|ttf|otf)$/i.test(name);
+
+// Fixed CSS font-family names for CMS-uploaded custom fonts. Must match the
+// names FontSync (client/src/App.jsx) uses when injecting the @font-face rule.
+const CUSTOM_HEADING_FAMILY = 'CMSHeadingFont';
+const CUSTOM_BODY_FAMILY    = 'CMSBodyFont';
 
 // Store files in memory so we can upload them to GCS or save to local disk
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB (videos)
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
+    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf|woff2?|ttf|otf)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
+      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), PDFs, and fonts (woff, woff2, ttf, otf) are allowed.'));
     }
   },
 });
@@ -169,9 +176,9 @@ function multipartParser(req, res, next) {
       bb.on('file', (fieldname, file, info) => {
         const { filename, encoding, mimeType } = info;
         
-        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(filename)) {
+        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf|woff2?|ttf|otf)$/i.test(filename)) {
           file.resume();
-          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
+          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), PDFs, and fonts (woff, woff2, ttf, otf) are allowed.'));
         }
 
         const chunks = [];
@@ -233,9 +240,10 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
   const { section, slot } = req.params;
   const isVideo = isVideoFile(req.file.originalname);
   const isPdf   = isPdfFile(req.file.originalname);
+  const isFont  = isFontFile(req.file.originalname);
 
   // Resize images exceeding 1920×1080 before saving
-  if (!isVideo && !isPdf) {
+  if (!isVideo && !isPdf && !isFont) {
     try {
       req.file.buffer = await resizeIfNeeded(req.file.buffer, req.file.mimetype);
     } catch (err) {
@@ -256,6 +264,7 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       let storagePath;
       if (isVideo)          storagePath = `video/${filename}`;
       else if (isPdf)       storagePath = `pdf/${filename}`;
+      else if (isFont)      storagePath = `fonts/${filename}`;
       else                  storagePath = `images/cms/${section}/${filename}`;
 
       const bucket = storage.bucket();
@@ -277,8 +286,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       let dest;
       if (isVideo)          dest = join(PUBLIC_DIR, 'video');
       else if (isPdf)       dest = join(PUBLIC_DIR, 'pdf');
+      else if (isFont)      dest = join(PUBLIC_DIR, 'fonts');
       else                  dest = join(PUBLIC_DIR, 'images', 'cms', section);
-      
+
       mkdirSync(dest, { recursive: true });
       writeFileSync(join(dest, filename), req.file.buffer);
 
@@ -286,7 +296,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
         ? `/video/${filename}`
         : isPdf
           ? `/pdf/${filename}`
-          : `/images/cms/${section}/${filename}`;
+          : isFont
+            ? `/fonts/${filename}`
+            : `/images/cms/${section}/${filename}`;
     }
   } catch (err) {
     console.error('File upload failed:', err.message);
@@ -395,6 +407,27 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.branding.logo = filePath;
       break;
     }
+    case 'fonts': {
+      // Custom heading/body typeface upload. slot: 'heading' | 'body'.
+      if (!assets.fonts) assets.fonts = {};
+      if (!isFont) {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: 'This slot requires a font file (woff, woff2, ttf, otf).' });
+      }
+      if (slot === 'heading') {
+        await deletePhysical(assets.fonts.headingFontFile);
+        assets.fonts.headingFontFile = filePath;
+        assets.fonts.headingFont = `'${CUSTOM_HEADING_FAMILY}', 'Cormorant Garamond', serif`;
+      } else if (slot === 'body') {
+        await deletePhysical(assets.fonts.bodyFontFile);
+        assets.fonts.bodyFontFile = filePath;
+        assets.fonts.bodyFont = `'${CUSTOM_BODY_FAMILY}', 'Jost', sans-serif`;
+      } else {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: 'Invalid font slot: must be "heading" or "body".' });
+      }
+      break;
+    }
     default:
       await deletePhysical(filePath); // Cleanup file if invalid section
       return res.status(400).json({ error: `Unknown section: ${section}` });
@@ -475,6 +508,19 @@ router.delete('/assets/:section', auth, async (req, res) => {
     case 'branding': {
       await deletePhysical(assets.branding?.logo);
       if (assets.branding) assets.branding.logo = null;
+      break;
+    }
+    case 'fonts': {
+      // Remove a custom-uploaded font and revert that slot to the brand default.
+      if (slot === 'heading' && assets.fonts) {
+        await deletePhysical(assets.fonts.headingFontFile);
+        assets.fonts.headingFontFile = null;
+        assets.fonts.headingFont = "'Merzalina', 'Cormorant Garamond', serif";
+      } else if (slot === 'body' && assets.fonts) {
+        await deletePhysical(assets.fonts.bodyFontFile);
+        assets.fonts.bodyFontFile = null;
+        assets.fonts.bodyFont = "'Aptos Narrow', 'Jost', sans-serif";
+      }
       break;
     }
     default:
