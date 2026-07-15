@@ -126,3 +126,12 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 
 ## Done — cms-upgrade
 - [x] In-context (WYSIWYG) bilingual text editing: `<EditMark>` + `EditModeContext` + `InlineTextEditor`; hybrid with existing `TextContentSection`. (ADR-10)
+
+## Done — hero-new-animation (2026-07-15)
+- [x] Hero rebuilt as auto-advancing expanding-card slider (GSAP FLIP expander, autoplay 6s, prev/next arrows, clickable square cards, progress bar + counter, Ken Burns idle zoom). (ADR-11)
+- [x] CMS: Media Manager → Hero tab now manages `assets.heroSlider` — add/replace/delete/reorder slides + per-slide bilingual kicker/title/description. Server `heroSlider` section in `routes/cms.js`.
+- [x] 5 dev slides seeded from existing gallery Storage images (2 stale URLs swapped: RENDER_9/11 → RENDER_15/13).
+- [x] Static brand block (YUMA BAY + tagline) left side; no CTA; not affected by slide changes.
+- [x] Mobile: slider UI row hidden; cards + brand only.
+- [x] Autoplay image-decode guard (no black background on slow networks).
+- [x] `@vitejs/plugin-react` ^4 → ^6 — clean `npm install` works with vite 8. (ADR-11.1)

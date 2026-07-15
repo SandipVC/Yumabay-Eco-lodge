@@ -24,6 +24,11 @@ export default function Preloader() {
     // Identify critical images to preload
     const criticalImages = [];
     if (assets.hero?.poster) criticalImages.push(assets.hero.poster);
+    // First hero-slider slide is the initial background; next two are the
+    // first visible cards.
+    (assets.heroSlider || []).slice(0, 3).forEach(s => {
+      if (s?.src) criticalImages.push(s.src);
+    });
     if (assets.about?.main) criticalImages.push(assets.about.main);
     if (assets.about?.accent) criticalImages.push(assets.about.accent);
     if (assets.properties) {

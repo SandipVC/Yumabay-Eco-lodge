@@ -2,8 +2,8 @@
 
 **Repo:** https://github.com/SandipVC/Yumabay-Eco-lodge  
 **Local path:** `C:\Yumabay-Eco-lodge`  
-**Last updated:** 2026-06-30  
-**Current branch:** `text-changes-client` (branched from `drishti-new-design`) · latest commit `eb345e5`  
+**Last updated:** 2026-07-15  
+**Current branch:** `hero-new-animation` (branched from `cms-font`)  
 **Audience:** next AI agent picking up cold. Read top to bottom before touching code.
 
 > **Deploy note:** This site is live on **Firebase** — Hosting (`client/dist`) + a single
@@ -102,9 +102,21 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Footer: Replaced Twitter logo with inline X SVG logo | `Footer.jsx` | ADR-9.2 |
 | CMS: Added editable URL fields for footer social links (Instagram, Facebook, X) | `textSchema.js`, `en.js`, `es.js`, `Footer.jsx` | ADR-9.2 |
 
+### Hero expanding-card slider (2026-07-15, branch `hero-new-animation`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Hero rebuilt: scrub-video hero → auto-advancing expanding-card slider (card image FLIP-expands to fullscreen bg; prev shrinks bg back into card; autoplay 6s with image-decode guard; square cards; Ken Burns idle zoom; mobile hides arrows/progress row) | `Hero.jsx`, `global.css` | ADR-11 |
+| Static brand block left (YUMA BAY + tagline only, no CTA, unaffected by slide changes) | `Hero.jsx`, `global.css`, `en.js`, `es.js` | ADR-11 |
+| CMS: Hero tab manages `assets.heroSlider` (max 8) — add/replace/delete/reorder + bilingual kicker/title/desc per slide; new `heroSlider` POST/DELETE cases with shared-gallery-file delete guard | `CmsPanel.jsx`, `server/routes/cms.js`, `server/data/assets.json` | ADR-11 |
+| Preloader also preloads first 3 slider images | `Preloader.jsx` | — |
+| Navbar reveal: hero dispatches `yb-hero-progress = 1` on mount (no scrub anymore) | `Hero.jsx` | ADR-11 |
+| `@vitejs/plugin-react` ^4 → ^6 (clean install with vite 8, no `--legacy-peer-deps`) | `client/package.json` | ADR-11.1 |
+
 ### What's next
 
 Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
+Merge `hero-new-animation` → `main` after client reviews the new hero slider.
 
 **Note:** The hero scrub video iOS/Android buffering bug and touch-scroll keyframing issue have both been fully resolved. The video was re-encoded with `-movflags +faststart` and `-g 1`, and `Hero.jsx` was updated with `autoPlay` and a `touchstart` unlocker.
 
@@ -126,7 +138,9 @@ Vite proxies `/api/*` → `:3001`. If frontend logs `ECONNREFUSED`, backend isn'
 
 ### Hero scroll decoupling
 `Hero.jsx` → `CustomEvent('yb-hero-progress', { detail: 0–1 })` → `Navbar.jsx` listens.  
-Navbar adds `.nav-hidden` (translateY(-100%)) until `detail >= 0.98`.
+Navbar adds `.nav-hidden` (translateY(-100%)) until `detail >= 0.98`.  
+Since the expanding-card slider (ADR-11) the hero has no scrub — it dispatches `1` once on
+mount, so the header shows immediately on Home. The event contract is kept for Navbar compat.
 
 ### Gallery labels backward compat
 `'labelEn' in img` = new record format (`labelEn`/`labelEs`).  

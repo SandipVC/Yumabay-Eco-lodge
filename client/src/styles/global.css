@@ -3383,6 +3383,161 @@ footer { background: var(--teal); color: var(--white); }
 /* Zone editor */
 .dash-light .cms-panel .zone-edit-title     { font-size: 26.4px; color: var(--teal); }
 .dash-light .cms-panel .zone-edit-empty     { font-size: 18px; color: var(--teal); }
+
+/* ============================================================
+   HERO — expanding-card slider (Hero.jsx)
+   Placed after the light-theme override so these rules win.
+   Layering inside #hero:
+     0 .hs-bg → 1 .hs-expander → 2 .hero-overlay/.hero-fade
+     → 3 .hs-content → 4 .hs-cards/.hs-ui
+   ============================================================ */
+
+.hs-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; background: #0C0C0C; }
+.hs-bg-img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  animation: hs-kenburns 14s ease-out forwards;
+}
+@keyframes hs-kenburns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
+}
+
+/* Single reusable FLIP layer — Hero.jsx sets its background-image and
+   animates x/y/width/height between a card rect and the full section. */
+.hs-expander {
+  position: absolute; top: 0; left: 0; z-index: 1;
+  opacity: 0; pointer-events: none;
+  background-size: cover; background-position: center;
+  will-change: transform, width, height;
+  box-shadow: 0 18px 44px rgba(0,0,0,.35);
+}
+
+#hero .hero-overlay, #hero .hero-fade { z-index: 2; pointer-events: none; }
+
+/* Static brand block, left side */
+.hs-content {
+  position: absolute; z-index: 3;
+  left: clamp(24px, 8vw, 150px);
+  bottom: clamp(56px, 14vh, 150px);
+  max-width: min(560px, 44vw);
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: clamp(10px, 1.6vh, 20px);
+}
+.hs-title {
+  font-family: var(--font-heading);
+  font-weight: 400; line-height: 1.02;
+  font-size: clamp(48px, 6vw, 110px);
+  white-space: nowrap;
+  padding-top: .12em;   /* headroom for background-clip:text cap tops */
+  background-image: linear-gradient(90deg, #0A4C58 0%, #0A4C58 45%, #1B6973 75%, #2C8995 100%);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.hs-tagline {
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.1vw, 19px);
+  letter-spacing: .34em; text-transform: uppercase;
+  color: var(--ink-soft);
+  padding-left: .1em;   /* optical alignment with the tracked capitals */
+}
+/* Upcoming-slide cards, bottom-right */
+.hs-cards {
+  position: absolute; z-index: 4;
+  right: clamp(20px, 6vw, 110px);
+  bottom: clamp(96px, 16vh, 170px);
+  display: flex; gap: clamp(10px, 1.2vw, 18px);
+}
+.hs-card {
+  position: relative;
+  width: clamp(96px, 10vw, 168px);
+  aspect-ratio: 1 / 1;
+  border: 0; padding: 0; cursor: pointer;
+  border-radius: 12px;             /* keep in sync with CARD_RADIUS in Hero.jsx */
+  overflow: hidden; background: #0C0C0C;
+  box-shadow: 0 10px 26px rgba(10,34,41,.28);
+  transition: transform .35s ease, box-shadow .35s ease;
+}
+.hs-card:hover { transform: translateY(-6px); box-shadow: 0 16px 34px rgba(10,34,41,.36); }
+.hs-card img {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; display: block;
+}
+/* Arrows + progress + counter */
+.hs-ui {
+  position: absolute; z-index: 4;
+  right: clamp(20px, 6vw, 110px);
+  bottom: clamp(40px, 6.5vh, 64px);
+  display: flex; align-items: center; gap: 16px;
+}
+.hs-arrow {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 1px solid rgba(10,34,41,.28); background: rgba(255,255,255,.6);
+  color: var(--ink); font-size: 17px; line-height: 1; cursor: pointer;
+  transition: background .3s, color .3s, border-color .3s;
+}
+.hs-arrow:hover { background: var(--teal); border-color: var(--teal); color: #fff; }
+.hs-progress {
+  width: clamp(90px, 10vw, 170px); height: 2px;
+  background: rgba(10,34,41,.18); overflow: hidden; border-radius: 2px;
+}
+.hs-progress span {
+  display: block; height: 100%; background: var(--teal);
+  transition: width .5s ease;
+}
+.hs-count {
+  font-family: var(--font-body); font-size: 13px;
+  letter-spacing: .1em; color: var(--ink-soft); min-width: 24px;
+}
+
+@media (max-width: 900px) {
+  .hs-content { max-width: min(560px, 82vw); bottom: clamp(150px, 26vh, 220px); }
+  .hs-cards {
+    left: clamp(20px, 6vw, 110px); right: auto;
+    bottom: clamp(32px, 6vh, 72px);
+  }
+  .hs-card { width: clamp(78px, 20vw, 110px); }
+  /* No arrows / progress / counter on mobile — cards + brand only */
+  .hs-ui { display: none; }
+}
+
+/* ── CMS · Hero slider manager ──────────────────────────────── */
+.cms-hero-slides {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 22px; margin-bottom: 22px;
+}
+.cms-hero-slide { display: flex; flex-direction: column; gap: 12px; }
+.cms-hero-order { float: right; display: inline-flex; gap: 6px; }
+.cms-hero-order button {
+  width: 26px; height: 26px; border-radius: 4px; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.25);
+  background: transparent; color: inherit; font-size: 13px; line-height: 1;
+}
+.cms-hero-order button:disabled { opacity: .3; cursor: default; }
+.cms-hero-fields {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px;
+}
+.cms-hero-field { display: flex; flex-direction: column; gap: 3px; }
+.cms-hero-field span {
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase;
+  opacity: .65;
+}
+.cms-hero-field input, .cms-hero-field textarea {
+  font-family: var(--font-body); font-size: 13px;
+  padding: 7px 9px; border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.06); color: inherit;
+  resize: vertical;
+}
+.cms-hero-field input:focus, .cms-hero-field textarea:focus {
+  outline: none; border-color: var(--gold, #C9A84C);
+}
+.dash-light .cms-panel .cms-hero-order button { border-color: rgba(10,76,88,.3); color: var(--teal); }
+.dash-light .cms-panel .cms-hero-field input,
+.dash-light .cms-panel .cms-hero-field textarea {
+  border-color: rgba(10,76,88,.25); background: #fff; color: var(--ink, #0A2229);
+}
+
 .dash-light .cms-panel .zone-field > span,
 .dash-light .cms-panel .zone-geom-label,
 .dash-light .cms-panel .zone-geom-field > span { font-size: 14.4px; color: var(--teal); }

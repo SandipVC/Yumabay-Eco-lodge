@@ -178,65 +178,130 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
   );
 }
 
-/** Hero section — video + poster slots */
+/** Hero section — expanding-card slider slides (image + bilingual copy each) */
 function HeroSection({ assets, token, refresh }) {
   const { t } = useLang();
   const c = t.dashboard;
-  const [busy, setBusy]   = useState({});
-  const [err,  setErr]    = useState(null);
-  const fileRef           = useRef({});
+  const [busy,   setBusy]   = useState({});
+  const [err,    setErr]    = useState(null);
+  // Unsaved per-slide text edits, keyed by slide index.
+  const [drafts, setDrafts] = useState({});
 
-  async function handleUpload(slot, file) {
-    setBusy(b => ({ ...b, [slot]: true }));
+  const slides = Array.isArray(assets?.heroSlider) ? assets.heroSlider : [];
+
+  async function withBusy(key, fn) {
+    setBusy(b => ({ ...b, [key]: true }));
     setErr(null);
+    let ok = false;
     try {
-      await uploadFile({ file, section: 'hero', slot, token });
+      await fn();
+      ok = true;
       invalidateAssetsCache();
       refresh();
     } catch (e) { setErr(e.message); }
-    finally { setBusy(b => ({ ...b, [slot]: false })); }
+    finally { setBusy(b => ({ ...b, [key]: false })); }
+    return ok;
   }
 
-  async function handleDelete(slot) {
+  const addSlide = (file) => withBusy('add', () =>
+    uploadFile({
+      file, section: 'heroSlider', token,
+      labelEn: file.name.replace(/\.[^.]+$/, ''),
+    }));
+
+  const replaceImage = (idx, file) => withBusy(idx, () =>
+    uploadFile({ file, section: 'heroSlider', slot: idx, token }));
+
+  const removeSlide = (idx) => {
     if (!confirm(c.cmsHeroRemoveConfirm)) return;
-    setBusy(b => ({ ...b, [slot]: true }));
-    setErr(null);
-    try {
-      await deleteAsset({ section: 'hero', slot, token });
-      invalidateAssetsCache();
-      refresh();
-    } catch (e) { setErr(e.message); }
-    finally { setBusy(b => ({ ...b, [slot]: false })); }
-  }
+    withBusy(idx, () => deleteAsset({ section: 'heroSlider', slot: String(idx), token }));
+  };
 
-  const slots = [
-    { key: 'poster', label: c.cmsHeroPoster, accept: 'image/*' },
-    { key: 'video',  label: c.cmsHeroVideo,  accept: 'video/mp4,video/webm' },
+  const move = async (idx, dir) => {
+    const next = [...slides];
+    const [s] = next.splice(idx, 1);
+    next.splice(idx + dir, 0, s);
+    const ok = await withBusy(idx, () => patchSection({ section: 'heroSlider', data: next, token }));
+    if (ok) setDrafts({}); // indices shifted — drop unsaved text edits
+  };
+
+  const setField = (idx, key, val) =>
+    setDrafts(d => ({ ...d, [idx]: { ...d[idx], [key]: val } }));
+
+  const fieldVal = (idx, key) => drafts[idx]?.[key] ?? slides[idx]?.[key] ?? '';
+
+  const saveText = async (idx) => {
+    const draft = drafts[idx];
+    if (!draft) return;
+    const next = slides.map((s, i) => (i === idx ? { ...s, ...draft } : s));
+    const ok = await withBusy(idx, () => patchSection({ section: 'heroSlider', data: next, token }));
+    if (ok) setDrafts(d => { const n = { ...d }; delete n[idx]; return n; });
+  };
+
+  const FIELDS = [
+    ['kickerEn', c.cmsHeroKickerEn], ['kickerEs', c.cmsHeroKickerEs],
+    ['titleEn',  c.cmsHeroTitleEn],  ['titleEs',  c.cmsHeroTitleEs],
+    ['descEn',   c.cmsHeroDescEn],   ['descEs',   c.cmsHeroDescEs],
   ];
 
   return (
     <div className="cms-section-body">
       {err && <p className="cms-error">{err}</p>}
       <p className="cms-hint">{c.cmsHeroHint}</p>
-      <div className="cms-slot-grid">
-        {slots.map(({ key, label, accept }) => (
-          <div key={key} className="cms-slot">
-            <p className="cms-slot-label">{label}</p>
+
+      {slides.length === 0 && <p className="cms-hint">{c.cmsHeroEmpty}</p>}
+
+      <div className="cms-hero-slides">
+        {slides.map((slide, idx) => (
+          <div key={`${slide.src}-${idx}`} className="cms-slot cms-hero-slide">
+            <p className="cms-slot-label">
+              {c.cmsHeroSlide} {idx + 1}
+              <span className="cms-hero-order">
+                <button type="button" disabled={idx === 0 || busy[idx]}
+                  onClick={() => move(idx, -1)} title={c.cmsHeroMoveUp}>↑</button>
+                <button type="button" disabled={idx === slides.length - 1 || busy[idx]}
+                  onClick={() => move(idx, 1)} title={c.cmsHeroMoveDown}>↓</button>
+              </span>
+            </p>
             <AssetThumb
-              src={assets?.hero?.[key]}
-              label={key === 'video' ? assets?.hero?.video || c.cmsHeroNoVideo : ''}
-              replacing={busy[key]}
-              onReplace={file => handleUpload(key, file)}
-              onDelete={assets?.hero?.[key] ? () => handleDelete(key) : null}
+              src={slide.src}
+              replacing={busy[idx]}
+              onReplace={file => replaceImage(idx, file)}
+              onDelete={() => removeSlide(idx)}
             />
-            <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
-              {busy[key] ? c.cmsUploadingDots : `${c.cmsUpload} ${label}`}
-              <input type="file" accept={accept} style={{ display: 'none' }}
-                onChange={e => { if (e.target.files[0]) handleUpload(key, e.target.files[0]); }} />
-            </label>
+            <div className="cms-hero-fields">
+              {FIELDS.map(([key, label]) => (
+                <label key={key} className="cms-hero-field">
+                  <span>{label}</span>
+                  {key.startsWith('desc') ? (
+                    <textarea rows={2} value={fieldVal(idx, key)}
+                      onChange={e => setField(idx, key, e.target.value)} />
+                  ) : (
+                    <input type="text" value={fieldVal(idx, key)}
+                      onChange={e => setField(idx, key, e.target.value)} />
+                  )}
+                </label>
+              ))}
+            </div>
+            <button
+              type="button"
+              className="cms-upload-btn"
+              disabled={!drafts[idx] || busy[idx]}
+              onClick={() => saveText(idx)}
+            >
+              {busy[idx] ? c.cmsUploadingDots : c.cmsHeroSaveText}
+            </button>
           </div>
         ))}
       </div>
+
+      {slides.length < 8 && (
+        <label className={`cms-upload-btn${busy.add ? ' loading' : ''}`}>
+          {busy.add ? c.cmsUploadingDots : c.cmsHeroAddSlide}
+          <input type="file" accept="image/*" style={{ display: 'none' }}
+            onChange={e => { if (e.target.files[0]) addSlide(e.target.files[0]); e.target.value = ''; }} />
+        </label>
+      )}
     </div>
   );
 }

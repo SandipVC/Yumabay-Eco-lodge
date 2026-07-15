@@ -357,6 +357,31 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.gallery.push({ src: filePath, labelEn, labelEs, cat });
       break;
     }
+    case 'heroSlider': {
+      // Hero expanding-card slides. slot = index → replace that slide's image
+      // (keeping its copy); no slot → append a new slide.
+      if (!Array.isArray(assets.heroSlider)) assets.heroSlider = [];
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && idx >= 0 && idx < assets.heroSlider.length) {
+        // Seed slides reference shared gallery files — only delete files that
+        // were uploaded specifically for the hero slider.
+        const old = assets.heroSlider[idx]?.src;
+        if (old && old.includes('heroSlider')) await deletePhysical(old);
+        assets.heroSlider[idx] = { ...assets.heroSlider[idx], src: filePath };
+      } else {
+        if (assets.heroSlider.length >= 8) {
+          await deletePhysical(filePath);
+          return res.status(400).json({ error: 'Hero slider is limited to 8 slides.' });
+        }
+        assets.heroSlider.push({
+          src: filePath,
+          titleEn: labelEn, titleEs: labelEs,
+          kickerEn: '', kickerEs: '',
+          descEn: '', descEs: '',
+        });
+      }
+      break;
+    }
     case 'lounge': {
       if (!Array.isArray(assets.lounge)) assets.lounge = [];
       const idx = parseInt(slot, 10);
@@ -479,6 +504,17 @@ router.delete('/assets/:section', auth, async (req, res) => {
       if (target) {
         assets.gallery = assets.gallery.filter(img => img.src !== filePath);
         await deletePhysical(filePath);
+      }
+      break;
+    }
+    case 'heroSlider': {
+      // Body: { slot: index } — remove one slide from the hero slider.
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && Array.isArray(assets.heroSlider) && assets.heroSlider[idx]) {
+        const old = assets.heroSlider[idx].src;
+        // Seeded slides share gallery files — see the upload case above.
+        if (old && old.includes('heroSlider')) await deletePhysical(old);
+        assets.heroSlider.splice(idx, 1);
       }
       break;
     }

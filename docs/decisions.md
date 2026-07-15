@@ -200,3 +200,33 @@ Save PATCHes the full `translations` section (mirrors `TextContentSection`).
 placeholders, state strings) that have no on-screen anchor.
 **Note:** `.yb-em { pointer-events:auto }` under `body.yb-editing` re-enables clicks inside
 non-interactive parents (e.g. the hero wordmark uses `pointer-events:none` for its scroll-fade).
+
+### ADR-11 — Hero: expanding-card slider replaces scroll-scrub video
+The scrub-video hero (pin + ScrollTrigger, ADR-8.2/8.3) is replaced by an auto-advancing
+"expanding card" slider (branch `hero-new-animation`): upcoming-slide cards sit bottom-right;
+every 6s (or on arrow/card click) the target card's image expands from its card rect to fill
+the viewport (manual FLIP via a single `.hs-expander` layer animated with GSAP) and becomes
+the new background. Reverse (prev) shrinks the current background back into the first card.
+- **Slides are CMS-driven:** new `assets.heroSlider` array (max 8) — `{ src, kickerEn/Es,
+  titleEn/Es, descEn/Es }` — managed in Media Manager → Hero (add/replace/delete/reorder +
+  bilingual copy). Server: `heroSlider` cases in `server/routes/cms.js` (POST slot=index
+  replaces image, no slot appends; DELETE body.slot removes; PATCH replaces whole array).
+- **Shared-file guard:** seeded slides reference existing gallery Storage files; upload/delete
+  only calls `deletePhysical` when the old path contains `heroSlider`, so replacing a seeded
+  slide never deletes a gallery image.
+- **Brand block is static:** left side shows only YUMA BAY + "Eco Lodge & Residences"
+  (t.hero.title/titleEm/tagline) — it does not change with slides. No CTA button.
+- **Autoplay decode guard:** the interval skips a tick until the next card's `<img>` is
+  decoded (`complete && naturalWidth > 0`) — prevents expanding to a black background on
+  slow networks. Card images load eagerly (no `loading="lazy"`).
+- **Navbar reveal:** Hero now dispatches `yb-hero-progress = 1` once on mount (no scrub), so
+  the header is visible immediately on Home. Navbar listener unchanged.
+- **Mobile (≤900px):** arrows/progress/counter hidden (`.hs-ui{display:none}`); cards +
+  brand block only.
+- Old `assets.hero.{video,poster}` data and server cases are retained (poster still used by
+  the Preloader), but the CMS Hero tab now manages only `heroSlider`.
+
+### ADR-11.1 — Vite 8 peer-dep fix
+Clean `npm install` in `client/` failed (ERESOLVE): `vite ^8.0.16` with
+`@vitejs/plugin-react ^4.3.1` (peer allows vite ≤7). Bumped `@vitejs/plugin-react` → `^6.0.3`
+(peer `vite ^8.0.0`). No `--legacy-peer-deps` needed anymore.
