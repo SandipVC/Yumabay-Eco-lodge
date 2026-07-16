@@ -135,3 +135,20 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 - [x] Mobile: slider UI row hidden; cards + brand only.
 - [x] Autoplay image-decode guard (no black background on slow networks).
 - [x] `@vitejs/plugin-react` ^4 → ^6 — clean `npm install` works with vite 8. (ADR-11.1)
+
+## Done — deployment-and-ui-fixes (2026-07-16)
+- [x] Prevent `app.listen()` from running during Firebase Cloud Functions codebase discovery/deployment by checking `isMain`. (ADR-12)
+- [x] Restore scroll-linked Navbar reveal on Home by listening to scroll position directly in `Navbar.jsx` instead of relying on `yb-hero-progress` event. (ADR-13)
+- [x] Refine Hero Section UI/UX layout, spacing, alignment, bottom gradient, localized logo glow, and animations to luxury brand standards. (ADR-14)
+- [x] Refactor Hero to remove thumbnails cards, disable Ken Burns zoom animation, implement a traditional Right -> Left horizontal sliding transition, center-align the brand logo/glow block at the bottom-center, replace progress pagination with modern centered dots, and implement static reference brand text proportions. (ADR-15)
+- [x] Refine Preloader layout: remove percentage text, increase YUMA BAY title font size, scale up logo height, and optimize vertical spacing. (ADR-16)
+
+
+
+
+
+
+
+
+
+

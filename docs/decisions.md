@@ -230,3 +230,43 @@ the new background. Reverse (prev) shrinks the current background back into the 
 Clean `npm install` in `client/` failed (ERESOLVE): `vite ^8.0.16` with
 `@vitejs/plugin-react ^4.3.1` (peer allows vite ≤7). Bumped `@vitejs/plugin-react` → `^6.0.3`
 (peer `vite ^8.0.0`). No `--legacy-peer-deps` needed anymore.
+
+### ADR-12 — Prevent server listening during Functions discovery/deployment
+During `firebase deploy`, the Firebase CLI imports `server/index.js` locally to discover exported Cloud Functions. Because neither `process.env.FIREBASE_CONFIG` nor `process.env.FUNCTIONS_EMULATOR` are set during local discovery, the Express app previously invoked `app.listen()`, binding to the CLI's discovery port and causing a `Timeout after 10000` (10 seconds) deployment failure.
+**Decision:** Check if `index.js` is run directly by comparing `import.meta.url` with the file URL of the entrypoint `process.argv[1]`. `app.listen()` is only called if it is the main module (`isMain === true`). This prevents the server from listening during import/deployment discovery.
+
+### ADR-13 — Scroll-linked Navbar reveal on Home
+With the removal of the hero video scrub (ADR-11), the `yb-hero-progress` event was no longer dispatched based on scroll. This caused the header to stay visible on the home page at scroll=0, instead of hiding and sliding down as the user scrolls.
+**Decision:** Remove the `yb-hero-progress` event listener/dispatch completely. Instead, in `Navbar.jsx`, calculate scroll progress directly in the scroll listener on the Home page (`window.scrollY >= window.innerHeight * 0.98`) to dynamically set `heroDone` and control `.nav-hidden` class activation. This restores the exact original scroll-linked header reveal behavior on Home while keeping it fully decoupled from the Hero component.
+
+### ADR-14 — Hero Section UI/UX Refinement
+To elevate the hero section of the Yuma Bay website to match luxury brand standards (e.g. Aman, Four Seasons) without changing the core design language.
+**Decision:**
+- **Alignment & Grid:** Implemented a unified layout grid padding (96px desktop, 64px tablet, 24px mobile).
+- **Logo Block & Gallery Baseline:** Raised the logo/title block (`.hs-content`) and the gallery cards (`.hs-cards`) to align their baselines perfectly at `bottom: 128px` (desktop), reducing the gap between title and tagline to 8px.
+- **Bottom Gradient & Overlay:** Reduced `.hero-fade` height to 38% and softened the color curve to reveal more of the pool and architecture. Added multi-gradient `.hero-overlay` with linear top shadow (nav legibility) and radial dark vignette/center wash using the `--ink` color (`rgba(10,30,38,...)`) to subtly reduce contrast and visual prominence of the "Welcome to Yuma Bay" sign.
+- **Localized Logo Glow:** Added a soft, horizontally stretched white radial gradient backdrop (`ellipse at center`) behind the logo block (`.hs-content::before`) extending `140px` horizontally (`inset: -64px -140px`) on both desktop and mobile. This ensures complete legibility for the full width of the dark teal `YUMA BAY` logo text (specifically the word `BAY` on the right side) against any dark background components such as shadows or foliage.
+- **Unified Navigation:** Restructured `.hs-ui` into a single unified pagination bar with arrows on the left, counter (`04 / 08`) in the middle, and a thin `1px` progress bar expanding to the right grid margin.
+- **Mobile Stacked Layout:** Repositioned the layout on mobile (<=768px) into a clean vertical flow where the gallery becomes horizontally scrollable (overflow hidden scrollbar) and the unified navigation bar moves below the gallery.
+- **Animations:** Added fade-in and 20px upward motion on the logo, fade-in and scale 0.98 -> 1.00 on the gallery cards, and fade-in on the navigation. Added a subtle scroll-linked parallax to the active background image.
+
+### ADR-15 — Traditional Horizontal Slide Carousel
+To replace the expanding-card FLIP transition with a classic horizontal sliding transition for the background photos, while removing the upcoming-slide card thumbnails.
+**Decision:**
+- **Remove Cards:** Completely removed the `.hs-cards` and `.hs-card` thumbnail elements from the JSX and CSS, allowing the full width of the screen to focus on the architecture and pool.
+- **Traditional Slide Transitions:** Refactored the slider to render all slides absolute-positioned. Configured GSAP to animate transitions in a traditional Right-to-Left (exit left/enter right) direction for next, and Left-to-Right (exit right/enter left) for prev.
+- **Minimal Navigation Dots:** Replaced the pagination bar (arrows, counter, and progress line) with centered minimal dot indicators at the bottom. Active dot expands into a modern `24px` horizontal pill using CSS transition logic, while clicking dots triggers direct sliding navigation in the correct directional flow.
+- **Centered Brand Logo & Glow:** Positioned the logo block (`.hs-content`) and its pseudo-element white radial glow in the bottom-center of the screen (`left: 50%`, `transform: translateX(-50%)`, `bottom: 128px`), centered all internal text, and offset the letter-spacing on the tagline (`margin-right: -.34em`) to ensure mathematical centering.
+- **Static Brand Layout & Proportions:** Replaced dynamic text switching with static luxury text (`YUMA BAY / CLUB LOUNGE / CARRIBEAN / EXCLUSIVE LIVING. ENDLESS HORIZONS.`) matching the reference image proportions and colors (#0F3C5F Navy and #C5A880 Gold) exactly. Spelled `CARRIBEAN` to match reference text, scaled up font-sizes, and restricted the entrance animations to mount-only so the text layer remains completely static and calm when background slide images change.
+- **Remove Ken Burns Animation:** Removed the `hs-kenburns` zoom keyframes and animation from `.hs-bg-img` to present a calm, clean, static image during idle states.
+
+### ADR-16 — Preloader Screen Refinements
+To polish the preloader/loading screen to match luxury visual identity guidelines.
+**Decision:**
+- **Remove Percentage:** Removed `<div className="preloader-percentage">{percent}%</div>` to present a cleaner, less cluttered interface.
+- **Enlarge Logo & Title:** Increased the palm tree logo scale to `clamp(64px, 16vw, 96px)` and the "YUMA BAY" title font size to `clamp(36px, 10vw, 56px)`.
+- **Refine Spacing:** Increased the space between the logo and the title block (`margin-bottom: 24px` on logo wrap), tightened the gap inside the text block (`gap: 8px` on preloader content) to keep title/tagline closely grouped, and increased the distance to the progress bar (`margin-top: 48px`).
+
+
+
+

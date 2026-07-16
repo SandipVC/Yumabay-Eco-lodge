@@ -113,10 +113,24 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Navbar reveal: hero dispatches `yb-hero-progress = 1` on mount (no scrub anymore) | `Hero.jsx` | ADR-11 |
 | `@vitejs/plugin-react` ^4 → ^6 (clean install with vite 8, no `--legacy-peer-deps`) | `client/package.json` | ADR-11.1 |
 
+### Deployment & UI Fixes (2026-07-16)
+
+| Change | Files | ADR |
+|---|---|---|
+| Fix deployment timeout: prevent `app.listen()` from running during functions discovery/deployment by checking `isMain` | `server/index.js` | ADR-12 |
+| Restore scroll-linked Navbar reveal on Home: check scroll position in `Navbar.jsx` instead of using `yb-hero-progress` event | `Navbar.jsx`, `Hero.jsx` | ADR-13 |
+| Refine Hero Section UI/UX layout, spacing, alignment, bottom gradient, localized logo glow, and animations to luxury brand standards | `Hero.jsx`, `global.css` | ADR-14 |
+| Refactor Hero: remove thumbnails cards, disable Ken Burns zoom animation, implement a traditional Right -> Left horizontal sliding transition, center-align the brand logo/glow block at the bottom-center, replace progress pagination with modern centered dots, and implement static reference brand text proportions | `Hero.jsx`, `global.css` | ADR-15 |
+| Refine Preloader layout: remove percentage text, increase YUMA BAY title font size, scale up logo height, and optimize vertical spacing | `Preloader.jsx`, `Preloader.css` | ADR-16 |
+
+
+
 ### What's next
 
-Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
-Merge `hero-new-animation` → `main` after client reviews the new hero slider.
+- Run `firebase deploy --only hosting,functions` to verify that the deployment completes without timeouts.
+- Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
+- Merge `hero-new-animation` → `main` after client reviews the new hero slider.
+
 
 **Note:** The hero scrub video iOS/Android buffering bug and touch-scroll keyframing issue have both been fully resolved. The video was re-encoded with `-movflags +faststart` and `-g 1`, and `Hero.jsx` was updated with `autoPlay` and a `touchstart` unlocker.
 

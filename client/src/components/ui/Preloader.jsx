@@ -13,8 +13,11 @@ export default function Preloader() {
   const [isDestroyed, setIsDestroyed] = useState(false);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const isDebug = params.has('debug-preloader') || window.location.hash === '#debug-preloader';
+
     // Check session storage first
-    if (sessionStorage.getItem('yb_preloader_shown')) {
+    if (sessionStorage.getItem('yb_preloader_shown') && !isDebug) {
       setIsDestroyed(true);
       return;
     }
@@ -46,7 +49,7 @@ export default function Preloader() {
 
     if (uniqueImages.length === 0) {
       setPercent(100);
-      triggerFadeOut();
+      if (!isDebug) triggerFadeOut();
       return;
     }
 
@@ -59,7 +62,7 @@ export default function Preloader() {
       setPercent(currentPercent);
 
       if (loadedCount >= total) {
-        triggerFadeOut();
+        if (!isDebug) triggerFadeOut();
       }
     };
 
@@ -96,7 +99,6 @@ export default function Preloader() {
         <div className="preloader-progress-container">
           <div className="preloader-progress-bar" style={{ width: `${percent}%` }} />
         </div>
-        <div className="preloader-percentage">{percent}%</div>
       </div>
     </div>
   );
