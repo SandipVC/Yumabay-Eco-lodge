@@ -26,7 +26,7 @@ export const en = {
     label: 'About the Project',
     title: 'Where the\nBahia meets',
     titleEm: 'paradise',
-    body: 'Combines the freedom of Caribbean living with European quality standards, refined design, and effortless international connectivity.\n\nNestled along the untouched coastline of Boca de Yuma, it is a place where the rhythm of the sea, tropical nature, and modern comfort exist in perfect harmony. Designed for those seeking peace, beauty, and authenticity, Yuma Bay invites you to slow down, reconnect, and let the soul unwind.\n\nNatural materials, timeless architecture, and carefully curated spaces create an atmosphere of relaxed luxury and conscious living. From ocean-inspired residences to the exclusive Club Lounge experience, every detail reflects a lifestyle shaped by elegance, simplicity, and connection.',
+    body: 'A private coastal retreat where Caribbean freedom meets European refinement. Nestled along the untouched shores of Boca de Yuma, Yuma Bay is designed for those who seek beauty, stillness, and intention.\n\nTimeless architecture, natural materials, and curated ocean-view residences create a life shaped by simplicity and grace. Every detail quietly reflects a commitment to living well.',
     stat1Num: '222',
     stat1Lbl: 'm² Villas',
     stat2Num: '2',

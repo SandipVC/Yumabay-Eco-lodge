@@ -26,7 +26,7 @@ export const es = {
     label: 'Sobre el Proyecto',
     title: 'Donde la Bahía\nse encuentra con',
     titleEm: 'el paraíso',
-    body: 'Yuma Bay & Club Lounge combina la libertad de la vida caribeña con estándares europeos de calidad, diseño refinado y una conectividad internacional excepcional.\n\nUbicado en la costa virgen de Boca de Yuma, es un lugar donde el ritmo del mar, la naturaleza tropical y el confort moderno conviven en perfecta armonía. Creado para quienes buscan tranquilidad, belleza y autenticidad, Yuma Bay invita a desconectar, respirar profundamente y dejar que el alma encuentre calma.\n\nMateriales naturales, arquitectura atemporal y espacios cuidadosamente diseñados crean una atmósfera de lujo relajado y vida consciente. Desde residencias inspiradas en el océano hasta la experiencia exclusiva del Club Lounge, cada detalle refleja un estilo de vida definido por la elegancia, la simplicidad y la conexión con la naturaleza.',
+    body: 'Un refugio costero privado donde la libertad caribeña se encuentra con el refinamiento europeo. Enclavado en las orillas vírgenes de Boca de Yuma, Yuma Bay está diseñado para quienes buscan belleza, quietud e intención.\n\nArquitectura atemporal, materiales naturales y residencias con vistas al océano crean una vida moldeada por la simplicidad y la gracia. Cada detalle refleja silenciosamente un compromiso con el buen vivir.',
     stat1Num: '222',
     stat1Lbl: 'm² Villas',
     stat2Num: '2',

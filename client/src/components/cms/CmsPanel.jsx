@@ -6,7 +6,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { useAssets, invalidateAssetsCache } from '../../hooks/useAssets.js';
 import { useLang } from '../../context/LanguageContext.jsx';
 import SiteMapZoneEditor from './SiteMapZoneEditor.jsx';
-
+import MediaLibraryPicker from './MediaLibraryPicker.jsx';
 // ── Constants ─────────────────────────────────────────────────────────────────
 
 // Must match the order of property cards in translations (en.js / es.js → properties.items)
@@ -79,6 +79,23 @@ async function uploadFile({ file, section, slot, labelEn, labelEs, cat, token })
   return res.json();
 }
 
+async function reuseAsset({ url, section, slot, labelEn, labelEs, cat, token }) {
+  const body = { url, labelEn, labelEs, cat };
+  const res = await fetch(`/api/cms/reuse-asset/${section}${slot != null ? `/${slot}` : ''}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(() => ({}));
+    throw new Error(e.error || 'Reuse failed');
+  }
+  return res.json();
+}
+
 async function deleteAsset({ section, filePath, slot, propIdx, imgIdx, token }) {
   const body = { path: filePath, slot };
   if (propIdx != null) body.propIdx = propIdx;
@@ -118,7 +135,7 @@ async function patchSection({ section, data, token }) {
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 /** Single asset thumbnail with overlay delete / replace button */
-function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
+function AssetThumb({ src, label, onDelete, onReplace, onReuse, replacing }) {
   const fileRef = useRef();
   const { t } = useLang();
   const c = t.dashboard;
@@ -167,6 +184,16 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
               onChange={e => { if (e.target.files[0]) onReplace(e.target.files[0]); }} />
           </>
         )}
+        {onReuse && (
+          <button
+            className="cms-thumb-btn cms-thumb-reuse"
+            onClick={onReuse}
+            disabled={replacing}
+            title="Choose from Library"
+          >
+            Library
+          </button>
+        )}
         {onDelete && (
           <button className="cms-thumb-btn cms-thumb-del" onClick={onDelete} title={c.cmsRemove}>
             {c.cmsRemoveBtn}
@@ -179,7 +206,7 @@ function AssetThumb({ src, label, onDelete, onReplace, replacing }) {
 }
 
 /** Hero section — expanding-card slider slides (image + bilingual copy each) */
-function HeroSection({ assets, token, refresh }) {
+function HeroSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy,   setBusy]   = useState({});
@@ -212,10 +239,14 @@ function HeroSection({ assets, token, refresh }) {
   const replaceImage = (idx, file) => withBusy(idx, () =>
     uploadFile({ file, section: 'heroSlider', slot: idx, token }));
 
-  const removeSlide = (idx) => {
-    if (!confirm(c.cmsHeroRemoveConfirm)) return;
-    withBusy(idx, () => deleteAsset({ section: 'heroSlider', slot: String(idx), token }));
-  };
+  const handleReuse = (idx, url) => withBusy(idx, () =>
+    reuseAsset({ url, section: 'heroSlider', slot: idx, token }));
+
+  const handleReuseAdd = (url) => withBusy('add', () =>
+    reuseAsset({ url, section: 'heroSlider', slot: 'add', token }));
+
+  const deleteSlide = idx => withBusy(idx, () =>
+    deleteAsset({ section: 'heroSlider', slot: idx, token }));
 
   const move = async (idx, dir) => {
     const next = [...slides];
@@ -267,7 +298,8 @@ function HeroSection({ assets, token, refresh }) {
               src={slide.src}
               replacing={busy[idx]}
               onReplace={file => replaceImage(idx, file)}
-              onDelete={() => removeSlide(idx)}
+              onReuse={() => openPicker(url => handleReuse(idx, url))}
+              onDelete={() => deleteSlide(idx)}
             />
             <div className="cms-hero-fields">
               {FIELDS.map(([key, label]) => (
@@ -296,18 +328,28 @@ function HeroSection({ assets, token, refresh }) {
       </div>
 
       {slides.length < 8 && (
-        <label className={`cms-upload-btn${busy.add ? ' loading' : ''}`}>
-          {busy.add ? c.cmsUploadingDots : c.cmsHeroAddSlide}
-          <input type="file" accept="image/*" style={{ display: 'none' }}
-            onChange={e => { if (e.target.files[0]) addSlide(e.target.files[0]); e.target.value = ''; }} />
-        </label>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <label className={`cms-upload-btn${busy.add ? ' loading' : ''}`}>
+            {busy.add ? c.cmsUploadingDots : c.cmsHeroAddSlide}
+            <input type="file" accept="image/*" style={{ display: 'none' }}
+              onChange={e => { if (e.target.files[0]) addSlide(e.target.files[0]); e.target.value = ''; }} />
+          </label>
+          <button
+            type="button"
+            className="cms-upload-btn"
+            disabled={busy.add}
+            onClick={() => openPicker(url => handleReuseAdd(url))}
+          >
+            Library
+          </button>
+        </div>
       )}
     </div>
   );
 }
 
-/** Branding section — single site logo (header / footer / preloader / favicon) */
-function BrandingSection({ assets, token, refresh }) {
+/** Branding section — Logo */
+function BrandingSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy, setBusy] = useState(false);
@@ -317,6 +359,15 @@ function BrandingSection({ assets, token, refresh }) {
     setBusy(true); setErr(null);
     try {
       await uploadFile({ file, section: 'branding', slot: 'logo', token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(false); }
+  }
+
+  async function handleReuse(url) {
+    setBusy(true); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'branding', slot: 'logo', token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusy(false); }
@@ -343,9 +394,10 @@ function BrandingSection({ assets, token, refresh }) {
           <p className="cms-slot-label">{c.cmsBrandingLogo}</p>
           <AssetThumb
             src={logo || 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media'}
-            label={logo ? '' : c.cmsBrandingDefault}
+            label={c.cmsBrandingLogo}
             replacing={busy}
             onReplace={file => handleUpload(file)}
+            onReuse={() => openPicker(url => handleReuse(url))}
             onDelete={logo ? () => handleDelete() : null}
           />
           <label className={`cms-upload-btn${busy ? ' loading' : ''}`}>
@@ -360,7 +412,7 @@ function BrandingSection({ assets, token, refresh }) {
 }
 
 /** About section — main + accent image slots */
-function AboutSection({ assets, token, refresh }) {
+function AboutSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy, setBusy] = useState({});
@@ -370,6 +422,15 @@ function AboutSection({ assets, token, refresh }) {
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await uploadFile({ file, section: 'about', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [slot]: false })); }
+  }
+
+  async function handleReuse(slot, url) {
+    setBusy(b => ({ ...b, [slot]: true })); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'about', slot, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusy(b => ({ ...b, [slot]: false })); }
@@ -401,6 +462,7 @@ function AboutSection({ assets, token, refresh }) {
               src={assets?.about?.[key]}
               replacing={busy[key]}
               onReplace={file => handleUpload(key, file)}
+              onReuse={() => openPicker(url => handleReuse(key, url))}
               onDelete={assets?.about?.[key] ? () => handleDelete(key) : null}
             />
             <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
@@ -416,7 +478,7 @@ function AboutSection({ assets, token, refresh }) {
 }
 
 /** Properties section — multi-image gallery per property, fully CMS-managed */
-function PropertiesSection({ assets, token, refresh }) {
+function PropertiesSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   // busy key: `${propIdx}` for add-upload, `${propIdx}-${imgIdx}` for replace, `del-${propIdx}-${imgIdx}` for delete
@@ -457,11 +519,31 @@ function PropertiesSection({ assets, token, refresh }) {
     finally { setBusyKey(key, false); }
   }
 
+  async function handleReuseAdd(propIdx, url) {
+    const key = `${propIdx}`;
+    setBusyKey(key, true); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'propertyImages', slot: propIdx, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusyKey(key, false); }
+  }
+
   async function handleReplace(propIdx, imgIdx, file) {
     const key = `${propIdx}-${imgIdx}`;
     setBusyKey(key, true); setErr(null);
     try {
       await uploadFile({ file, section: 'propertyImages', slot: `${propIdx}-${imgIdx}`, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusyKey(key, false); }
+  }
+
+  async function handleReuse(propIdx, imgIdx, url) {
+    const key = `${propIdx}-${imgIdx}`;
+    setBusyKey(key, true); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'propertyImages', slot: `${propIdx}-${imgIdx}`, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusyKey(key, false); }
@@ -569,6 +651,7 @@ function PropertiesSection({ assets, token, refresh }) {
                       src={src}
                       replacing={busy[`${propIdx}-${imgIdx}`]}
                       onReplace={file => handleReplace(propIdx, imgIdx, file)}
+                      onReuse={() => openPicker(url => handleReuse(propIdx, imgIdx, url))}
                       onDelete={() => handleDelete(propIdx, imgIdx, name)}
                     />
                     {busy[`del-${propIdx}-${imgIdx}`] && (
@@ -580,19 +663,34 @@ function PropertiesSection({ assets, token, refresh }) {
                 ))}
 
                 {/* Add new image slot */}
-                <label style={{
+                <div style={{
                   width: 140, height: 100, display: 'flex', flexDirection: 'column',
-                  alignItems: 'center', justifyContent: 'center', gap: 6,
-                  border: '1.5px dashed rgba(201,168,76,.35)', borderRadius: 4,
-                  cursor: addBusy ? 'not-allowed' : 'pointer',
-                  color: addBusy ? 'rgba(255,255,255,.3)' : 'rgba(201,168,76,.7)',
-                  fontSize: 11, background: 'rgba(201,168,76,.04)', transition: 'border-color .2s',
+                  alignItems: 'stretch', gap: 4
                 }}>
-                  <span style={{ fontSize: 22, lineHeight: 1 }}>{addBusy ? '…' : '+'}</span>
-                  <span>{addBusy ? c.cmsUploadingDots : c.cmsPropAddImage}</span>
-                  <input type="file" accept="image/*" style={{ display: 'none' }} disabled={addBusy}
-                    onChange={e => { if (e.target.files[0]) handleAdd(propIdx, e.target.files[0]); }} />
-                </label>
+                  <label style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    border: '1.5px dashed rgba(201,168,76,.35)', borderRadius: 4,
+                    cursor: addBusy ? 'not-allowed' : 'pointer',
+                    color: addBusy ? 'rgba(255,255,255,.3)' : 'rgba(201,168,76,.7)',
+                    background: 'rgba(201,168,76,.04)', transition: 'border-color .2s',
+                  }}>
+                    <span style={{ fontSize: 22, lineHeight: 1 }}>{addBusy ? '…' : '+'}</span>
+                    <input type="file" accept="image/*" style={{ display: 'none' }} disabled={addBusy}
+                      onChange={e => { if (e.target.files[0]) handleAdd(propIdx, e.target.files[0]); e.target.value = ''; }} />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => openPicker(url => handleReuseAdd(propIdx, url))}
+                    disabled={addBusy}
+                    style={{
+                      background: 'rgba(255,255,255,.05)', border: '1px solid rgba(255,255,255,.1)',
+                      color: 'rgba(255,255,255,.6)', fontSize: 10, padding: '4px', borderRadius: 4,
+                      cursor: 'pointer', textTransform: 'uppercase', letterSpacing: '.05em'
+                    }}
+                  >
+                    Library
+                  </button>
+                </div>
               </div>
             </div>
           );
@@ -992,7 +1090,7 @@ function GallerySection({ assets, token, refresh }) {
 }
 
 /** Lounge section — 4 indexed slots */
-function LoungeSection({ assets, token, refresh }) {
+function LoungeSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy, setBusy] = useState({});
@@ -1002,6 +1100,15 @@ function LoungeSection({ assets, token, refresh }) {
     setBusy(b => ({ ...b, [idx]: true })); setErr(null);
     try {
       await uploadFile({ file, section: 'lounge', slot: idx, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [idx]: false })); }
+  }
+
+  async function handleReuse(idx, url) {
+    setBusy(b => ({ ...b, [idx]: true })); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'lounge', slot: idx, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusy(b => ({ ...b, [idx]: false })); }
@@ -1029,6 +1136,7 @@ function LoungeSection({ assets, token, refresh }) {
               src={assets?.lounge?.[idx]}
               replacing={busy[idx]}
               onReplace={file => handleUpload(idx, file)}
+              onReuse={() => openPicker(url => handleReuse(idx, url))}
               onDelete={assets?.lounge?.[idx] ? () => handleDelete(idx) : null}
             />
             <label className={`cms-upload-btn${busy[idx] ? ' loading' : ''}`}>
@@ -1095,7 +1203,7 @@ function PdfSlot({ label, hint, src, busy, onReplace, onDelete }) {
 }
 
 /** Decor section — decorative band patterns & palm overlays */
-function DecorSection({ assets, token, refresh }) {
+function DecorSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy, setBusy] = useState({});
@@ -1105,6 +1213,15 @@ function DecorSection({ assets, token, refresh }) {
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await uploadFile({ file, section: 'decor', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [slot]: false })); }
+  }
+
+  async function handleReuse(slot, url) {
+    setBusy(b => ({ ...b, [slot]: true })); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'decor', slot, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusy(b => ({ ...b, [slot]: false })); }
@@ -1138,6 +1255,7 @@ function DecorSection({ assets, token, refresh }) {
               src={assets?.decor?.[key]}
               replacing={busy[key]}
               onReplace={file => handleUpload(key, file)}
+              onReuse={() => openPicker(url => handleReuse(key, url))}
               onDelete={assets?.decor?.[key] ? () => handleDelete(key) : null}
             />
             <label className={`cms-upload-btn${busy[key] ? ' loading' : ''}`}>
@@ -1153,7 +1271,7 @@ function DecorSection({ assets, token, refresh }) {
 }
 
 /** Site Map section — backdrop, plan image + downloadable PDFs */
-function SiteMapSection({ assets, token, refresh }) {
+function SiteMapSection({ assets, token, refresh, openPicker }) {
   const { t } = useLang();
   const c = t.dashboard;
   const [busy, setBusy] = useState({});
@@ -1163,6 +1281,15 @@ function SiteMapSection({ assets, token, refresh }) {
     setBusy(b => ({ ...b, [slot]: true })); setErr(null);
     try {
       await uploadFile({ file, section: 'sitemap', slot, token });
+      invalidateAssetsCache(); refresh();
+    } catch (e) { setErr(e.message); }
+    finally { setBusy(b => ({ ...b, [slot]: false })); }
+  }
+
+  async function handleReuse(slot, url) {
+    setBusy(b => ({ ...b, [slot]: true })); setErr(null);
+    try {
+      await reuseAsset({ url, section: 'sitemap', slot, token });
       invalidateAssetsCache(); refresh();
     } catch (e) { setErr(e.message); }
     finally { setBusy(b => ({ ...b, [slot]: false })); }
@@ -1193,6 +1320,7 @@ function SiteMapSection({ assets, token, refresh }) {
             src={sm.backdrop}
             replacing={busy.backdrop}
             onReplace={file => handleUpload('backdrop', file)}
+            onReuse={() => openPicker(url => handleReuse('backdrop', url))}
             onDelete={sm.backdrop ? () => handleDelete('backdrop', 'backdrop image') : null}
           />
           <label className={`cms-upload-btn${busy.backdrop ? ' loading' : ''}`}>
@@ -1207,6 +1335,7 @@ function SiteMapSection({ assets, token, refresh }) {
             src={sm.planImage}
             replacing={busy.planImage}
             onReplace={file => handleUpload('planImage', file)}
+            onReuse={() => openPicker(url => handleReuse('planImage', url))}
             onDelete={sm.planImage ? () => handleDelete('planImage', 'plan image') : null}
           />
           <label className={`cms-upload-btn${busy.planImage ? ' loading' : ''}`}>
@@ -1425,11 +1554,12 @@ function FontsSection({ assets, token, refresh }) {
 
 export default function CmsPanel({ token }) {
   const [activeSection, setActiveSection] = useState('gallery');
+  const [pickerCallback, setPickerCallback] = useState(null);
   const { assets, loading, error, refresh } = useAssets();
   const { t } = useLang();
   const c = t.dashboard;
 
-  const sectionProps = { assets, token, refresh };
+  const sectionProps = { assets, token, refresh, openPicker: cb => setPickerCallback(() => cb) };
 
   return (
     <div className="cms-panel">
@@ -1466,6 +1596,17 @@ export default function CmsPanel({ token }) {
           </>
         )}
       </div>
+
+      {pickerCallback && (
+        <MediaLibraryPicker
+          token={token}
+          onPick={url => {
+            pickerCallback(url);
+            setPickerCallback(null);
+          }}
+          onCancel={() => setPickerCallback(null)}
+        />
+      )}
     </div>
   );
 }

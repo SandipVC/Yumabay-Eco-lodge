@@ -174,9 +174,13 @@ const SplitText = ({
     return (
       // key={text}: when the copy changes (CMS load / language toggle) remount a
       // fresh node so GSAP SplitText re-splits clean markup instead of stale spans.
-      <Tag key={text} ref={ref} style={style} className={classes}>
-        {text}
-      </Tag>
+      <Tag 
+        key={text} 
+        ref={ref} 
+        style={style} 
+        className={classes} 
+        dangerouslySetInnerHTML={{ __html: text }} 
+      />
     );
   };
   return renderTag();

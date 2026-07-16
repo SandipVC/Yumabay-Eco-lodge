@@ -167,11 +167,15 @@ export default function Hero() {
   // Staggered text animation on mount
   useEffect(() => {
     if (reduced) return;
-    const content = contentRef.current;
-    if (content) {
-      gsap.fromTo(content.children,
-        { y: 15, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out' });
+    const contentTop = contentRef.current;
+    if (contentTop) {
+      // Find all elements with hs-anim class within the parent section to stagger them
+      const anims = sectionRef.current?.querySelectorAll('.hs-anim');
+      if (anims) {
+        gsap.fromTo(anims,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out' });
+      }
     }
   }, [reduced]);
 
@@ -225,14 +229,22 @@ export default function Hero() {
       <div className="hero-overlay" />
       <div className="hero-fade" />
 
+      {/* Top blur strip */}
+      <div className="hs-blur-top" />
+      {/* Bottom blur strip */}
+      <div className="hs-blur-bottom" />
+
       {/* Static brand block — does NOT change with the slides */}
-      <div className="hs-content" ref={contentRef}>
-        <span className="hs-brand-name">YUMA BAY</span>
-        <h1 className="hs-slide-title">CLUB LOUNGE</h1>
-        <div className="hs-slide-kicker">
+      <div className="hs-content-top" ref={contentRef}>
+        <span className="hs-brand-name hs-anim">YUMA BAY</span>
+        <h1 className="hs-slide-title hs-anim">CLUB LOUNGE</h1>
+        <div className="hs-slide-kicker hs-anim">
           <span>CARRIBEAN</span>
         </div>
-        <p className="hs-slide-desc">EXCLUSIVE LIVING. ENDLESS HORIZONS.</p>
+      </div>
+      
+      <div className="hs-content-bottom">
+        <p className="hs-slide-desc hs-anim">EXCLUSIVE LIVING. ENDLESS HORIZONS.</p>
       </div>
 
       {slides.length > 1 && (
