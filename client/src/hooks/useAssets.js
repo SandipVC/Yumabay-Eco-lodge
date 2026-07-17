@@ -7,6 +7,7 @@
  * Shape of assets:
  * {
  *   hero:       { video, poster },
+ *   heroSlider: [ { src, kickerEn, kickerEs, titleEn, titleEs, descEn, descEs }, ... ],  // max 8 slides
  *   about:      { main, accent },
  *   properties: [ "/images/...", ... ],   // 5 slots indexed 0-4 (preload hints)
  *   propertyImages: [ [ "/images/..." ], ... ],  // per-property galleries (5 lists)

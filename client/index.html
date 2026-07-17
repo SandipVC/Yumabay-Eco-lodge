@@ -3,7 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="color-scheme" content="dark" />
+    <!-- Site is light-themed (drishti-new-design). "only light" also opts the
+         page out of Chromium/Brave forced-dark ("Night Mode") inversion. -->
+    <meta name="color-scheme" content="only light" />
     <title>Yuma Bay — Eco Lodge &amp; Residences | Boca de Yuma, Dominican Republic</title>
     <meta name="description" content="Yuma Bay Eco Lodge &amp; Residences — luxury villas, apartments, and bungalows in Boca de Yuma, Dominican Republic. Private pools, beach club, and Caribbean living." />
     <meta name="keywords" content="Yuma Bay, Boca de Yuma, Dominican Republic, eco lodge, villas, apartments, beach club, Caribbean real estate" />
@@ -21,11 +23,40 @@
     <link rel="preload" href="/font/Merzalina/Merzalina-Regular.otf" as="font" type="font/otf" crossorigin />
     <link rel="preload" href="/font/Aptos/Aptos-Narrow.ttf" as="font" type="font/ttf" crossorigin />
 
+    <!-- Optional CMS-selectable fonts (see FONT_OPTIONS in CmsPanel.jsx / --font-heading, --font-body in global.css) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
     <!-- Google Search Console verification (replace with real token) -->
     <meta name="google-site-verification" content="REPLACE_WITH_YOUR_GSC_VERIFICATION_TOKEN" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Apply cached CMS fonts BEFORE React renders — eliminates font flicker.
+         FontSync in App.jsx writes these keys after each CMS fetch. -->
+    <script>
+      (function(){
+        try {
+          var h = localStorage.getItem('yb_font_heading');
+          var b = localStorage.getItem('yb_font_body');
+          var hf = localStorage.getItem('yb_font_heading_file');
+          var bf = localStorage.getItem('yb_font_body_file');
+          var s = document.documentElement.style;
+          if (h) s.setProperty('--font-heading', h);
+          if (b) s.setProperty('--font-body', b);
+          if (hf || bf) {
+            var css = '';
+            if (hf) css += "@font-face{font-family:'CMSHeadingFont';src:url('" + hf + "');font-display:swap}";
+            if (bf) css += "@font-face{font-family:'CMSBodyFont';src:url('" + bf + "');font-display:swap}";
+            var el = document.createElement('style');
+            el.id = 'cms-custom-fonts-cached';
+            el.textContent = css;
+            document.head.appendChild(el);
+          }
+        } catch(e) {}
+      })();
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

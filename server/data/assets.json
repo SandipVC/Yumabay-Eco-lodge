@@ -6,6 +6,53 @@
     "video": null,
     "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2Fhero-dusk.jpg?alt=media"
   },
+  "heroSlider": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_1.png?alt=media",
+      "kickerEn": "Boca de Yuma · Dominican Republic",
+      "kickerEs": "Boca de Yuma · República Dominicana",
+      "titleEn": "Yuma Bay",
+      "titleEs": "Yuma Bay",
+      "descEn": "Eco Lodge & Residences on the untouched southeast coast — where the Yuma River meets the Caribbean Sea.",
+      "descEs": "Eco Lodge & Residencias en la costa sureste virgen — donde el río Yuma se encuentra con el mar Caribe."
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_7.png?alt=media",
+      "kickerEn": "Private Residences",
+      "kickerEs": "Residencias privadas",
+      "titleEn": "Eco Villas",
+      "titleEs": "Eco Villas",
+      "descEn": "Three-bedroom villas with private pools and gardens, a few steps from the shore.",
+      "descEs": "Villas de tres habitaciones con piscinas privadas y jardines, a pocos pasos de la orilla."
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_15.png?alt=media",
+      "kickerEn": "Oceanfront Living",
+      "kickerEs": "Vida frente al mar",
+      "titleEn": "Beach Club",
+      "titleEs": "Club de Playa",
+      "descEn": "A private beach club with infinity pool, bar and direct access to the Caribbean.",
+      "descEs": "Un club de playa privado con piscina infinita, bar y acceso directo al Caribe."
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_13.png?alt=media",
+      "kickerEn": "Resort Amenities",
+      "kickerEs": "Amenidades del resort",
+      "titleEn": "Pool & Gardens",
+      "titleEs": "Piscina y Jardines",
+      "descEn": "Tropical pools and lush gardens woven through the whole resort.",
+      "descEs": "Piscinas tropicales y exuberantes jardines a lo largo de todo el resort."
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media",
+      "kickerEn": "Members & Guests",
+      "kickerEs": "Socios e invitados",
+      "titleEn": "Club Lounge",
+      "titleEs": "Club Lounge",
+      "descEn": "Restaurant, lounge and co-working with panoramic views over the bay.",
+      "descEs": "Restaurante, lounge y co-working con vistas panorámicas a la bahía."
+    }
+  ],
   "about": {
     "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2F1781701241190_R-16.png?alt=media",
     "accent": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FLOCATION_-_GRUND.jpg?alt=media"

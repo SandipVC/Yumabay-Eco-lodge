@@ -33,6 +33,7 @@ export default function SiteMap() {
   const [inlineErrors, setInlineErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState('idle');
 
+  const backdropUrl  = assets?.sitemap?.backdrop || BACKDROP_URL;
   const planImage    = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
   const masterPdf    = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
   const villasPdf    = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
@@ -101,6 +102,7 @@ export default function SiteMap() {
     const errs = {};
     if (inlineForm.name.trim().length < 2) errs.name = lang === 'es' ? 'Nombre requerido' : 'Name is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inlineForm.email)) errs.email = lang === 'es' ? 'Correo inválido' : 'Valid email required';
+    if (inlineForm.phone.trim().length < 7) errs.phone = lang === 'es' ? 'Teléfono inválido' : 'Valid phone required';
     if (inlineForm.message.trim().length < 5) errs.message = lang === 'es' ? 'Mensaje demasiado corto' : 'Message must be at least 5 characters';
     return errs;
   };
@@ -193,7 +195,7 @@ export default function SiteMap() {
 
             {/* Base image — grayscale when map is hovered */}
             <image
-              href={BACKDROP_URL}
+              href={backdropUrl}
               x="0" y="0" width="840" height="480"
               preserveAspectRatio="none"
               style={{
@@ -204,7 +206,7 @@ export default function SiteMap() {
 
             {/* Color reveal — same image clipped to zone rects, fades in on hover */}
             <image
-              href={BACKDROP_URL}
+              href={backdropUrl}
               x="0" y="0" width="840" height="480"
               preserveAspectRatio="none"
               clipPath="url(#sm-zones-clip)"
@@ -368,7 +370,7 @@ export default function SiteMap() {
 
               {submitStatus === 'success' ? (
                 <div className="form-success" style={{ padding: '20px 0', border: 'none' }}>
-                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
+                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: '400' }}>
                     {t.contact?.successTitle || 'Enquiry received!'}
                   </h3>
                   <p style={{ fontSize: '15px', color: 'var(--ink-soft)', lineHeight: '1.7' }}>
@@ -419,6 +421,7 @@ export default function SiteMap() {
                       placeholder={t.contact?.phonePlaceholder || 'Phone (optional)'} 
                       value={inlineForm.phone} onChange={handleInlineChange}
                     />
+                    {inlineErrors.phone && <span className="form-error" style={{ color: 'var(--coral)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{inlineErrors.phone}</span>}
                   </div>
 
                   <div className="form-field">

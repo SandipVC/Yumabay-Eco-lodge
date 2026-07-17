@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import express, { Router } from 'express';
 import multer from 'multer';
 import busboy from 'busboy';
 import sharp from 'sharp';
@@ -119,7 +119,8 @@ async function deletePhysical(filePath) {
     const isCms   = filePath.includes('/images/cms/');
     const isVideo = filePath.startsWith('/video/');
     const isPdf   = filePath.startsWith('/pdf/');
-    if (!isCms && !isVideo && !isPdf) return;
+    const isFont  = filePath.startsWith('/fonts/');
+    if (!isCms && !isVideo && !isPdf && !isFont) return;
     const abs = join(PUBLIC_DIR, filePath);
     if (existsSync(abs)) { try { unlinkSync(abs); } catch {} }
   }
@@ -128,16 +129,22 @@ async function deletePhysical(filePath) {
 // ── Multer storage ────────────────────────────────────────────────────────────
 const isVideoFile = (name) => /\.(mp4|webm|mov)$/i.test(name);
 const isPdfFile   = (name) => /\.pdf$/i.test(name);
+const isFontFile  = (name) => /\.(woff2?|ttf|otf)$/i.test(name);
+
+// Fixed CSS font-family names for CMS-uploaded custom fonts. Must match the
+// names FontSync (client/src/App.jsx) uses when injecting the @font-face rule.
+const CUSTOM_HEADING_FAMILY = 'CMSHeadingFont';
+const CUSTOM_BODY_FAMILY    = 'CMSBodyFont';
 
 // Store files in memory so we can upload them to GCS or save to local disk
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 500 * 1024 * 1024 }, // 500 MB (videos)
   fileFilter: (_req, file, cb) => {
-    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(file.originalname)) {
+    if (/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf|woff2?|ttf|otf)$/i.test(file.originalname)) {
       cb(null, true);
     } else {
-      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
+      cb(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), PDFs, and fonts (woff, woff2, ttf, otf) are allowed.'));
     }
   },
 });
@@ -169,9 +176,9 @@ function multipartParser(req, res, next) {
       bb.on('file', (fieldname, file, info) => {
         const { filename, encoding, mimeType } = info;
         
-        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf)$/i.test(filename)) {
+        if (!/\.(jpg|jpeg|png|webp|gif|svg|mp4|webm|mov|pdf|woff2?|ttf|otf)$/i.test(filename)) {
           file.resume();
-          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), and PDFs are allowed.'));
+          return next(new Error('Only images (jpg, png, webp, gif, svg), videos (mp4, webm), PDFs, and fonts (woff, woff2, ttf, otf) are allowed.'));
         }
 
         const chunks = [];
@@ -224,6 +231,66 @@ router.get('/assets', async (_req, res) => {
 });
 
 /**
+ * GET /api/cms/media-library  (auth required)
+ * Returns a flat, deduplicated list of every image URL that has been uploaded
+ * to this CMS, scraped from all sections of the assets store.
+ * Shape: { images: [{ url, section, label }] }
+ */
+router.get('/media-library', auth, async (_req, res) => {
+  try {
+    const assets = await readAssets();
+    const seen = new Set();
+    const images = [];
+
+    function push(url, section, label) {
+      if (!url || typeof url !== 'string') return;
+      if (!/^https?:\/\/|^\//.test(url)) return; // must be a real URL or path
+      if (/\.(mp4|webm|mov|pdf|ttf|otf|woff)$/i.test(url)) return; // skip non-images
+      if (seen.has(url)) return;
+      seen.add(url);
+      images.push({ url, section, label: label || section });
+    }
+
+    // Hero slider slides
+    (assets.heroSlider || []).forEach((s, i) => push(s.src, 'heroSlider', `Hero slide ${i + 1}`));
+
+    // About
+    push(assets.about?.main,   'about', 'About – Main');
+    push(assets.about?.accent, 'about', 'About – Accent');
+
+    // Properties (cover images)
+    (assets.properties || []).forEach((u, i) => push(u, 'properties', `Property ${i + 1} cover`));
+
+    // Property galleries
+    (assets.propertyImages || []).forEach((arr, pi) =>
+      (arr || []).forEach((u, ii) => push(u, 'propertyImages', `Property ${pi + 1} · image ${ii + 1}`))
+    );
+
+    // Gallery
+    (assets.gallery || []).forEach((g, i) => push(g.src || g, 'gallery', `Gallery ${i + 1}` + (g.label ? ` — ${g.label}` : '')));
+
+    // Lounge
+    (assets.lounge || []).forEach((u, i) => push(u, 'lounge', `Lounge ${i + 1}`));
+
+    // Decor
+    push(assets.decor?.aboutPalms,    'decor', 'Decor – About palms');
+    push(assets.decor?.loungePattern, 'decor', 'Decor – Lounge pattern');
+    push(assets.decor?.ctaPattern,    'decor', 'Decor – CTA pattern');
+
+    // Sitemap
+    push(assets.sitemap?.backdrop,  'sitemap', 'Sitemap – Backdrop');
+    push(assets.sitemap?.planImage, 'sitemap', 'Sitemap – Plan image');
+
+    // Branding
+    push(assets.branding?.logo, 'branding', 'Logo');
+
+    res.json({ images });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+/**
  * POST /api/cms/assets/:section/:slot?
  * Upload a file into a section.
  */
@@ -233,9 +300,10 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
   const { section, slot } = req.params;
   const isVideo = isVideoFile(req.file.originalname);
   const isPdf   = isPdfFile(req.file.originalname);
+  const isFont  = isFontFile(req.file.originalname);
 
   // Resize images exceeding 1920×1080 before saving
-  if (!isVideo && !isPdf) {
+  if (!isVideo && !isPdf && !isFont) {
     try {
       req.file.buffer = await resizeIfNeeded(req.file.buffer, req.file.mimetype);
     } catch (err) {
@@ -256,6 +324,7 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       let storagePath;
       if (isVideo)          storagePath = `video/${filename}`;
       else if (isPdf)       storagePath = `pdf/${filename}`;
+      else if (isFont)      storagePath = `fonts/${filename}`;
       else                  storagePath = `images/cms/${section}/${filename}`;
 
       const bucket = storage.bucket();
@@ -277,8 +346,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       let dest;
       if (isVideo)          dest = join(PUBLIC_DIR, 'video');
       else if (isPdf)       dest = join(PUBLIC_DIR, 'pdf');
+      else if (isFont)      dest = join(PUBLIC_DIR, 'fonts');
       else                  dest = join(PUBLIC_DIR, 'images', 'cms', section);
-      
+
       mkdirSync(dest, { recursive: true });
       writeFileSync(join(dest, filename), req.file.buffer);
 
@@ -286,7 +356,9 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
         ? `/video/${filename}`
         : isPdf
           ? `/pdf/${filename}`
-          : `/images/cms/${section}/${filename}`;
+          : isFont
+            ? `/fonts/${filename}`
+            : `/images/cms/${section}/${filename}`;
     }
   } catch (err) {
     console.error('File upload failed:', err.message);
@@ -345,6 +417,31 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.gallery.push({ src: filePath, labelEn, labelEs, cat });
       break;
     }
+    case 'heroSlider': {
+      // Hero expanding-card slides. slot = index → replace that slide's image
+      // (keeping its copy); no slot → append a new slide.
+      if (!Array.isArray(assets.heroSlider)) assets.heroSlider = [];
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && idx >= 0 && idx < assets.heroSlider.length) {
+        // Seed slides reference shared gallery files — only delete files that
+        // were uploaded specifically for the hero slider.
+        const old = assets.heroSlider[idx]?.src;
+        if (old && old.includes('heroSlider')) await deletePhysical(old);
+        assets.heroSlider[idx] = { ...assets.heroSlider[idx], src: filePath };
+      } else {
+        if (assets.heroSlider.length >= 8) {
+          await deletePhysical(filePath);
+          return res.status(400).json({ error: 'Hero slider is limited to 8 slides.' });
+        }
+        assets.heroSlider.push({
+          src: filePath,
+          titleEn: labelEn, titleEs: labelEs,
+          kickerEn: '', kickerEs: '',
+          descEn: '', descEs: '',
+        });
+      }
+      break;
+    }
     case 'lounge': {
       if (!Array.isArray(assets.lounge)) assets.lounge = [];
       const idx = parseInt(slot, 10);
@@ -395,8 +492,155 @@ router.post('/assets/:section/:slot?', auth, multipartParser, async (req, res) =
       assets.branding.logo = filePath;
       break;
     }
+    case 'fonts': {
+      // Custom heading/body typeface upload. slot: 'heading' | 'body'.
+      if (!assets.fonts) assets.fonts = {};
+      if (!isFont) {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: 'This slot requires a font file (woff, woff2, ttf, otf).' });
+      }
+      if (slot === 'heading') {
+        await deletePhysical(assets.fonts.headingFontFile);
+        assets.fonts.headingFontFile = filePath;
+        assets.fonts.headingFont = `'${CUSTOM_HEADING_FAMILY}', 'Cormorant Garamond', serif`;
+      } else if (slot === 'body') {
+        await deletePhysical(assets.fonts.bodyFontFile);
+        assets.fonts.bodyFontFile = filePath;
+        assets.fonts.bodyFont = `'${CUSTOM_BODY_FAMILY}', 'Jost', sans-serif`;
+      } else {
+        await deletePhysical(filePath);
+        return res.status(400).json({ error: 'Invalid font slot: must be "heading" or "body".' });
+      }
+      break;
+    }
     default:
       await deletePhysical(filePath); // Cleanup file if invalid section
+      return res.status(400).json({ error: `Unknown section: ${section}` });
+  }
+
+  await writeAssets(assets);
+  res.json({ ok: true, path: filePath, assets });
+});
+
+/**
+ * POST /api/cms/reuse-asset/:section/:slot?
+ * Reuse an existing asset URL instead of uploading a new one.
+ * Body JSON: { url, labelEn, labelEs, cat }
+ */
+router.post('/reuse-asset/:section/:slot?', auth, express.json(), async (req, res) => {
+  const { section, slot } = req.params;
+  const { url: filePath, labelEn: rawLabelEn, labelEs: rawLabelEs, cat: rawCat } = req.body || {};
+  if (!filePath) return res.status(400).json({ error: 'No url provided.' });
+
+  const labelEn = (rawLabelEn || '').trim();
+  const labelEs = (rawLabelEs || '').trim();
+  const cat     = rawCat || 'Exterior';
+
+  const assets = await readAssets();
+
+  switch (section) {
+    case 'hero': {
+      if (!assets.hero) assets.hero = {};
+      const key = slot === 'video' ? 'video' : 'poster';
+      await deletePhysical(assets.hero[key]);
+      assets.hero[key] = filePath;
+      break;
+    }
+    case 'about': {
+      if (!assets.about) assets.about = {};
+      const key = slot === 'accent' ? 'accent' : 'main';
+      await deletePhysical(assets.about[key]);
+      assets.about[key] = filePath;
+      break;
+    }
+    case 'propertyImages': {
+      if (!Array.isArray(assets.propertyImages)) assets.propertyImages = [[], [], [], [], []];
+      while (assets.propertyImages.length < 5) assets.propertyImages.push([]);
+
+      const parts   = (slot || '').split('-');
+      const propIdx = parseInt(parts[0], 10);
+      const imgIdx  = parts.length > 1 ? parseInt(parts[1], 10) : NaN;
+
+      if (isNaN(propIdx) || propIdx < 0 || propIdx > 4) {
+        return res.status(400).json({ error: 'Invalid property index (0–4).' });
+      }
+      if (!Array.isArray(assets.propertyImages[propIdx])) assets.propertyImages[propIdx] = [];
+
+      if (!isNaN(imgIdx) && imgIdx >= 0 && imgIdx < assets.propertyImages[propIdx].length) {
+        await deletePhysical(assets.propertyImages[propIdx][imgIdx]);
+        assets.propertyImages[propIdx][imgIdx] = filePath;
+      } else {
+        assets.propertyImages[propIdx].push(filePath);
+      }
+      break;
+    }
+    case 'gallery': {
+      if (!Array.isArray(assets.gallery)) assets.gallery = [];
+      assets.gallery.push({ src: filePath, labelEn, labelEs, cat });
+      break;
+    }
+    case 'heroSlider': {
+      if (!Array.isArray(assets.heroSlider)) assets.heroSlider = [];
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && idx >= 0 && idx < assets.heroSlider.length) {
+        const old = assets.heroSlider[idx]?.src;
+        if (old && old.includes('heroSlider')) await deletePhysical(old);
+        assets.heroSlider[idx] = { ...assets.heroSlider[idx], src: filePath };
+      } else {
+        if (assets.heroSlider.length >= 8) {
+          return res.status(400).json({ error: 'Hero slider is limited to 8 slides.' });
+        }
+        assets.heroSlider.push({
+          src: filePath,
+          titleEn: labelEn, titleEs: labelEs,
+          kickerEn: '', kickerEs: '',
+          descEn: '', descEs: '',
+        });
+      }
+      break;
+    }
+    case 'lounge': {
+      if (!Array.isArray(assets.lounge)) assets.lounge = [];
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && idx >= 0 && idx <= 7) {
+        await deletePhysical(assets.lounge[idx]);
+        assets.lounge[idx] = filePath;
+      } else {
+        assets.lounge.push(filePath);
+      }
+      break;
+    }
+    case 'sitemap': {
+      if (!assets.sitemap) assets.sitemap = {};
+      const PDF_SLOTS = ['masterPdf', 'villasPdf', 'brochurePdf', 'amenitiesPdf'];
+      const IMG_SLOTS = ['planImage', 'backdrop'];
+      const wantsPdf = PDF_SLOTS.includes(slot);
+      const wantsImg = IMG_SLOTS.includes(slot);
+      const isPdf = /\.pdf$/i.test(filePath);
+      if (wantsPdf && !isPdf) return res.status(400).json({ error: 'This slot requires a PDF file.' });
+      if (wantsImg && isPdf) return res.status(400).json({ error: 'This slot requires an image file.' });
+      const key = (wantsPdf || wantsImg) ? slot : 'planImage';
+      await deletePhysical(assets.sitemap[key]);
+      assets.sitemap[key] = filePath;
+      break;
+    }
+    case 'decor': {
+      if (!assets.decor) assets.decor = {};
+      const allowed = ['aboutPalms', 'loungePattern', 'ctaPattern'];
+      if (!allowed.includes(slot)) {
+        return res.status(400).json({ error: `Invalid decor slot: ${slot}` });
+      }
+      await deletePhysical(assets.decor[slot]);
+      assets.decor[slot] = filePath;
+      break;
+    }
+    case 'branding': {
+      if (!assets.branding) assets.branding = {};
+      await deletePhysical(assets.branding.logo);
+      assets.branding.logo = filePath;
+      break;
+    }
+    default:
       return res.status(400).json({ error: `Unknown section: ${section}` });
   }
 
@@ -449,6 +693,17 @@ router.delete('/assets/:section', auth, async (req, res) => {
       }
       break;
     }
+    case 'heroSlider': {
+      // Body: { slot: index } — remove one slide from the hero slider.
+      const idx = parseInt(slot, 10);
+      if (!isNaN(idx) && Array.isArray(assets.heroSlider) && assets.heroSlider[idx]) {
+        const old = assets.heroSlider[idx].src;
+        // Seeded slides share gallery files — see the upload case above.
+        if (old && old.includes('heroSlider')) await deletePhysical(old);
+        assets.heroSlider.splice(idx, 1);
+      }
+      break;
+    }
     case 'lounge': {
       const idx = parseInt(slot, 10);
       if (!isNaN(idx) && assets.lounge?.[idx]) {
@@ -475,6 +730,19 @@ router.delete('/assets/:section', auth, async (req, res) => {
     case 'branding': {
       await deletePhysical(assets.branding?.logo);
       if (assets.branding) assets.branding.logo = null;
+      break;
+    }
+    case 'fonts': {
+      // Remove a custom-uploaded font and revert that slot to the brand default.
+      if (slot === 'heading' && assets.fonts) {
+        await deletePhysical(assets.fonts.headingFontFile);
+        assets.fonts.headingFontFile = null;
+        assets.fonts.headingFont = "'Cormorant Garamond', Georgia, serif";
+      } else if (slot === 'body' && assets.fonts) {
+        await deletePhysical(assets.fonts.bodyFontFile);
+        assets.fonts.bodyFontFile = null;
+        assets.fonts.bodyFont = "'Aptos Narrow', 'Jost', sans-serif";
+      }
       break;
     }
     default:

@@ -2,15 +2,11 @@ import { useRef } from 'react';
 import { useInView } from 'motion/react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
-import assetsUrls from '../../assetsUrls.json';
-import TiltedCard from '../ui/TiltedCard.jsx';
-import CountUp from '../ui/CountUp.jsx';
-import SplitText from '../ui/SplitText.jsx';
 import EditMark from '../cms/EditMark.jsx';
+import CountUp from '../ui/CountUp.jsx';
 
 const DEFAULTS = {
-  main:   'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
-  accent: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
+  main: 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7',
 };
 
 export default function About() {
@@ -18,14 +14,15 @@ export default function About() {
   const a          = t.about;
   const { assets } = useAssets();
 
-  const statsRef = useRef(null);
-  const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
-
   const mainImg  = assets?.about?.main || DEFAULTS.main;
-  const palmsUrl = assets?.decor?.aboutPalms || assetsUrls['palms-about.png'];
 
-  // Figma sets the heading as one flowing line over the image card.
   const title = `${a.title.replace(/\n/g, ' ')} ${a.titleEm}`;
+
+  // Split body into paragraphs
+  const paragraphs = a.body.split('\n\n').filter(Boolean);
+
+  const statsRef   = useRef(null);
+  const statsInView = useInView(statsRef, { once: true, amount: 0.3 });
 
   const stats = [
     { num: a.stat1Num, lbl: a.stat1Lbl },
@@ -33,83 +30,54 @@ export default function About() {
     { num: a.stat3Num, lbl: a.stat3Lbl },
   ];
 
-  const p = t.project;
-
   return (
-    <section id="about">
-      <img className="about-palms" src={palmsUrl} alt="" aria-hidden loading="lazy" />
-
-      <div className="about-inner">
-        <div className="about-head">
-          <p className="section-label reveal">
+    <>
+      <section id="about" style={{ backgroundImage: `url(${mainImg})` }}>
+        
+        <div className="about-centered-content wrap">
+          <p className="about-label section-label reveal">
             <EditMark path="about.label" label="About label">{a.label}</EditMark>
           </p>
+
           <EditMark as="div" path={['about.title', 'about.titleEm']} label="About heading">
-            <SplitText
-              text={title}
-              className="section-title"
-              delay={10}
-              duration={0.25}
-              ease="power3.out"
-              splitType="chars"
-              tag="h2"
-              textAlign="left"
-            />
+            <h2 className="about-heading section-title reveal" style={{ textAlign: 'center' }}>
+              {title}
+            </h2>
           </EditMark>
-        </div>
 
-        {/* Figma stacks the base render under the coastline aerial */}
-        <div className="about-card reveal rd1" style={{ overflow: 'visible', background: 'none' }}>
-          <TiltedCard
-            imageSrc={mainImg}
-            altText="Yuma Bay aerial view"
-            containerHeight="100%"
-            containerWidth="100%"
-            imageHeight="100%"
-            imageWidth="100%"
-            scaleOnHover={1.05}
-            rotateAmplitude={10}
-            showMobileWarning={false}
-            showTooltip={false}
-            displayOverlayContent={false}
-          />
+          <div className="about-body-wrap reveal">
+            <EditMark as="div" path="about.body" label="About body">
+              {paragraphs.map((para, i) => (
+                <p key={i} className="about-body section-body">{para}</p>
+              ))}
+            </EditMark>
+          </div>
         </div>
+      </section>
 
-        <div className="about-side">
-          <EditMark as="div" path="about.body" label="About body">
-            {a.body.split('\n\n').map((para, i) => (
-              <p key={i} className="section-body reveal rd2">{para}</p>
-            ))}
-          </EditMark>
+      {/* Stats strip */}
+      <div className="about-stats-band reveal" ref={statsRef}>
+        <div className="about-stats-inner wrap">
+          {stats.map((s, i) => {
+            const numMatch = s.num.match(/[\d.]+/);
+            const val = numMatch ? parseFloat(numMatch[0]) : 0;
+            const suffix = numMatch ? s.num.replace(numMatch[0], '') : s.num;
+            return (
+              <div className="stat-block" key={i}>
+                <div className="stat-num">
+                  <EditMark path={`about.stat${i + 1}Num`} label={`Stat ${i + 1} number`}>
+                    <CountUp from={0} to={val} duration={2} separator="," startWhen={statsInView} />
+                    {suffix}
+                  </EditMark>
+                </div>
+                <div className="stat-lbl">
+                  <EditMark path={`about.stat${i + 1}Lbl`} label={`Stat ${i + 1} label`}>{s.lbl}</EditMark>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
-
-      <div className="about-stats reveal" ref={statsRef}>
-        {stats.map((s, i) => {
-          const numMatch = s.num.match(/[\d.]+/);
-          const val = numMatch ? parseFloat(numMatch[0]) : 0;
-          const suffix = numMatch ? s.num.replace(numMatch[0], '') : s.num;
-          return (
-            <div className="stat" key={i}>
-              <div className="stat-num">
-                <EditMark path={`about.stat${i + 1}Num`} label={`Stat ${i + 1} number`}>
-                  <CountUp
-                    from={0}
-                    to={val}
-                    duration={2}
-                    separator=","
-                    startWhen={statsInView}
-                  />
-                  {suffix}
-                </EditMark>
-              </div>
-              <div className="stat-lbl">
-                <EditMark path={`about.stat${i + 1}Lbl`} label={`Stat ${i + 1} label`}>{s.lbl}</EditMark>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </section>
+    </>
   );
 }
