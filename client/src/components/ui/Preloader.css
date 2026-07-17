@@ -44,7 +44,7 @@
 }
 
 .preloader-title {
-  font-family: 'Merzalina', 'Cormorant Garamond', serif;
+  font-family: var(--font-heading);
   font-size: clamp(36px, 10vw, 80px); /* increased font size of YUMA BAY */
   font-weight: 400;
   letter-spacing: 0.12em;
@@ -56,7 +56,7 @@
 }
 
 .preloader-subtitle {
-  font-family: 'Aptos Narrow', 'Jost', sans-serif;
+  font-family: var(--font-body);
   font-size: clamp(11px, 3.2vw, 20px);
   letter-spacing: 0.12em;
   text-transform: uppercase;

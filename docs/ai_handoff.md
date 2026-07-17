@@ -123,7 +123,15 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Refactor Hero: remove thumbnails cards, disable Ken Burns zoom animation, implement a traditional Right -> Left horizontal sliding transition, center-align the brand logo/glow block at the bottom-center, replace progress pagination with modern centered dots, and implement static reference brand text proportions | `Hero.jsx`, `global.css` | ADR-15 |
 | Refine Preloader layout: remove percentage text, increase YUMA BAY title font size, scale up logo height, and optimize vertical spacing | `Preloader.jsx`, `Preloader.css` | ADR-16 |
 
+### Refresh Styling Fix (2026-07-17)
 
+| Change | Files | ADR |
+|---|---|---|
+| Fix flash of default hero image and default fonts on page refresh by keeping preloader overlay active until CMS assets finish loading; hide progress bar on refresh | `Preloader.jsx` | — |
+| Configure Preloader text elements to use dynamic CSS variables for fonts so they match the CMS-configured fonts | `Preloader.css` | — |
+| Prevent automatic scroll-to-top on page refresh to preserve browser's native scroll restoration (e.g. on Gallery reload) | `App.jsx` | — |
+| Redesign Cookie Consent banner to follow the website's warm light theme (cream background, ink text, teal buttons) | `global.css` | — |
+| Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out for easy future activation) | `Layout.jsx` | — |
 
 ### What's next
 

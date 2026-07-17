@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { useEffect, lazy, Suspense } from 'react';
+import { useEffect, useRef, lazy, Suspense } from 'react';
 import { LanguageProvider } from './context/LanguageContext.jsx';
 import { EditModeProvider } from './context/EditModeContext.jsx';
 import { useAssets } from './hooks/useAssets.js';
@@ -14,7 +14,16 @@ const Dashboard = lazy(() => import('./pages/Dashboard.jsx'));
 
 function ScrollReset() {
   const { pathname } = useLocation();
-  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  const isFirstMount = useRef(true);
+
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return null;
 }
 

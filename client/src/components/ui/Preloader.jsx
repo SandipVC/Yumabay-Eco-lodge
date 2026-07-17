@@ -12,17 +12,28 @@ export default function Preloader() {
   const [isFading, setIsFading] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);
 
+  const params = new URLSearchParams(window.location.search);
+  const isDebug = params.has('debug-preloader') || window.location.hash === '#debug-preloader';
+  const isSecondLoad = sessionStorage.getItem('yb_preloader_shown') && !isDebug;
+
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const isDebug = params.has('debug-preloader') || window.location.hash === '#debug-preloader';
+    if (loading) return;
 
     // Check session storage first
-    if (sessionStorage.getItem('yb_preloader_shown') && !isDebug) {
-      setIsDestroyed(true);
-      return;
+    if (isSecondLoad) {
+      setIsFading(true);
+      const timer = setTimeout(() => {
+        setIsDestroyed(true);
+      }, 800); // match CSS transition duration
+      return () => clearTimeout(timer);
     }
 
-    if (loading || !assets) return;
+    if (!assets) {
+      // If assets failed to load, fade out immediately to avoid getting stuck
+      setPercent(100);
+      triggerFadeOut();
+      return;
+    }
 
     // Identify critical images to preload
     const criticalImages = [];
@@ -49,7 +60,7 @@ export default function Preloader() {
 
     if (uniqueImages.length === 0) {
       setPercent(100);
-      if (!isDebug) triggerFadeOut();
+      triggerFadeOut();
       return;
     }
 
@@ -62,7 +73,7 @@ export default function Preloader() {
       setPercent(currentPercent);
 
       if (loadedCount >= total) {
-        if (!isDebug) triggerFadeOut();
+        triggerFadeOut();
       }
     };
 
@@ -83,7 +94,7 @@ export default function Preloader() {
         }, 800); // match CSS transition duration
       }, 300);
     }
-  }, [assets, loading]);
+  }, [assets, loading, isSecondLoad, logoUrl]);
 
   if (isDestroyed) return null;
 
@@ -96,9 +107,11 @@ export default function Preloader() {
         <h2 className="preloader-title">YUMA BAY</h2>
         <p className="preloader-subtitle">Eco Lodge & Residences</p>
         
-        <div className="preloader-progress-container">
-          <div className="preloader-progress-bar" style={{ width: `${percent}%` }} />
-        </div>
+        {!isSecondLoad && (
+          <div className="preloader-progress-container">
+            <div className="preloader-progress-bar" style={{ width: `${percent}%` }} />
+          </div>
+        )}
       </div>
     </div>
   );

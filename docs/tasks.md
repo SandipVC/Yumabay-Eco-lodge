@@ -143,12 +143,9 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 - [x] Refactor Hero to remove thumbnails cards, disable Ken Burns zoom animation, implement a traditional Right -> Left horizontal sliding transition, center-align the brand logo/glow block at the bottom-center, replace progress pagination with modern centered dots, and implement static reference brand text proportions. (ADR-15)
 - [x] Refine Preloader layout: remove percentage text, increase YUMA BAY title font size, scale up logo height, and optimize vertical spacing. (ADR-16)
 
-
-
-
-
-
-
-
-
-
+## Done — refresh-preloader-fix (2026-07-17)
+- [x] Fix flash of default hero image and default fonts on page refresh by keeping the preloader overlay active until CMS assets finish loading; hide progress bar on refresh. (`Preloader.jsx`)
+- [x] Configure Preloader title and subtitle to use dynamic `--font-heading` and `--font-body` CSS variables so they immediately reflect the custom uploaded CMS fonts. (`Preloader.css`)
+- [x] Prevent automatic scroll-to-top on page refresh so that the browser's native scroll restoration works (e.g. staying on the Gallery section). (`App.jsx`)
+- [x] Redesign Cookie Consent banner to use the website's warm light theme (cream background, ink text, and teal buttons). (`global.css`)
+- [x] Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out in Layout.jsx for easy future activation).

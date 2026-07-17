@@ -101,6 +101,7 @@ export default function SiteMap() {
     const errs = {};
     if (inlineForm.name.trim().length < 2) errs.name = lang === 'es' ? 'Nombre requerido' : 'Name is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inlineForm.email)) errs.email = lang === 'es' ? 'Correo inválido' : 'Valid email required';
+    if (inlineForm.phone.trim().length < 7) errs.phone = lang === 'es' ? 'Teléfono inválido' : 'Valid phone required';
     if (inlineForm.message.trim().length < 5) errs.message = lang === 'es' ? 'Mensaje demasiado corto' : 'Message must be at least 5 characters';
     return errs;
   };
@@ -419,6 +420,7 @@ export default function SiteMap() {
                       placeholder={t.contact?.phonePlaceholder || 'Phone (optional)'} 
                       value={inlineForm.phone} onChange={handleInlineChange}
                     />
+                    {inlineErrors.phone && <span className="form-error" style={{ color: 'var(--coral)', fontSize: '11px', marginTop: '4px', display: 'block' }}>{inlineErrors.phone}</span>}
                   </div>
 
                   <div className="form-field">
