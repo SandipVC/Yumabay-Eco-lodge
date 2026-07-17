@@ -737,7 +737,7 @@ router.delete('/assets/:section', auth, async (req, res) => {
       if (slot === 'heading' && assets.fonts) {
         await deletePhysical(assets.fonts.headingFontFile);
         assets.fonts.headingFontFile = null;
-        assets.fonts.headingFont = "'Merzalina', 'Cormorant Garamond', serif";
+        assets.fonts.headingFont = "'Cormorant Garamond', Georgia, serif";
       } else if (slot === 'body' && assets.fonts) {
         await deletePhysical(assets.fonts.bodyFontFile);
         assets.fonts.bodyFontFile = null;

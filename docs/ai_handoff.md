@@ -132,6 +132,7 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Prevent automatic scroll-to-top on page refresh to preserve browser's native scroll restoration (e.g. on Gallery reload) | `App.jsx` | — |
 | Redesign Cookie Consent banner to follow the website's warm light theme (cream background, ink text, teal buttons) | `global.css` | — |
 | Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out for easy future activation) | `Layout.jsx` | — |
+| Change the website's default heading font to Cormorant Garamond (making it the default fallback brand font) to eliminate the preloader runtime font transition flicker | `global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js` | — |
 
 ### What's next
 

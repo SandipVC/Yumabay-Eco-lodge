@@ -369,7 +369,7 @@ export default function SiteMap() {
 
               {submitStatus === 'success' ? (
                 <div className="form-success" style={{ padding: '20px 0', border: 'none' }}>
-                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'Merzalina, serif', fontSize: '24px', fontWeight: '400' }}>
+                  <h3 style={{ color: 'var(--teal)', marginBottom: '12px', fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: '400' }}>
                     {t.contact?.successTitle || 'Enquiry received!'}
                   </h3>
                   <p style={{ fontSize: '15px', color: 'var(--ink-soft)', lineHeight: '1.7' }}>

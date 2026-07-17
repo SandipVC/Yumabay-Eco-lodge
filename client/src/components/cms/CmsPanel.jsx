@@ -41,8 +41,8 @@ const SECTIONS = [
 // self-hosted (see @font-face in global.css), the rest are either loaded via
 // the Google Fonts <link> in index.html or universally available system fonts.
 const HEADING_FONT_OPTIONS = [
-  { value: "'Merzalina', 'Cormorant Garamond', serif", label: 'Merzalina (Brand default)' },
-  { value: "'Cormorant Garamond', Georgia, serif",     label: 'Cormorant Garamond' },
+  { value: "'Cormorant Garamond', Georgia, serif",     label: 'Cormorant Garamond (Brand default)' },
+  { value: "'Merzalina', 'Cormorant Garamond', serif", label: 'Merzalina' },
   { value: "'Playfair Display', Georgia, serif",       label: 'Playfair Display' },
   { value: "Georgia, 'Times New Roman', serif",        label: 'Georgia' },
 ];

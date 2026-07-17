@@ -50,7 +50,7 @@
   --grad-btn: linear-gradient(to right, #A78F77, var(--burnt));
   /* Site fonts — CMS-editable (Dashboard → Media Manager → Fonts). Overridden
      at runtime via document.documentElement.style (see FontSync in App.jsx). */
-  --font-heading: 'Merzalina', 'Cormorant Garamond', serif;
+  --font-heading: 'Cormorant Garamond', Georgia, serif;
   --font-body:    'Aptos Narrow', 'Jost', sans-serif;
 }
 
