@@ -53,6 +53,8 @@
   padding-left: 0.26em; /* offset for letter-spacing centering */
   white-space: nowrap;
   line-height: .8;
+  opacity: 0; /* hidden until font is loaded */
+  transition: opacity 0.3s ease;
 }
 
 .preloader-subtitle {
@@ -63,7 +65,14 @@
   color: #9D7F5A; /* teal — readable on light */
   margin: 0;
   padding-left: 0.24em;
-  opacity: 0.85;
+  opacity: 0; /* hidden until font is loaded */
+  transition: opacity 0.3s ease;
+}
+
+/* Shown once the CMS custom font file has been fully loaded */
+.preloader-title.font-ready,
+.preloader-subtitle.font-ready {
+  opacity: 1;
 }
 
 .preloader-progress-container {

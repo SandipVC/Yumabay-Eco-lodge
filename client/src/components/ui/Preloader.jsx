@@ -11,6 +11,7 @@ export default function Preloader() {
   const [percent, setPercent] = useState(0);
   const [isFading, setIsFading] = useState(false);
   const [isDestroyed, setIsDestroyed] = useState(false);
+  const [fontReady, setFontReady] = useState(false);
 
   const params = new URLSearchParams(window.location.search);
   const isDebug = params.has('debug-preloader') || window.location.hash === '#debug-preloader';
@@ -21,6 +22,7 @@ export default function Preloader() {
 
     // Check session storage first
     if (isSecondLoad) {
+      setFontReady(true);
       setIsFading(true);
       const timer = setTimeout(() => {
         setIsDestroyed(true);
@@ -30,14 +32,15 @@ export default function Preloader() {
 
     if (!assets) {
       // If assets failed to load, fade out immediately to avoid getting stuck
+      setFontReady(true);
       setPercent(100);
       triggerFadeOut();
       return;
     }
 
-    // --- Load custom CMS fonts FIRST so the preloader text renders correctly ---
+    // --- Load custom CMS fonts FIRST, keeping text hidden until ready ---
     // Uses the browser's FontFace API to download the font file and register
-    // it before any UI transition. Even first-time visitors see the right font.
+    // it before making the text visible. This prevents ALL font-swap flicker.
     (async () => {
       try {
         const headingFile = assets.fonts?.headingFontFile;
@@ -55,7 +58,7 @@ export default function Preloader() {
           fontPromises.push(face.load());
         }
 
-        // Also apply the CSS variables immediately so the preloader uses them
+        // Apply the CSS variables so elements reference the right font-family
         if (assets.fonts?.headingFont) {
           document.documentElement.style.setProperty('--font-heading', assets.fonts.headingFont);
         }
@@ -69,6 +72,9 @@ export default function Preloader() {
       } catch (e) {
         // Font loading failed — proceed anyway so we don't get stuck
       }
+
+      // Font is now fully loaded and CSS variables are set — safe to show text
+      setFontReady(true);
 
       // --- Now preload critical images ---
       const criticalImages = [];
@@ -140,8 +146,8 @@ export default function Preloader() {
         <div className="preloader-logo-wrap">
           {logoUrl && <img src={logoUrl} alt="Yuma Bay" className="preloader-logo" />}
         </div>
-        <h2 className="preloader-title">YUMA BAY</h2>
-        <p className="preloader-subtitle">Eco Lodge & Residences</p>
+        <h2 className={`preloader-title${fontReady ? ' font-ready' : ''}`}>YUMA BAY</h2>
+        <p className={`preloader-subtitle${fontReady ? ' font-ready' : ''}`}>Eco Lodge &amp; Residences</p>
         
         {!isSecondLoad && (
           <div className="preloader-progress-container">
