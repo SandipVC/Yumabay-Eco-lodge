@@ -57,6 +57,10 @@ const CUSTOM_BODY_FAMILY    = 'CMSBodyFont';
 // If the admin uploaded a custom font file, also inject an @font-face rule
 // pointing at it (uploaded fonts aren't known ahead of time, so they can't
 // live in the static global.css).
+//
+// Also persists the current font selection to localStorage so that the
+// inline <script> in index.html can apply it synchronously on the next
+// page load — before React renders — eliminating font flicker.
 function FontSync() {
   const { assets } = useAssets();
   const headingFont     = assets?.fonts?.headingFont;
@@ -66,14 +70,28 @@ function FontSync() {
 
   useEffect(() => {
     const root = document.documentElement;
-    if (headingFont) root.style.setProperty('--font-heading', headingFont);
-    if (bodyFont)    root.style.setProperty('--font-body', bodyFont);
+    if (headingFont) {
+      root.style.setProperty('--font-heading', headingFont);
+      try { localStorage.setItem('yb_font_heading', headingFont); } catch(e) {}
+    }
+    if (bodyFont) {
+      root.style.setProperty('--font-body', bodyFont);
+      try { localStorage.setItem('yb_font_body', bodyFont); } catch(e) {}
+    }
   }, [headingFont, bodyFont]);
 
   useEffect(() => {
+    // Remove the cached style tag from index.html once the real one takes over
+    const cached = document.getElementById('cms-custom-fonts-cached');
+    if (cached) cached.remove();
+
     let style = document.getElementById('cms-custom-fonts');
     if (!headingFontFile && !bodyFontFile) {
       if (style) style.remove();
+      try {
+        localStorage.removeItem('yb_font_heading_file');
+        localStorage.removeItem('yb_font_body_file');
+      } catch(e) {}
       return;
     }
     if (!style) {
@@ -84,9 +102,15 @@ function FontSync() {
     let css = '';
     if (headingFontFile) {
       css += `@font-face { font-family: '${CUSTOM_HEADING_FAMILY}'; src: url('${headingFontFile}'); font-display: swap; }\n`;
+      try { localStorage.setItem('yb_font_heading_file', headingFontFile); } catch(e) {}
+    } else {
+      try { localStorage.removeItem('yb_font_heading_file'); } catch(e) {}
     }
     if (bodyFontFile) {
       css += `@font-face { font-family: '${CUSTOM_BODY_FAMILY}'; src: url('${bodyFontFile}'); font-display: swap; }\n`;
+      try { localStorage.setItem('yb_font_body_file', bodyFontFile); } catch(e) {}
+    } else {
+      try { localStorage.removeItem('yb_font_body_file'); } catch(e) {}
     }
     style.textContent = css;
   }, [headingFontFile, bodyFontFile]);
