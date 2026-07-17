@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import os from 'os';
+import { pathToFileURL } from 'url';
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -52,8 +53,9 @@ app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
+const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
 
-if (!process.env.FIREBASE_CONFIG && !process.env.FUNCTIONS_EMULATOR) {
+if (isMain && !process.env.FIREBASE_CONFIG && !process.env.FUNCTIONS_EMULATOR) {
   app.listen(PORT, '0.0.0.0', () => {
     const lan = Object.values(os.networkInterfaces())
       .flat()

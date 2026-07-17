@@ -1,178 +1,265 @@
-import { useLayoutEffect, useRef } from 'react';
+/**
+ * Hero — auto-advancing traditional Right -> Left horizontal slider.
+ *
+ * Slides come from the CMS (assets.heroSlider — image + bilingual copy per
+ * slide, managed in Dashboard → Media Manager → Hero). DEFAULT_SLIDES below
+ * keep the section alive when the API is down or the CMS list is empty.
+ */
+import { useState, useRef, useEffect } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
-import EditMark from '../cms/EditMark.jsx';
-
-// Scrub progress past which the header is allowed to drop in from above.
-export const NAV_REVEAL_AT = 0.98;
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Mobile browsers fire a resize when the URL bar shows/hides during scroll.
-// Without this, ScrollTrigger re-pins mid-scroll — the hero scrolls a little,
-// then snaps into the scrub (with a white strip below). Ignoring those bar-only
-// resizes keeps the pin locked from the first pixel of scroll.
-ScrollTrigger.config({ ignoreMobileResize: true });
+const FB = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o';
 
-// The scrub video is supplied entirely via the CMS (assets.hero.video) — upload
-// an all-keyframe (every frame an I-frame) re-encode for instant seeking. No
-// video is bundled with the app (kept the 100+MB of media out of the deploy).
-// When no CMS video is set the hero falls back to a static poster (no scrub).
-const POSTER_FALLBACK = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-// Scroll runway per second of video. Higher = slower scrub, more scroll required.
-const PX_PER_SECOND = 150;
+// Development fallbacks — existing gallery renders already in Storage.
+const DEFAULT_SLIDES = [
+  {
+    src: `${FB}/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_1.png?alt=media`,
+    kickerEn: 'Boca de Yuma · Dominican Republic',
+    kickerEs: 'Boca de Yuma · República Dominicana',
+    titleEn: 'Yuma Bay', titleEs: 'Yuma Bay',
+    descEn: 'Eco Lodge & Residences on the untouched southeast coast — where the Yuma River meets the Caribbean Sea.',
+    descEs: 'Eco Lodge & Residencias en la costa sureste virgen — donde el río Yuma se encuentra con el mar Caribe.',
+  },
+  {
+    src: `${FB}/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_7.png?alt=media`,
+    kickerEn: 'Private Residences', kickerEs: 'Residencias privadas',
+    titleEn: 'Eco Villas', titleEs: 'Eco Villas',
+    descEn: 'Three-bedroom villas with private pools and gardens, a few steps from the shore.',
+    descEs: 'Villas de tres habitaciones con piscinas privadas y jardines, a pocos pasos de la orilla.',
+  },
+  {
+    src: `${FB}/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_15.png?alt=media`,
+    kickerEn: 'Oceanfront Living', kickerEs: 'Vida frente al mar',
+    titleEn: 'Beach Club', titleEs: 'Club de Playa',
+    descEn: 'A private beach club with infinity pool, bar and direct access to the Caribbean.',
+    descEs: 'Un club de playa privado con piscina infinita, bar y acceso directo al Caribe.',
+  },
+  {
+    src: `${FB}/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_13.png?alt=media`,
+    kickerEn: 'Resort Amenities', kickerEs: 'Amenidades del resort',
+    titleEn: 'Pool & Gardens', titleEs: 'Piscina y Jardines',
+    descEn: 'Tropical pools and lush gardens woven through the whole resort.',
+    descEs: 'Piscinas tropicales y exuberantes jardines a lo largo de todo el resort.',
+  },
+  {
+    src: `${FB}/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media`,
+    kickerEn: 'Members & Guests', kickerEs: 'Socios e invitados',
+    titleEn: 'Club Lounge', titleEs: 'Club Lounge',
+    descEn: 'Restaurant, lounge and co-working with panoramic views over the bay.',
+    descEs: 'Restaurante, lounge y co-working con vistas panorámicas a la bahía.',
+  },
+];
+
+const AUTOPLAY_MS = 6000;
+
+// Bilingual field with EN fallback (CMS may only have EN filled in).
+const pick = (slide, lang, key) => {
+  if (!slide) return '';
+  return (lang === 'es' ? slide[`${key}Es`] : slide[`${key}En`]) || slide[`${key}En`] || '';
+};
 
 export default function Hero() {
-  const { t }      = useLang();
-  const h          = t.hero;
-  const { assets } = useAssets();
-  const sectionRef = useRef(null);
-  const videoRef   = useRef(null);
-  const logoRef    = useRef(null);
+  const { t, lang } = useLang();
+  const { assets }  = useAssets();
 
-  // CMS poster acts as a still while the video buffers / on reduced-data clients.
-  const poster = assets?.hero?.poster || POSTER_FALLBACK;
-  // Scrub video comes only from the CMS. Empty string → static poster hero.
-  const videoSrc = assets?.hero?.video || '';
-  const hasVideo = Boolean(videoSrc);
+  const cmsSlides = Array.isArray(assets?.heroSlider)
+    ? assets.heroSlider.filter(s => s && s.src)
+    : [];
+  const slides = cmsSlides.length ? cmsSlides : DEFAULT_SLIDES;
 
-  // useLayoutEffect (not useEffect): its cleanup runs during React's mutation
-  // phase, BEFORE React removes #hero on unmount. That lets trigger.kill(true)
-  // revert the ScrollTrigger pin (un-reparent #hero from the pin-spacer) in time,
-  // so React's removeChild(#hero) doesn't throw NotFoundError.
-  useLayoutEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-    // No CMS video → static poster hero: no pin, no scrub. Keep the centre logo
-    // visible and reveal the header immediately so the page behaves normally.
-    if (!hasVideo) {
-      if (logoRef.current) { logoRef.current.style.opacity = ''; logoRef.current.style.transform = ''; }
-      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
+  const sectionRef   = useRef(null);
+  const bgRef        = useRef(null);
+  const contentRef   = useRef(null);
+  const slideRefs    = useRef([]);
+  const uiRef        = useRef(null);
+  const animatingRef = useRef(false);
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Re-sync slide selection when the CMS slide list itself changes.
+  const slidesKey = slides.map(s => s.src).join('|');
+  useEffect(() => {
+    animatingRef.current = false;
+    setCurrentIndex(0);
+    // Reset position and display styles of all slide refs
+    slideRefs.current.forEach((slide, idx) => {
+      if (slide) {
+        gsap.set(slide, { display: idx === 0 ? 'block' : 'none', x: 0 });
+      }
+    });
+  }, [slidesKey]);
+
+  /** Transition to slide at targetIdx */
+  function goToSlide(targetIdx, direction = 'next') {
+    if (animatingRef.current || targetIdx === currentIndex || slides.length < 2) return;
+    animatingRef.current = true;
+
+    const currentSlide = slideRefs.current[currentIndex];
+    const nextSlide = slideRefs.current[targetIdx];
+
+    if (!currentSlide || !nextSlide) {
+      setCurrentIndex(targetIdx);
+      animatingRef.current = false;
       return;
     }
 
-    const video = videoRef.current;
-    if (!video) return;
+    const enterFrom = direction === 'next' ? '100%' : '-100%';
+    const exitTo    = direction === 'next' ? '-100%' : '100%';
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Set initial positions before animation
+    gsap.set(nextSlide, { display: 'block', x: enterFrom, zIndex: 1 });
+    gsap.set(currentSlide, { zIndex: 0 });
 
-    // Duration is 0 until the video reports metadata. Until then the runway is
-    // just one viewport so the pin can be created IMMEDIATELY — otherwise the
-    // hero free-scrolls (video visibly slides up) until metadata loads on slower
-    // mobile networks, then snaps into the scrub. Pinning at mount kills that.
-    const getDuration = () =>
-      (video.duration && isFinite(video.duration)) ? video.duration : 0;
-    const getRunway = () => {
-      const d = getDuration();
-      return d > 0 ? Math.max(window.innerHeight, d * PX_PER_SECOND) : window.innerHeight;
-    };
-
-    // Directly set currentTime on GSAP's tick. ScrollTrigger's onUpdate is already
-    // synchronized with requestAnimationFrame, so a secondary rAF here causes 
-    // frame drops and stuttering on Android.
-    const applyProgress = (p) => {
-      const logo = logoRef.current;
-      if (logo) {
-        const fade = Math.min(p / 0.5, 1);   // gone by 50% progress
-        logo.style.opacity = String(1 - fade);
-        logo.style.transform = `translate(-50%, ${-fade * 120}px)`;
+    const tl = gsap.timeline({
+      onComplete: () => {
+        gsap.set(currentSlide, { display: 'none', x: 0 });
+        setCurrentIndex(targetIdx);
+        animatingRef.current = false;
       }
-      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: p }));
-    };
-    applyProgress(0);
+    });
 
-    let trigger;
+    tl.to(currentSlide, { x: exitTo, duration: 0.9, ease: 'power2.inOut' }, 0);
+    tl.to(nextSlide, { x: '0%', duration: 0.9, ease: 'power2.inOut' }, 0);
+  }
 
-    if (reducedMotion) {
-      // Skip scrub, leave a normal autoplay loop, reveal the header immediately.
-      video.play().catch(() => {});
-      if (logoRef.current) logoRef.current.style.opacity = '0';
-      window.dispatchEvent(new CustomEvent('yb-hero-progress', { detail: 1 }));
-    } else {
-      // Created at mount, before metadata — anticipatePin avoids the 1-frame
-      // engage jump on fast flicks. invalidateOnRefresh re-reads getRunway() once
-      // duration is known.
-      trigger = ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end:   () => `+=${getRunway()}`,
-        pin:   true,
-        pinSpacing: true,
-        scrub: true,
-        anticipatePin: 1,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          applyProgress(self.progress);
-          const d = getDuration();
-          if (d <= 0 || video.readyState < 1) return;
-          const targetTime = self.progress * d;
-          if (Math.abs(video.currentTime - targetTime) > 0.02) {
-            try { video.currentTime = targetTime; } catch { /* noop */ }
-          }
-        },
-      });
+  function goNext() {
+    const target = (currentIndex + 1) % slides.length;
+    goToSlide(target, 'next');
+  }
+
+  function goPrev() {
+    const target = (currentIndex - 1 + slides.length) % slides.length;
+    goToSlide(target, 'prev');
+  }
+
+  function handleDotClick(targetIdx) {
+    if (animatingRef.current || targetIdx === currentIndex) return;
+    const direction = targetIdx > currentIndex ? 'next' : 'prev';
+    goToSlide(targetIdx, direction);
+  }
+
+  // Autoplay
+  useEffect(() => {
+    if (slides.length < 2 || reduced) return;
+    const id = setInterval(goNext, AUTOPLAY_MS);
+    return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, slidesKey]);
+
+  // Entrance animation for dots/navigation on mount
+  useEffect(() => {
+    if (reduced) return;
+    const ui = uiRef.current;
+    if (ui) {
+      gsap.fromTo(ui,
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, ease: 'power2.out', delay: 0.5 });
     }
+  }, [reduced]);
 
-    // Metadata arrived → stop autoplay, reset to frame 0, recompute the runway.
-    const onMeta = () => {
-      if (reducedMotion) return;
-      video.pause();
-      try { video.currentTime = 0; } catch { /* noop */ }
-      ScrollTrigger.refresh();
-    };
-    if (video.readyState >= 1) onMeta();
-    else video.addEventListener('loadedmetadata', onMeta, { once: true });
+  // Staggered text animation on mount
+  useEffect(() => {
+    if (reduced) return;
+    const contentTop = contentRef.current;
+    if (contentTop) {
+      // Find all elements with hs-anim class within the parent section to stagger them
+      const anims = sectionRef.current?.querySelectorAll('.hs-anim');
+      if (anims) {
+        gsap.fromTo(anims,
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power2.out' });
+      }
+    }
+  }, [reduced]);
 
-    // Android/iOS sometimes refuse to seek via JS unless the video has been explicitly 
-    // played via a user interaction. This unlocks the media engine on the first touch.
-    const unlockVideo = () => {
-      video.play().then(() => {
-        video.pause();
-      }).catch(() => {});
-      window.removeEventListener('touchstart', unlockVideo);
-    };
-    window.addEventListener('touchstart', unlockVideo);
+  // Parallax ScrollTrigger
+  useEffect(() => {
+    if (reduced) return;
+    const bgContainer = bgRef.current;
+    if (!bgContainer) return;
+
+    const trigger = gsap.to(bgContainer, {
+      yPercent: 12,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#hero',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: true,
+      }
+    });
 
     return () => {
-      // kill(true) reverts the pin: removes the generated pin-spacer and moves
-      // #hero back into its original React parent BEFORE React unmounts the tree.
-      // Without revert, React's removeChild(#hero) fails (node lives in pin-spacer).
-      trigger?.kill(true);
-      video.removeEventListener('loadedmetadata', onMeta);
-      window.removeEventListener('touchstart', unlockVideo);
+      trigger.scrollTrigger?.kill();
     };
-  }, [videoSrc]);
+  }, [reduced]);
+
+  const current = slides[currentIndex] || slides[0];
 
   return (
     <section id="hero" ref={sectionRef}>
-      <div className="hero-bg" />
-      {hasVideo ? (
-        <video
-          ref={videoRef}
-          className="hero-video"
-          src={videoSrc}
-          poster={poster}
-          muted
-          playsInline
-          autoPlay
-          preload="auto"
-          aria-label="Yuma Bay Eco Lodge intro"
-        />
-      ) : (
-        <img className="hero-img" src={poster} alt="Yuma Bay Eco Lodge" />
-      )}
-      <div className="hero-overlay" />
-      <div className="hero-logo-center" ref={logoRef}>
-        <h1 className="hero-title grad-text">
-          <EditMark path={['hero.title', 'hero.titleEm']} label="Hero title">{h.title} {h.titleEm}</EditMark>
-        </h1>
-        <p className="hero-tagline">
-          <EditMark path="hero.tagline" label="Hero tagline">{h.tagline}</EditMark>
-        </p>
+      <div className="hs-bg" ref={bgRef}>
+        {slides.map((slide, idx) => (
+          <div
+            key={slide.src}
+            ref={el => slideRefs.current[idx] = el}
+            className="hs-slide"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: idx === currentIndex ? 'block' : 'none',
+              overflow: 'hidden',
+            }}
+          >
+            <img
+              className="hs-bg-img"
+              src={slide.src}
+              alt={pick(slide, lang, 'title')}
+            />
+          </div>
+        ))}
       </div>
+      <div className="hero-overlay" />
+      <div className="hero-fade" />
+
+      {/* Top blur strip */}
+      <div className="hs-blur-top" />
+      {/* Bottom blur strip */}
+      <div className="hs-blur-bottom" />
+
+      {/* Static brand block — does NOT change with the slides */}
+      <div className="hs-content-top" ref={contentRef}>
+        <span className="hs-brand-name hs-anim">YUMA BAY</span>
+        <h1 className="hs-slide-title hs-anim">CLUB LOUNGE</h1>
+        <div className="hs-slide-kicker hs-anim">
+          <span>CARRIBEAN</span>
+        </div>
+      </div>
+      
+      <div className="hs-content-bottom">
+        <p className="hs-slide-desc hs-anim">EXCLUSIVE LIVING. ENDLESS HORIZONS.</p>
+      </div>
+
+      {slides.length > 1 && (
+        <div className="hs-dots" ref={uiRef}>
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`hs-dot ${idx === currentIndex ? 'active' : ''}`}
+              onClick={() => handleDotClick(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

@@ -25,52 +25,62 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 8px; /* closely group title & tagline */
   width: 100%;
-  max-width: 360px;
+  max-width: 420px;
   box-sizing: border-box;
 }
 
 .preloader-logo-wrap {
-  margin-bottom: 8px;
+  margin-bottom: 35px; /* generous space between logo and text */
   animation: logoPulse 2s infinite ease-in-out;
 }
 
 .preloader-logo {
-  height: clamp(44px, 12vw, 60px);
+  height: clamp(64px, 16vw, 130px); /* increased size of logo */
   width: auto;
   max-width: 100%;
   display: block;
 }
 
 .preloader-title {
-  font-family: 'Merzalina', 'Cormorant Garamond', serif;
-  font-size: clamp(28px, 8vw, 40px);
+  font-family: var(--font-heading);
+  font-size: clamp(36px, 10vw, 80px); /* increased font size of YUMA BAY */
   font-weight: 400;
-  letter-spacing: 0.22em;
-  color: #0A2229; /* ink */
+  letter-spacing: 0.12em;
+  color: #094c58; /* ink */
   margin: 0;
-  padding-left: 0.22em; /* offset for letter-spacing centering */
+  padding-left: 0.26em; /* offset for letter-spacing centering */
   white-space: nowrap;
+  line-height: .8;
+  opacity: 0; /* hidden until font is loaded */
+  transition: opacity 0.3s ease;
 }
 
 .preloader-subtitle {
-  font-family: 'Aptos Narrow', 'Jost', sans-serif;
-  font-size: clamp(10px, 3vw, 14px);
-  letter-spacing: 0.22em;
+  font-family: var(--font-body);
+  font-size: clamp(11px, 3.2vw, 20px);
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #0A4C58; /* teal — readable on light */
+  color: #9D7F5A; /* teal — readable on light */
   margin: 0;
-  padding-left: 0.22em;
+  padding-left: 0.24em;
+  opacity: 0; /* hidden until font is loaded */
+  transition: opacity 0.3s ease;
+}
+
+/* Shown once the CMS custom font file has been fully loaded */
+.preloader-title.font-ready,
+.preloader-subtitle.font-ready {
   opacity: 1;
 }
 
 .preloader-progress-container {
-  width: 100%;
-  height: 2px;
+  width: 80%;
+  height: 5px;
   background: rgba(10, 34, 41, 0.12);
   border-radius: 100px;
-  margin-top: 32px;
+  margin-top: 40px; /* generous distance below text block */
   overflow: hidden;
   position: relative;
 }
@@ -82,15 +92,4 @@
   transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.preloader-percentage {
-  font-family: 'Aptos Narrow', 'Jost', sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.15em;
-  color: rgba(10, 34, 41, 0.55);
-  margin-top: 8px;
-}
 
-@keyframes logoPulse {
-  0%, 100% { opacity: 0.6; transform: scale(0.98); }
-  50% { opacity: 1; transform: scale(1.02); }
-}

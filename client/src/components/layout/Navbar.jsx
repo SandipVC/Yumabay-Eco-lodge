@@ -22,21 +22,18 @@ export default function Navbar() {
   const isHome = pathname === '/';
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 60);
+      if (isHome) {
+        setHeroDone(window.scrollY >= window.innerHeight * 0.98);
+      }
+    };
+    onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [isHome]);
 
-  useEffect(() => {
-    const onProgress = (e) => setHeroDone(e.detail >= 0.98);
-    window.addEventListener('yb-hero-progress', onProgress);
-    return () => window.removeEventListener('yb-hero-progress', onProgress);
-  }, []);
-
-  // Reset the gate whenever we land back on home (hero will re-broadcast).
-  useEffect(() => { if (isHome) setHeroDone(false); }, [isHome]);
-
-  // Header is hidden only while the home hero scrub is still running.
+  // Header is hidden only while the home hero slider is at the top of the viewport.
   const navHidden = isHome && !heroDone;
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);

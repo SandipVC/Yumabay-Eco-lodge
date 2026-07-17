@@ -126,3 +126,29 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 
 ## Done — cms-upgrade
 - [x] In-context (WYSIWYG) bilingual text editing: `<EditMark>` + `EditModeContext` + `InlineTextEditor`; hybrid with existing `TextContentSection`. (ADR-10)
+
+## Done — hero-new-animation (2026-07-15)
+- [x] Hero rebuilt as auto-advancing expanding-card slider (GSAP FLIP expander, autoplay 6s, prev/next arrows, clickable square cards, progress bar + counter, Ken Burns idle zoom). (ADR-11)
+- [x] CMS: Media Manager → Hero tab now manages `assets.heroSlider` — add/replace/delete/reorder slides + per-slide bilingual kicker/title/description. Server `heroSlider` section in `routes/cms.js`.
+- [x] 5 dev slides seeded from existing gallery Storage images (2 stale URLs swapped: RENDER_9/11 → RENDER_15/13).
+- [x] Static brand block (YUMA BAY + tagline) left side; no CTA; not affected by slide changes.
+- [x] Mobile: slider UI row hidden; cards + brand only.
+- [x] Autoplay image-decode guard (no black background on slow networks).
+- [x] `@vitejs/plugin-react` ^4 → ^6 — clean `npm install` works with vite 8. (ADR-11.1)
+
+## Done — deployment-and-ui-fixes (2026-07-16)
+- [x] Prevent `app.listen()` from running during Firebase Cloud Functions codebase discovery/deployment by checking `isMain`. (ADR-12)
+- [x] Restore scroll-linked Navbar reveal on Home by listening to scroll position directly in `Navbar.jsx` instead of relying on `yb-hero-progress` event. (ADR-13)
+- [x] Refine Hero Section UI/UX layout, spacing, alignment, bottom gradient, localized logo glow, and animations to luxury brand standards. (ADR-14)
+- [x] Refactor Hero to remove thumbnails cards, disable Ken Burns zoom animation, implement a traditional Right -> Left horizontal sliding transition, center-align the brand logo/glow block at the bottom-center, replace progress pagination with modern centered dots, and implement static reference brand text proportions. (ADR-15)
+- [x] Refine Preloader layout: remove percentage text, increase YUMA BAY title font size, scale up logo height, and optimize vertical spacing. (ADR-16)
+
+## Done — refresh-preloader-fix (2026-07-17)
+- [x] Fix flash of default hero image and default fonts on page refresh by keeping the preloader overlay active until CMS assets finish loading; hide progress bar on refresh. (`Preloader.jsx`)
+- [x] Configure Preloader title and subtitle to use dynamic `--font-heading` and `--font-body` CSS variables so they immediately reflect the custom uploaded CMS fonts. (`Preloader.css`)
+- [x] Prevent automatic scroll-to-top on page refresh so that the browser's native scroll restoration works (e.g. staying on the Gallery section). (`App.jsx`)
+- [x] Redesign Cookie Consent banner to use the website's warm light theme (cream background, ink text, and teal buttons). (`global.css`)
+- [x] Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out in Layout.jsx for easy future activation).
+- [x] Change the website's default heading font to Cormorant Garamond to match your selected font, completely resolving the preloader runtime font flicker. (`global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js`)
+- [x] Cache CMS font selection in localStorage; inline script in index.html applies it before React renders — zero flicker for any custom uploaded font. (`index.html`, `App.jsx`)
+- [x] Load dynamic site map backdrop from CMS assets and add site map assets to Preloader pre-caching list to prevent slow background loading. (`SiteMap.jsx`, `Preloader.jsx`)

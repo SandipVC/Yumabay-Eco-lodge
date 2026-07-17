@@ -32,6 +32,8 @@ export default function Contact() {
     const errs = {};
     if (form.name.trim().length < 2) errs.name = 'Name is required';
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Valid email required';
+    if (form.phone.trim().length < 7) errs.phone = 'Valid phone number required';
+    if (!form.propertyInterest) errs.propertyInterest = 'Please select an option';
     if (form.message.trim().length < 5) errs.message = 'Please enter a message';
     return errs;
   };
@@ -182,6 +184,7 @@ export default function Contact() {
                     placeholder={c.phonePlaceholder} value={form.phone} onChange={handleChange}
                     autoComplete="tel"
                   />
+                  {errors.phone && <span className="form-error">{errors.phone}</span>}
                 </div>
                 <div className="form-field">
                   <label className="form-label" htmlFor="propertyInterest">{c.interestLabel}</label>
@@ -193,6 +196,7 @@ export default function Contact() {
                       <option key={i} value={i === 0 ? '' : opt}>{opt}</option>
                     ))}
                   </select>
+                  {errors.propertyInterest && <span className="form-error">{errors.propertyInterest}</span>}
                 </div>
               </div>
 

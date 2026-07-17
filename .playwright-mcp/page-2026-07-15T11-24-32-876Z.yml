@@ -1,0 +1,262 @@
+- generic [ref=e2]:
+  - generic [ref=e4]:
+    - generic:
+      - img "Yuma Bay"
+    - heading "YUMA BAY" [level=2] [ref=e5]
+    - paragraph [ref=e6]: Eco Lodge & Residences
+    - generic [ref=e8]: 0%
+  - navigation [ref=e9]:
+    - link [ref=e10] [cursor=pointer]:
+      - /url: /
+      - img "Yuma Bay Logo" [ref=e11]
+    - generic [ref=e12]:
+      - button "Toggle menu" [ref=e13] [cursor=pointer]
+      - button "Toggle language" [ref=e14] [cursor=pointer]: EN
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - img "Yuma Bay" [ref=e18]
+      - generic [ref=e19]:
+        - heading "YUMA BAY" [level=1] [ref=e20]
+        - paragraph [ref=e21]: Eco Lodge & Residences
+        - link "Discover More" [ref=e23] [cursor=pointer]:
+          - /url: "#about"
+      - generic [ref=e24]:
+        - button "Eco Villas" [ref=e25] [cursor=pointer]
+        - button "Beach Club" [ref=e26] [cursor=pointer]
+        - button "Pool & Gardens" [ref=e27] [cursor=pointer]
+        - button "Club Lounge" [ref=e28] [cursor=pointer]
+      - generic [ref=e29]:
+        - button "Previous slide" [ref=e30] [cursor=pointer]: ←
+        - button "Next slide" [ref=e31] [cursor=pointer]: →
+        - generic [ref=e34]: "01"
+    - generic [ref=e35]:
+      - generic [ref=e36]:
+        - generic [ref=e37]:
+          - paragraph [ref=e38]: (About the Project)
+          - heading "Where the Bahia meets paradise" [level=2] [ref=e39]
+        - figure [ref=e41]:
+          - img "Yuma Bay aerial view" [ref=e43]
+        - generic [ref=e44]:
+          - paragraph [ref=e45]: Combines the freedom of Caribbean living with European quality standards, refined design, and effortless international connectivity.
+          - paragraph [ref=e46]: Nestled along the untouched coastline of Boca de Yuma, it is a place where the rhythm of the sea, tropical nature, and modern comfort exist in perfect harmony. Designed for those seeking peace, beauty, and authenticity, Yuma Bay invites you to slow down, reconnect, and let the soul unwind.
+          - paragraph [ref=e47]: Natural materials, timeless architecture, and carefully curated spaces create an atmosphere of relaxed luxury and conscious living. From ocean-inspired residences to the exclusive Club Lounge experience, every detail reflects a lifestyle shaped by elegance, simplicity, and connection.
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - generic [ref=e50]: "0"
+          - generic [ref=e51]: m² Villas
+        - generic [ref=e52]:
+          - generic [ref=e53]: "0"
+          - generic [ref=e54]: Phases
+        - generic [ref=e55]:
+          - generic [ref=e56]: 0+
+          - generic [ref=e57]: Buildings
+    - generic [ref=e58]:
+      - generic [ref=e59]:
+        - generic [ref=e60]:
+          - paragraph [ref=e61]: (Properties)
+          - heading "Spaces crafted for living" [level=2] [ref=e62]
+        - paragraph [ref=e63]: Yuma Bay remains seamlessly connected to the world, with Punta Cana and La Romana International Airports less than 40 minutes away — offering rare accessibility while preserving the serenity of authentic Caribbean coastal life.
+      - generic [ref=e64]:
+        - article [ref=e65]:
+          - generic [ref=e66] [cursor=pointer]:
+            - img "Villas" [ref=e67]
+            - button "View Villas" [ref=e68]
+          - generic [ref=e69]:
+            - generic [ref=e70]:
+              - generic [ref=e71]: Phase 1 · Featured
+              - heading "Villas" [level=3] [ref=e72]
+              - paragraph [ref=e73]: 201–207 m² · Private Pool & Jacuzzi
+            - generic [ref=e74]:
+              - generic [ref=e75]: 3 Bedrooms
+              - generic [ref=e76]: Pool + Jacuzzi
+              - generic [ref=e77]: Double Carport
+              - generic [ref=e78]: Service Room
+            - button "Enquire Now" [ref=e79] [cursor=pointer]
+        - article [ref=e80]:
+          - generic [ref=e81] [cursor=pointer]:
+            - img "Suites & Apartments" [ref=e82]
+            - button "View Suites & Apartments" [ref=e83]
+          - generic [ref=e84]:
+            - generic [ref=e85]:
+              - generic [ref=e86]: Edificio A-B
+              - heading "Suites & Apartments" [level=3] [ref=e87]
+              - paragraph [ref=e88]: Suite · 1BR · 2BR · Multi-level
+            - generic [ref=e89]:
+              - generic [ref=e90]: Suite 33 m²
+              - generic [ref=e91]: 1BR 60–67 m²
+              - generic [ref=e92]: 2BR 91–95 m²
+              - generic [ref=e93]: Balconies
+            - button "Enquire Now" [ref=e94] [cursor=pointer]
+        - article [ref=e95]:
+          - generic [ref=e96] [cursor=pointer]:
+            - img "Apartments" [ref=e97]
+            - button "View Apartments" [ref=e98]
+          - generic [ref=e99]:
+            - generic [ref=e100]:
+              - generic [ref=e101]: Edificio C
+              - heading "Apartments" [level=3] [ref=e102]
+              - paragraph [ref=e103]: 1BR · 2BR · Ocean Views
+            - generic [ref=e104]:
+              - generic [ref=e105]: 1BR 52–59 m²
+              - generic [ref=e106]: 2BR 91–96 m²
+              - generic [ref=e107]: Sea Views
+              - generic [ref=e108]: Balconies
+            - button "Enquire Now" [ref=e109] [cursor=pointer]
+        - article [ref=e110]:
+          - generic [ref=e111] [cursor=pointer]:
+            - img "Premium 2BR" [ref=e112]
+            - button "View Premium 2BR" [ref=e113]
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - generic [ref=e116]: Edificios D · E
+              - heading "Premium 2BR" [level=3] [ref=e117]
+              - paragraph [ref=e118]: 121 m² Total · Uniform Floorplan
+            - generic [ref=e119]:
+              - generic [ref=e120]: 2 Bedrooms
+              - generic [ref=e121]: 94 m² Interior
+              - generic [ref=e122]: 27 m² Balcony
+              - generic [ref=e123]: Sea View
+            - button "Enquire Now" [ref=e124] [cursor=pointer]
+      - generic [ref=e127]:
+        - generic [ref=e128]: (Hospitality & Rental)
+        - paragraph [ref=e129]: Not available for private sale — operated as part of the hotel rental program.
+      - article [ref=e132]:
+        - generic [ref=e133] [cursor=pointer]:
+          - img "Beachfront Bungalows" [ref=e134]
+          - button "View Beachfront Bungalows" [ref=e135]
+        - generic [ref=e136]:
+          - generic [ref=e137]:
+            - generic [ref=e138]: Phase 2 · Coming Soon
+            - heading "Beachfront Bungalows" [level=3] [ref=e139]
+            - paragraph [ref=e140]: 5 units · Sala-Comedor · Walking Closet
+          - generic [ref=e141]:
+            - generic [ref=e142]: Master + Bath
+            - generic [ref=e143]: Walking Closet
+            - generic [ref=e144]: Beachfront
+            - generic [ref=e145]: Phase 2
+          - button "Enquire Now" [ref=e146] [cursor=pointer]
+    - generic [ref=e148]:
+      - heading "More than a place to stay. More than an investment." [level=2] [ref=e150]
+      - generic [ref=e151]:
+        - paragraph [ref=e152]: A destination where lifestyle, quality, community, and Caribbean freedom come together naturally.
+        - button "Visit Site plan" [ref=e153] [cursor=pointer]
+    - generic [ref=e154]:
+      - generic [ref=e156]:
+        - generic [ref=e157]:
+          - paragraph [ref=e158]: (Amenities)
+          - heading "Every detail considered" [level=2] [ref=e159]
+        - paragraph [ref=e161]: A curated collection of amenities and services designed to elevate your living experience at Yuma Bay, blending luxury with the natural beauty of the Caribbean.
+      - generic [ref=e162]:
+        - generic [ref=e167]:
+          - heading "Swimming Pools" [level=3] [ref=e168]
+          - paragraph [ref=e169]: Two resort-style pools plus a dedicated children's pool, designed for family enjoyment.
+        - generic [ref=e174]:
+          - heading "Gymnasium" [level=3] [ref=e175]
+          - paragraph [ref=e176]: Fully equipped with modern technology — built for residents who want to stay active.
+        - generic [ref=e181]:
+          - heading "Beach Club" [level=3] [ref=e182]
+          - paragraph [ref=e183]: Phase 2 private beach club with pool bar and direct access to Bahía de Yuma.
+        - generic [ref=e188]:
+          - heading "Mini Market" [level=3] [ref=e189]
+          - paragraph [ref=e190]: On-site convenience store offering daily essentials and basic services to residents.
+        - generic [ref=e195]:
+          - heading "Kids Area" [level=3] [ref=e196]
+          - paragraph [ref=e197]: Safe, shaded play zone purpose-built for the youngest family members.
+        - generic [ref=e202]:
+          - heading "Gated Security" [level=3] [ref=e203]
+          - paragraph [ref=e204]: 24/7 controlled gate access with on-site guardhouse — a closed, private community.
+        - generic [ref=e209]:
+          - heading "Covered Parking" [level=3] [ref=e210]
+          - paragraph [ref=e211]: 65 designated spaces for residents and guests across the property.
+        - generic [ref=e216]:
+          - heading "Green Spaces" [level=3] [ref=e217]
+          - paragraph [ref=e218]: Mangrove-adjacent landscaping with extensive tropical gardens throughout.
+    - generic [ref=e220]:
+      - generic [ref=e221]:
+        - paragraph [ref=e222]: (Visual Journey)
+        - heading "The essence of Yuma Bay" [level=2] [ref=e223]
+      - generic [ref=e224]:
+        - button "All" [ref=e225] [cursor=pointer]
+        - button "Villas" [ref=e226] [cursor=pointer]
+        - button "Apartments" [ref=e227] [cursor=pointer]
+        - button "Beach Club & Amenities" [ref=e228] [cursor=pointer]
+        - button "Boca de Yuma" [ref=e229] [cursor=pointer]
+    - generic [ref=e230]:
+      - generic [ref=e231]:
+        - generic:
+          - generic:
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+          - generic:
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+            - generic: YUMA BAY
+        - iframe [ref=e233]:
+          
+      - list [ref=e235]:
+        - listitem [ref=e236]:
+          - generic [ref=e237]:
+            - text: ~45
+            - emphasis [ref=e238]: min
+          - generic [ref=e239]: La Romana Airport
+        - listitem [ref=e240]:
+          - generic [ref=e241]:
+            - text: ~1.5
+            - emphasis [ref=e242]: hr
+          - generic [ref=e243]: Punta Cana
+        - listitem [ref=e244]:
+          - generic [ref=e245]:
+            - text: ~2.5
+            - emphasis [ref=e246]: hr
+          - generic [ref=e247]: Santo Domingo
+        - listitem [ref=e248]:
+          - generic [ref=e249]: Direct
+          - generic [ref=e250]: Beach Access
+    - generic [ref=e252]:
+      - heading "Let the ocean set the rhythm. Let life feel lighter again." [level=2] [ref=e254]
+      - button "Schedule a Visit" [ref=e255] [cursor=pointer]:
+        - generic [ref=e256]:
+          - img [ref=e257]:
+            - generic [ref=e260]: GET IN TOUCH • GET IN TOUCH • GET IN TOUCH • GET IN TOUCH •
+          - generic:
+            - img "Arrow"
+  - contentinfo [ref=e261]:
+    - generic [ref=e262]:
+      - img "Yuma Bay Logo" [ref=e263]
+      - generic [ref=e264]:
+        - link "info@yumabay.com" [ref=e265] [cursor=pointer]:
+          - /url: mailto:info@yumabay.com
+        - link "+1 (809) 000-0000" [ref=e266] [cursor=pointer]:
+          - /url: tel:+1(809)000-0000
+      - paragraph [ref=e267]: Calle el Malecón Boca de Yuma, La Altagracia, DR
+    - generic [ref=e268]:
+      - paragraph [ref=e269]: © 2025 Yuma Bay Eco Lodge. All rights reserved.
+      - generic [ref=e270]:
+        - link "Instagram" [ref=e271] [cursor=pointer]:
+          - /url: "#"
+          - img "Instagram" [ref=e272]
+        - link "Facebook" [ref=e273] [cursor=pointer]:
+          - /url: "#"
+          - img "Facebook" [ref=e274]
+        - link "X" [ref=e275] [cursor=pointer]:
+          - /url: "#"
+  - generic:
+    - generic:
+      - paragraph:
+        - text: We use cookies to personalize content and anonymously analyze our site traffic.
+        - link "Cookie Policy":
+          - /url: "#privacy"
+      - generic:
+        - button "Decline"
+        - button "Accept"
