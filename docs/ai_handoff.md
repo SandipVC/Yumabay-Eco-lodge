@@ -134,6 +134,7 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out for easy future activation) | `Layout.jsx` | — |
 | Change the website's default heading font to Cormorant Garamond (making it the default fallback brand font) to eliminate the preloader runtime font transition flicker | `global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js` | — |
 | Cache CMS font selection (font-family + custom font file URL) in localStorage; inline script in index.html applies it synchronously before React renders — zero font flicker on refresh for any CMS-uploaded custom font | `index.html`, `App.jsx` | — |
+| Load dynamic site map backdrop from CMS assets instead of hardcoded fallback; add site map backdrop and plan layout images to Preloader image list to cache them before rendering to eliminate load lag | `SiteMap.jsx`, `Preloader.jsx` | — |
 
 ### What's next
 

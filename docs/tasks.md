@@ -151,3 +151,4 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 - [x] Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out in Layout.jsx for easy future activation).
 - [x] Change the website's default heading font to Cormorant Garamond to match your selected font, completely resolving the preloader runtime font flicker. (`global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js`)
 - [x] Cache CMS font selection in localStorage; inline script in index.html applies it before React renders — zero flicker for any custom uploaded font. (`index.html`, `App.jsx`)
+- [x] Load dynamic site map backdrop from CMS assets and add site map assets to Preloader pre-caching list to prevent slow background loading. (`SiteMap.jsx`, `Preloader.jsx`)
