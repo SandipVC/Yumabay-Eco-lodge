@@ -133,6 +133,7 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Redesign Cookie Consent banner to follow the website's warm light theme (cream background, ink text, teal buttons) | `global.css` | — |
 | Disable Cookie Consent banner by default since no tracking cookies are set (kept commented out for easy future activation) | `Layout.jsx` | — |
 | Change the website's default heading font to Cormorant Garamond (making it the default fallback brand font) to eliminate the preloader runtime font transition flicker | `global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js` | — |
+| Cache CMS font selection (font-family + custom font file URL) in localStorage; inline script in index.html applies it synchronously before React renders — zero font flicker on refresh for any CMS-uploaded custom font | `index.html`, `App.jsx` | — |
 
 ### What's next
 
