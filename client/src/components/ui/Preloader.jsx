@@ -5,6 +5,9 @@ import './Preloader.css';
 // Local bundled logo — CMS can override via assets.branding.logo
 const DEFAULT_LOGO = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fbrand%2Flogo-yb.svg?alt=media';
 
+const DEFAULT_SITEMAP_BACKDROP = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2FYumabay_Layout.png?alt=media';
+const DEFAULT_SITEMAP_PLAN = 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media';
+
 export default function Preloader() {
   const { assets, loading } = useAssets();
   const logoUrl = assets?.branding?.logo || DEFAULT_LOGO;
@@ -93,6 +96,12 @@ export default function Preloader() {
       }
       // Static logo
       if (logoUrl) criticalImages.push(logoUrl);
+
+      // Sitemap backdrop & plan image
+      const sitemapBackdrop = assets?.sitemap?.backdrop || DEFAULT_SITEMAP_BACKDROP;
+      if (sitemapBackdrop) criticalImages.push(sitemapBackdrop);
+      const sitemapPlan = assets?.sitemap?.planImage || DEFAULT_SITEMAP_PLAN;
+      if (sitemapPlan) criticalImages.push(sitemapPlan);
 
       // Filter unique and non-data URLs
       const uniqueImages = [...new Set(criticalImages)].filter(

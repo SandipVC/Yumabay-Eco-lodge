@@ -33,6 +33,7 @@ export default function SiteMap() {
   const [inlineErrors, setInlineErrors] = useState({});
   const [submitStatus, setSubmitStatus] = useState('idle');
 
+  const backdropUrl  = assets?.sitemap?.backdrop || BACKDROP_URL;
   const planImage    = assets?.sitemap?.planImage || SITEMAP_DEFAULTS.planImage;
   const masterPdf    = assets?.sitemap?.masterPdf || SITEMAP_DEFAULTS.masterPdf;
   const villasPdf    = assets?.sitemap?.villasPdf || SITEMAP_DEFAULTS.villasPdf;
@@ -194,7 +195,7 @@ export default function SiteMap() {
 
             {/* Base image — grayscale when map is hovered */}
             <image
-              href={BACKDROP_URL}
+              href={backdropUrl}
               x="0" y="0" width="840" height="480"
               preserveAspectRatio="none"
               style={{
@@ -205,7 +206,7 @@ export default function SiteMap() {
 
             {/* Color reveal — same image clipped to zone rects, fades in on hover */}
             <image
-              href={BACKDROP_URL}
+              href={backdropUrl}
               x="0" y="0" width="840" height="480"
               preserveAspectRatio="none"
               clipPath="url(#sm-zones-clip)"
