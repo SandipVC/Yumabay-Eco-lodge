@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLang } from '../../context/LanguageContext.jsx';
+import EditMark from '../cms/EditMark.jsx';
 
 export default function UnitGrid({ building, onEnquire }) {
   const { t } = useLang();
@@ -48,7 +49,7 @@ export default function UnitGrid({ building, onEnquire }) {
       {levels.length > 1 && (
         <div className="sitemap-level-select-wrap">
           <label className="sitemap-level-select-label">
-            {t.sitemap?.level || 'Level'}
+            <EditMark path="sitemap.level" label="Level label">{t.sitemap?.level || 'Level'}</EditMark>
           </label>
           <select
             className="sitemap-level-select"
@@ -92,7 +93,7 @@ export default function UnitGrid({ building, onEnquire }) {
         <div className="selected-unit-card">
           <div className="selected-unit-header">
             <h4 className="selected-unit-title">
-              {t.sitemap?.unit || 'Unit'} {selectedUnit.code}
+              <EditMark path="sitemap.unit" label="Unit label">{t.sitemap?.unit || 'Unit'}</EditMark> {selectedUnit.code}
             </h4>
             {selectedUnit.status !== 'available' && (
               <span className={`status-badge ${getStatusClass(selectedUnit.status)}`}>
@@ -103,23 +104,23 @@ export default function UnitGrid({ building, onEnquire }) {
 
           <div className="selected-unit-details">
             <div className="detail-row">
-              <span className="detail-label">{t.sitemap?.type || 'Type'}</span>
+              <span className="detail-label"><EditMark path="sitemap.type" label="Type label">{t.sitemap?.type || 'Type'}</EditMark></span>
               <span className="detail-value">{formatUnitType(selectedUnit.type)}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">{t.sitemap?.level || 'Level'}</span>
+              <span className="detail-label"><EditMark path="sitemap.level" label="Level label">{t.sitemap?.level || 'Level'}</EditMark></span>
               <span className="detail-value">{selectedUnit.level}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">{t.sitemap?.internalArea || 'Internal Area'}</span>
+              <span className="detail-label"><EditMark path="sitemap.internalArea" label="Internal Area label">{t.sitemap?.internalArea || 'Internal Area'}</EditMark></span>
               <span className="detail-value">{selectedUnit.areaInt} m²</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label">{t.sitemap?.balcony || 'Balcony'}</span>
+              <span className="detail-label"><EditMark path="sitemap.balcony" label="Balcony label">{t.sitemap?.balcony || 'Balcony'}</EditMark></span>
               <span className="detail-value">{selectedUnit.balcony} m²</span>
             </div>
             <div className="detail-row highlight">
-              <span className="detail-label">{t.sitemap?.totalArea || 'Total Area'}</span>
+              <span className="detail-label"><EditMark path="sitemap.totalArea" label="Total Area label">{t.sitemap?.totalArea || 'Total Area'}</EditMark></span>
               <span className="detail-value">{selectedUnit.total} m²</span>
             </div>
             {selectedUnit.note && (
@@ -132,7 +133,7 @@ export default function UnitGrid({ building, onEnquire }) {
               className="btn-primary enquire-unit-btn"
               onClick={() => onEnquire(selectedUnit.code, `${buildingNameTranslated} - ${selectedUnit.code}`)}
             >
-              {t.properties?.enquire || 'Enquire Now'} {selectedUnit.code}
+              <EditMark path="properties.enquire" label="Enquire button">{t.properties?.enquire || 'Enquire Now'}</EditMark> {selectedUnit.code}
             </button>
           )}
         </div>

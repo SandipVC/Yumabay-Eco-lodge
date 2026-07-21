@@ -481,12 +481,12 @@ export default function SiteMap() {
                 <>
                   <div className="sitemap-card-meta" style={{ marginBottom: 12 }}>
                     <div className="sitemap-meta-row">
-                      <span className="meta-key">{s.phase || 'Phase'}</span>
+                      <span className="meta-key"><EditMark path="sitemap.phase" label="Phase label">{s.phase || 'Phase'}</EditMark></span>
                       <span className="meta-val">{activeZone.phase}</span>
                     </div>
                     {activeZone.area && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">{s.areaRange || 'Area Range'}</span>
+                        <span className="meta-key"><EditMark path="sitemap.areaRange" label="Area Range label">{s.areaRange || 'Area Range'}</EditMark></span>
                         <span className="meta-val">{translateZoneText(activeZone.area)}</span>
                       </div>
                     )}
@@ -497,24 +497,24 @@ export default function SiteMap() {
                 <>
                   <div className="sitemap-card-meta">
                     <div className="sitemap-meta-row">
-                      <span className="meta-key">{s.phase || 'Phase'}</span>
+                      <span className="meta-key"><EditMark path="sitemap.phase" label="Phase label">{s.phase || 'Phase'}</EditMark></span>
                       <span className="meta-val">{activeZone.phase}</span>
                     </div>
                     {activeZone.beds && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">{s.units || 'Units'}</span>
+                        <span className="meta-key"><EditMark path="sitemap.units" label="Units label">{s.units || 'Units'}</EditMark></span>
                         <span className="meta-val">{translateZoneText(activeZone.beds)}</span>
                       </div>
                     )}
                     {activeZone.area && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">{s.area || 'Area'}</span>
+                        <span className="meta-key"><EditMark path="sitemap.area" label="Area label">{s.area || 'Area'}</EditMark></span>
                         <span className="meta-val">{translateZoneText(activeZone.area)}</span>
                       </div>
                     )}
                     {activeZone.units && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">{s.totalUnits || 'Total Units'}</span>
+                        <span className="meta-key"><EditMark path="sitemap.totalUnits" label="Total Units label">{s.totalUnits || 'Total Units'}</EditMark></span>
                         <span className="meta-val">{activeZone.units}</span>
                       </div>
                     )}

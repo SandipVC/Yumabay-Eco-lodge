@@ -8,6 +8,9 @@
  */
 import { useEditMode } from '../../context/EditModeContext.jsx';
 import { Link, useLocation } from 'react-router-dom';
+import { useState } from 'react';
+import MediaLibraryPicker from './MediaLibraryPicker.jsx';
+import { useAssets, invalidateAssetsCache } from '../../hooks/useAssets.js';
 
 export default function InlineTextEditor() {
   const em = useEditMode();
@@ -18,7 +21,59 @@ export default function InlineTextEditor() {
   const {
     editor, closeEditor, getValue, setValue,
     save, saving, saved, dirtyCount, error, exitEdit,
+    mediaEditor, closeMediaEditor, hasToken
   } = em;
+
+  const { refresh } = useAssets();
+  const [mediaSaving, setMediaSaving] = useState(false);
+  const token = hasToken ? window.sessionStorage.getItem('yb_admin') : '';
+
+  const handleMediaPick = async (url) => {
+    if (!mediaEditor || mediaSaving || !token) return;
+    setMediaSaving(true);
+    try {
+      const { section, slot } = mediaEditor;
+      const res = await fetch(`/api/cms/reuse-asset/${section}${slot != null ? `/${slot}` : ''}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ url }),
+      });
+      if (!res.ok) throw new Error('Failed to update image');
+      invalidateAssetsCache();
+      await refresh?.();
+      closeMediaEditor();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setMediaSaving(false);
+    }
+  };
+
+  const handleMediaUpload = async (file) => {
+    if (!mediaEditor || mediaSaving || !token) return;
+    setMediaSaving(true);
+    try {
+      const { section, slot } = mediaEditor;
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch(`/api/cms/assets/${section}${slot != null ? `/${slot}` : ''}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: fd,
+      });
+      if (!res.ok) throw new Error('Failed to upload image');
+      invalidateAssetsCache();
+      await refresh?.();
+      closeMediaEditor();
+    } catch (err) {
+      alert(err.message);
+    } finally {
+      setMediaSaving(false);
+    }
+  };
 
   return (
     <>
@@ -88,6 +143,15 @@ export default function InlineTextEditor() {
             </div>
           </div>
         </div>
+      )}
+
+      {mediaEditor && (
+        <MediaLibraryPicker
+          token={token}
+          onPick={handleMediaPick}
+          onUpload={handleMediaUpload}
+          onCancel={closeMediaEditor}
+        />
       )}
     </>
   );

@@ -11,6 +11,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import EditMark from '../cms/EditMark.jsx';
+import EditMedia from '../cms/EditMedia.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -219,11 +220,13 @@ export default function Hero() {
               overflow: 'hidden',
             }}
           >
-            <img
-              className="hs-bg-img"
-              src={slide.src}
-              alt={pick(slide, lang, 'title')}
-            />
+            <EditMedia section="heroSlider" slot={idx} style={{ width: '100%', height: '100%' }}>
+              <img
+                className="hs-bg-img"
+                src={slide.src}
+                alt={pick(slide, lang, 'title')}
+              />
+            </EditMedia>
           </div>
         ))}
       </div>
