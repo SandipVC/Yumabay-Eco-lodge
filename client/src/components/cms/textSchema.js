@@ -34,11 +34,12 @@ export const TEXT_SECTIONS = [
   },
   {
     id: 'hero',
-    label: 'Hero',
+    label: 'Hero Brand Block',
     fields: [
+      { key: 'brandName', label: 'Brand Name', kind: 'text' },
       { key: 'title', label: 'Title', kind: 'text' },
-      { key: 'titleEm', label: 'Title (highlighted word)', kind: 'text' },
-      { key: 'tagline', label: 'Tagline', kind: 'text' },
+      { key: 'kicker', label: 'Kicker', kind: 'text' },
+      { key: 'desc', label: 'Description', kind: 'text' },
     ],
   },
   {

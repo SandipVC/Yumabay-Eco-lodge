@@ -10,10 +10,10 @@ export const en = {
     reserveNow: 'Reserve Now',
   },
   hero: {
-    eyebrow: 'Boca de Yuma · La Altagracia · Dominican Republic',
-    title: 'YUMA',
-    titleEm: 'BAY',
-    tagline: 'Eco Lodge & Residences',
+    brandName: 'YUMA BAY',
+    title: 'CLUB LOUNGE',
+    kicker: 'CARIBBEAN',
+    desc: 'EXCLUSIVE LIVING. ENDLESS HORIZONS.',
   },
   strip: [
     'Caribbean Eco-Lodge',

@@ -1,60 +1,10 @@
 {
-  "branding": {
-    "logo": null
-  },
   "hero": {
     "video": null,
-    "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2Fhero-dusk.jpg?alt=media"
+    "poster": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fhero%2F1783079564799_3.png?alt=media"
   },
-  "heroSlider": [
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_1.png?alt=media",
-      "kickerEn": "Boca de Yuma · Dominican Republic",
-      "kickerEs": "Boca de Yuma · República Dominicana",
-      "titleEn": "Yuma Bay",
-      "titleEs": "Yuma Bay",
-      "descEn": "Eco Lodge & Residences on the untouched southeast coast — where the Yuma River meets the Caribbean Sea.",
-      "descEs": "Eco Lodge & Residencias en la costa sureste virgen — donde el río Yuma se encuentra con el mar Caribe."
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_7.png?alt=media",
-      "kickerEn": "Private Residences",
-      "kickerEs": "Residencias privadas",
-      "titleEn": "Eco Villas",
-      "titleEs": "Eco Villas",
-      "descEn": "Three-bedroom villas with private pools and gardens, a few steps from the shore.",
-      "descEs": "Villas de tres habitaciones con piscinas privadas y jardines, a pocos pasos de la orilla."
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_15.png?alt=media",
-      "kickerEn": "Oceanfront Living",
-      "kickerEs": "Vida frente al mar",
-      "titleEn": "Beach Club",
-      "titleEs": "Club de Playa",
-      "descEn": "A private beach club with infinity pool, bar and direct access to the Caribbean.",
-      "descEs": "Un club de playa privado con piscina infinita, bar y acceso directo al Caribe."
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_13.png?alt=media",
-      "kickerEn": "Resort Amenities",
-      "kickerEs": "Amenidades del resort",
-      "titleEn": "Pool & Gardens",
-      "titleEs": "Piscina y Jardines",
-      "descEn": "Tropical pools and lush gardens woven through the whole resort.",
-      "descEs": "Piscinas tropicales y exuberantes jardines a lo largo de todo el resort."
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media",
-      "kickerEn": "Members & Guests",
-      "kickerEs": "Socios e invitados",
-      "titleEn": "Club Lounge",
-      "titleEs": "Club Lounge",
-      "descEn": "Restaurant, lounge and co-working with panoramic views over the bay.",
-      "descEs": "Restaurante, lounge y co-working con vistas panorámicas a la bahía."
-    }
-  ],
   "about": {
-    "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2F1781701241190_R-16.png?alt=media",
+    "main": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2F1784201453256_ChatGPT_Image_Jul_16_2026_03_46_15_PM_1.png?alt=media",
     "accent": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fabout%2FLOCATION_-_GRUND.jpg?alt=media"
   },
   "properties": [
@@ -67,142 +17,126 @@
   "gallery": [
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_1.png?alt=media",
-      "label": "Yuma Bay Overview",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_3.png?alt=media",
-      "label": "Aerial View",
-      "cat": "Exterior"
+      "cat": "Apartments",
+      "labelEs": "",
+      "labelEn": ""
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_7.png?alt=media",
-      "label": "Villa Exterior",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_9.png?alt=media",
-      "label": "Beach Club",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_11.png?alt=media",
-      "label": "Pool Area",
-      "cat": "Exterior"
+      "cat": "Apartments"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_13.png?alt=media",
-      "label": "Garden Terrace",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND.jpg?alt=media",
-      "label": "Boca de Yuma Coast",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_3.jpg?alt=media",
-      "label": "Location View",
-      "cat": "Exterior"
+      "cat": "Apartments"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_-_2.jpg?alt=media",
-      "label": "Bahia de Yuma",
-      "cat": "Exterior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FLOCATION_-_GRUND_4.jpg?alt=media",
-      "label": "Eastern Coast",
-      "cat": "Exterior"
+      "cat": "Boca de Yuma"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-01.png?alt=media",
-      "label": "Living Room",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-02.png?alt=media",
-      "label": "Master Bedroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-03.png?alt=media",
-      "label": "Kitchen",
-      "cat": "Interior"
+      "cat": "Apartments"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-04.png?alt=media",
-      "label": "Bathroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-05.png?alt=media",
-      "label": "Terrace View",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-06.png?alt=media",
-      "label": "Dining Area",
-      "cat": "Interior"
+      "cat": "Apartments"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-07.png?alt=media",
-      "label": "Second Bedroom",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-08.png?alt=media",
-      "label": "Study",
-      "cat": "Interior"
+      "cat": "Villas"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-09.png?alt=media",
-      "label": "Jacuzzi",
-      "cat": "Interior"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FR-10.png?alt=media",
-      "label": "Corridor",
-      "cat": "Interior"
+      "cat": "Villas"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media",
-      "label": "Club Lounge",
       "cat": "Amenities"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_2.jpg?alt=media",
-      "label": "Lounge Bar",
       "cat": "Amenities"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_3.jpg?alt=media",
-      "label": "Lounge Terrace",
       "cat": "Amenities"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_4.jpg?alt=media",
-      "label": "Pool Deck",
-      "cat": "Amenities"
-    },
-    {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_5.jpg?alt=media",
-      "label": "Beach Club View",
       "cat": "Amenities"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_6.jpg?alt=media",
-      "label": "Club Interior",
       "cat": "Amenities"
     },
     {
       "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_15.png?alt=media",
-      "label": "Swimming Pool",
-      "cat": "Amenities"
+      "cat": "Apartments"
     },
     {
-      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FRENDER_ANLAGE_YUMA_BAY_ECO_LODGE_17.png?alt=media",
-      "label": "Gym",
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783073482255_Zwischenablage_07-01-2026_01.jpg?alt=media",
+      "labelEn": "Zwischenablage_07-01-2026_01",
+      "labelEs": "",
+      "cat": "Boca de Yuma"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783073501261_BARCO.jpg?alt=media",
+      "labelEn": "BARCO",
+      "labelEs": "",
+      "cat": "Boca de Yuma"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783073515911_FISCHER_HAFEN.jpg?alt=media",
+      "labelEn": "FISCHER HAFEN",
+      "labelEs": "",
+      "cat": "Boca de Yuma"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783073531529_FLUS.jpg?alt=media",
+      "labelEn": "FLUS",
+      "labelEs": "",
+      "cat": "Boca de Yuma"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074415451_WhatsApp_Image_2025-10-29_at_18.12.20_6.jpeg?alt=media",
+      "labelEn": "WhatsApp Image 2025-10-29 at 18.12.20 (6)",
+      "labelEs": "",
+      "cat": "Apartments"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074419315_WhatsApp_Image_2025-10-29_at_18.12.21.jpeg?alt=media",
+      "labelEn": "WhatsApp Image 2025-10-29 at 18.12.21",
+      "labelEs": "",
+      "cat": "Apartments"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074422524_WhatsApp_Image_2025-10-29_at_18.12.20_1.jpeg?alt=media",
+      "labelEn": "WhatsApp Image 2025-10-29 at 18.12.20 (1)",
+      "labelEs": "",
+      "cat": "Apartments"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074425071_WhatsApp_Image_2025-10-29_at_18.12.21_1.jpeg?alt=media",
+      "labelEn": "WhatsApp Image 2025-10-29 at 18.12.21 (1)",
+      "labelEs": "",
+      "cat": "Apartments"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074580353_RENDER_ANLAGE_YUMA_BAY_ECO_LODGE_17.png?alt=media",
+      "labelEn": "RENDER ANLAGE YUMA BAY ECO LODGE (17)",
+      "labelEs": "",
+      "cat": "Villas"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783074687835_villas_ohne_autos.png?alt=media",
+      "labelEn": "villas ohne autos",
+      "labelEs": "",
+      "cat": "Villas"
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783078779398_Escena_4_1.png?alt=media",
+      "labelEn": "Escena 4_1",
+      "labelEs": "",
       "cat": "Amenities"
     }
   ],
@@ -214,16 +148,10 @@
   ],
   "sitemap": {
     "planImage": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media",
-    "backdrop": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2FYumabay_Layout.png?alt=media",
     "masterPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FMASTER_PLAN_YUMA_BAY.pdf?alt=media",
     "villasPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2FPARCELAS_VILLAS_YUMA_BAY.pdf?alt=media",
-    "brochurePdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Fyuma-bay-brochure.pdf?alt=media",
-    "amenitiesPdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2Famenidades.pdf?alt=media"
-  },
-  "decor": {
-    "aboutPalms": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalms-about.png?alt=media",
-    "loungePattern": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalm-band-cta.png?alt=media",
-    "ctaPattern": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Ffigma%2Fpalm-band-cta.png?alt=media"
+    "brochurePdf": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/pdf%2F1784273185396_Yuma_Bay_Brochure.pdf?alt=media",
+    "backdrop": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fsitemap%2F1784290276533_Yumabay_Layout_2.jpg?alt=media"
   },
   "sitemapZones": [
     {
@@ -322,8 +250,185 @@
     }
   ],
   "translations": {
-    "es": {},
-    "en": {}
+    "en": {
+      "properties": {},
+      "cta": {
+        "eyebrow": "",
+        "title": "Let the ocean set the rhythm.\nLet life feel lighter, softer, and free.",
+        "titleEm": "",
+        "brochureBtn": "Request Brochure",
+        "visitBtn": "Schedule a Visit"
+      },
+      "footer": {
+        "tagline": "An eco-conscious luxury development on the shores of Boca de Yuma, Dominican Republic. Where nature, architecture, and the Caribbean come together.",
+        "propertiesCol": "Properties",
+        "propertiesLinks": [
+          "Villa Tipo 1",
+          "Apartments A–E",
+          "Bungalows",
+          "Floor Plans"
+        ],
+        "devCol": "Development",
+        "devLinks": [
+          "Master Plan",
+          "Phase 1",
+          "Phase 2",
+          "Beach Club"
+        ],
+        "contactCol": "Contact",
+        "email": "Info@yumabay-ecolodge.com",
+        "phone": "+1 (829) 548-9863",
+        "copyright": "© 2025 Yuma Bay Eco Lodge. All rights reserved.",
+        "instagram": "Instagram",
+        "instagramUrl": "#",
+        "facebook": "Facebook",
+        "facebookUrl": "#",
+        "xLabel": "X",
+        "xUrl": "#",
+        "whatsapp": "WhatsApp"
+      },
+      "hero": {
+        "subtitle": "",
+        "exploreBtn": "Explore Properties",
+        "discoverBtn": "Discover More"
+      },
+      "lounge": {
+        "bookBtn": "Site plan"
+      },
+      "about": {
+        "label": "About the Project",
+        "title": "Find Your Hidden Caribbean Paradise",
+        "titleEm": " ",
+        "stat1Num": "207 -  222",
+        "stat1Lbl": "m² Villas",
+        "stat2Num": "2",
+        "stat2Lbl": "Phases",
+        "badge": "Phases",
+        "viewAll": "View All Properties"
+      },
+      "amenities": {
+        "label": "Amenities",
+        "title": "Every detail\nconsidered",
+        "body": "A curated collection of amenities and services designed to elevate your living experience at Yuma Bay, blending luxury with the natural beauty of the Caribbean."
+      },
+      "location": {
+        "label": "Location",
+        "title": "Calle Malecon,",
+        "titleEm": "Boca de Yuma",
+        "distances": [
+          {
+            "name": "La Romana Airport",
+            "val": "~40",
+            "unit": "min"
+          },
+          {
+            "name": "Punta Cana",
+            "val": "~45",
+            "unit": "min"
+          },
+          {
+            "name": "Santo Domingo",
+            "val": "~1.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Beach Club  Access",
+            "val": "Direct",
+            "unit": ""
+          }
+        ],
+        "enquireBtn": "Enquire Now"
+      }
+    },
+    "es": {
+      "cta": {
+        "eyebrow": "",
+        "title": "Deja que el océano marque el ritmo. \nDeja que la vida  sentirse ligera. ",
+        "titleEm": "",
+        "brochureBtn": "Solicitar Brochure",
+        "visitBtn": "Programar una Visita"
+      },
+      "footer": {
+        "tagline": "Un desarrollo de lujo eco-consciente a orillas de Boca de Yuma, República Dominicana. Donde la naturaleza, la arquitectura y el Caribe se unen.",
+        "propertiesCol": "Propiedades",
+        "propertiesLinks": [
+          "Villa Tipo 1",
+          "Apartamentos A–E",
+          "Bungalows",
+          "Planos"
+        ],
+        "devCol": "Desarrollo",
+        "devLinks": [
+          "Master Plan",
+          "Fase 1",
+          "Fase 2",
+          "Club de Playa"
+        ],
+        "contactCol": "Contacto",
+        "email": "Info@yumabay-ecolodge.com",
+        "phone": "+1 (829) 548-9863",
+        "copyright": "© 2025 Yuma Bay Eco Lodge. Todos los derechos reservados.",
+        "instagram": "Instagram",
+        "instagramUrl": "#",
+        "facebook": "Facebook",
+        "facebookUrl": "#",
+        "xLabel": "X",
+        "xUrl": "#",
+        "whatsapp": "WhatsApp"
+      },
+      "hero": {
+        "subtitle": "",
+        "exploreBtn": "Ver Propiedades",
+        "discoverBtn": "Descubrir Más"
+      },
+      "lounge": {
+        "bookBtn": "Plano del sitio"
+      },
+      "about": {
+        "label": "Sobre el Proyecto",
+        "title": "Encuentra tu paraíso escondido en el Caribe",
+        "titleEm": " ",
+        "stat1Num": "207 - 222",
+        "stat1Lbl": "m² Villas",
+        "stat2Num": "2",
+        "stat2Lbl": "Fases",
+        "badge": "Fases",
+        "viewAll": "Ver Todas las Propiedades"
+      },
+      "amenities": {
+        "label": "Comodidades",
+        "title": "Cada detalle\nconsiderado",
+        "body": "Una colección seleccionada de comodidades y servicios diseñados para elevar su experiencia de vida en Yuma Bay, combinando el lujo con la belleza natural del Caribe."
+      },
+      "location": {
+        "label": "Ubicación",
+        "title": "Calle Malecon,",
+        "titleEm": "Boca de Yuma",
+        "distances": [
+          {
+            "name": "Aeropuerto La Romana",
+            "val": "~40",
+            "unit": "min"
+          },
+          {
+            "name": "Punta Cana",
+            "val": "~45",
+            "unit": "min"
+          },
+          {
+            "name": "Santo Domingo",
+            "val": "~1.5",
+            "unit": "hr"
+          },
+          {
+            "name": "Acceso al Club de  Playa",
+            "val": "Directo",
+            "unit": ""
+          }
+        ],
+        "enquireBtn": "Consultar Ahora"
+      }
+    }
   },
   "inventory": {
     "schemaVersion": 1,
@@ -1455,13 +1560,82 @@
       ]
     }
   },
-  "propertyImages": [
-    [
-      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782125061124_Villa.jpg?alt=media"
+  "propertyImages": {
+    "0": [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782128092189_R-13.png?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980099834_villas_ohne_autos.png?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980220858_R-07.png?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980263144_R-09.png?alt=media"
     ],
-    [],
-    [],
-    [],
-    []
+    "1": [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980344164_R-17.png?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980551653_R-20.png?alt=media"
+    ],
+    "2": [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782127461547_RENDER_ANLAGE_YUMA_BAY_ECO_LODGE_22.PNG?alt=media"
+    ],
+    "3": [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782127239971_R-05.png?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782980622170_R-19.png?alt=media"
+    ],
+    "4": [
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1782127417712_WhatsApp_Image_2026-04-30_at_14.12.35_2.jpeg?alt=media",
+      "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FpropertyImages%2F1783075462545_8.jpg?alt=media"
+    ]
+  },
+  "propertyPrices": [
+    "",
+    "",
+    "",
+    "",
+    ""
+  ],
+  "galleryShowLabels": false,
+  "branding": {
+    "logo": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fbranding%2F1782808858113_Logo_YB2_2.svg?alt=media"
+  },
+  "fonts": {
+    "headingFontFile": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/fonts%2F1783332686873_Canela-Medium-Trial.otf?alt=media",
+    "headingFont": "'CMSHeadingFont', 'Cormorant Garamond', serif",
+    "bodyFontFile": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/fonts%2F1783332830543_AvenirNextCyr-Medium.woff2?alt=media",
+    "bodyFont": "'CMSBodyFont', 'Jost', sans-serif"
+  },
+  "heroSlider": [
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2FYUMA_BAY_CLUB_LOUNGE_1.jpg?alt=media",
+      "kickerEn": "Members & Guests",
+      "kickerEs": "Socios e invitados",
+      "titleEn": "Club Lounge",
+      "titleEs": "Club Lounge",
+      "descEn": "Restaurant, lounge and co-working with panoramic views over the bay.",
+      "descEs": "Restaurante, lounge y co-working con vistas panorámicas a la bahía."
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fgallery%2F1783078779398_Escena_4_1.png?alt=media",
+      "titleEn": "",
+      "titleEs": "",
+      "kickerEn": "",
+      "kickerEs": "",
+      "descEn": "",
+      "descEs": ""
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2Fproperties%2F1781700641224_RENDER_ANLAGE_YUMA_BAY_ECO_LODGE_9.png?alt=media",
+      "titleEn": "",
+      "titleEs": "",
+      "kickerEn": "",
+      "kickerEs": "",
+      "descEn": "",
+      "descEs": ""
+    },
+    {
+      "src": "https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/images%2Fcms%2FheroSlider%2F1784199812631_LOCATION_-_GRUND_4.jpg?alt=media",
+      "titleEn": "",
+      "titleEs": "",
+      "kickerEn": "",
+      "kickerEs": "",
+      "descEn": "",
+      "descEs": ""
+    }
   ]
 }

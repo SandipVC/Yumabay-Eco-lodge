@@ -10,6 +10,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
+import EditMark from '../cms/EditMark.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -236,15 +237,23 @@ export default function Hero() {
 
       {/* Static brand block — does NOT change with the slides */}
       <div className="hs-content-top" ref={contentRef}>
-        <span className="hs-brand-name hs-anim">YUMA BAY</span>
-        <h1 className="hs-slide-title hs-anim">CLUB LOUNGE</h1>
+        <span className="hs-brand-name hs-anim">
+          <EditMark path="hero.brandName" label="Hero Brand Name">{t.hero?.brandName}</EditMark>
+        </span>
+        <h1 className="hs-slide-title hs-anim">
+          <EditMark path="hero.title" label="Hero Title">{t.hero?.title}</EditMark>
+        </h1>
         <div className="hs-slide-kicker hs-anim">
-          <span>CARRIBEAN</span>
+          <span>
+            <EditMark path="hero.kicker" label="Hero Kicker">{t.hero?.kicker}</EditMark>
+          </span>
         </div>
       </div>
       
       <div className="hs-content-bottom">
-        <p className="hs-slide-desc hs-anim">EXCLUSIVE LIVING. ENDLESS HORIZONS.</p>
+        <p className="hs-slide-desc hs-anim">
+          <EditMark path="hero.desc" label="Hero Description">{t.hero?.desc}</EditMark>
+        </p>
       </div>
 
       {slides.length > 1 && (
