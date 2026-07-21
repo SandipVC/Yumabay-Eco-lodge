@@ -7,9 +7,12 @@
  *     each field path, updating the live draft as you type.
  */
 import { useEditMode } from '../../context/EditModeContext.jsx';
+import { Link, useLocation } from 'react-router-dom';
 
 export default function InlineTextEditor() {
   const em = useEditMode();
+  const location = useLocation();
+  
   if (!em || !em.editing) return null;
 
   const {
@@ -23,6 +26,12 @@ export default function InlineTextEditor() {
         <span className="yb-edit-dot" />
         <strong>Editing site text</strong>
         <span className="yb-edit-hint">Click any highlighted text</span>
+        
+        <div className="yb-edit-nav">
+          <Link to="/" className={`yb-edit-nav-btn ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
+          <Link to="/sitemap" className={`yb-edit-nav-btn ${location.pathname === '/sitemap' ? 'active' : ''}`}>Site Map</Link>
+        </div>
+
         <span className="yb-edit-spacer" />
         {error && <span className="yb-edit-err">{error}</span>}
         <span className="yb-edit-count">{dirtyCount} unsaved</span>
