@@ -136,11 +136,19 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Cache CMS font selection (font-family + custom font file URL) in localStorage; inline script in index.html applies it synchronously before React renders — zero font flicker on refresh for any CMS-uploaded custom font | `index.html`, `App.jsx` | — |
 | Load dynamic site map backdrop from CMS assets instead of hardcoded fallback; add site map backdrop and plan layout images to Preloader image list to cache them before rendering to eliminate load lag | `SiteMap.jsx`, `Preloader.jsx` | — |
 
+### Hero Brand Text Editability (2026-07-21, branch `release`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Make hero brand block text (Brand Name, Title, Kicker, and Description) fully editable through the bilingual CMS panel | `en.js`, `es.js`, `textSchema.js`, `Hero.jsx` | — |
+| Integrate click-to-edit inline overlays for all four hero brand text fields | `Hero.jsx` | — |
+| Update database clean-up script to remove stale hero translation keys from Firestore and fallback assets.json, ensuring the new defaults load correctly | `strip-stale-overrides.mjs` | — |
+
 ### What's next
 
-- Run `firebase deploy --only hosting,functions` to verify that the deployment completes without timeouts.
-- Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
-- Merge `hero-new-animation` → `main` after client reviews the new hero slider.
+- Verify deployment on `vessel-contianer.web.app`.
+- Ask the client to test modifying the hero brand texts in the CMS.
+- Merge `release` to `main` when client sign-off is received.
 
 
 **Note:** The hero scrub video iOS/Android buffering bug and touch-scroll keyframing issue have both been fully resolved. The video was re-encoded with `-movflags +faststart` and `-g 1`, and `Hero.jsx` was updated with `autoPlay` and a `touchstart` unlocker.
