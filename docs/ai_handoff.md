@@ -144,10 +144,19 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Integrate click-to-edit inline overlays for all four hero brand text fields | `Hero.jsx` | — |
 | Update database clean-up script to remove stale hero translation keys from Firestore and fallback assets.json, ensuring the new defaults load correctly | `strip-stale-overrides.mjs` | — |
 
+### Sitemap Translation, Dropdown, and Inline Edit Support (2026-07-21, branch `release`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Localize sitemap page details sidebar keys (Phase, Area Range, Units, Blocked, Click to compare, etc.) and support runtime bilingual translation of default building names/types | `en.js`, `es.js`, `UnitGrid.jsx`, `SiteMap.jsx` | — |
+| Convert horizontal level selector tabs to a custom select dropdown styled for the dark detail card | `UnitGrid.jsx`, `global.css` | — |
+| Integrate click-to-edit inline overlays for all sitemap page headings, action buttons, and download files | `SiteMap.jsx` | — |
+| Add a Page Navigation switcher to the inline editor bottom toolbar to switch between Home and Site Map pages | `InlineTextEditor.jsx`, `global.css` | — |
+
 ### What's next
 
-- Verify deployment on `vessel-contianer.web.app`.
-- Ask the client to test modifying the hero brand texts in the CMS.
+- Ask the client to test the new sitemap levels select dropdown on mobile and desktop.
+- Verify sitemap inline translations and downloads are click-to-edit.
 - Merge `release` to `main` when client sign-off is received.
 
 
