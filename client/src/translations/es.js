@@ -235,6 +235,12 @@ export const es = {
     facebookUrl: '#',
     xLabel: 'X',
     xUrl: '#',
+    whatsappWidgetTitle: 'Escríbenos por WhatsApp',
+    whatsappWidgetSub: '¡Elige una de las opciones abajo!',
+    whatsappOp1Name: 'Oficina de Ventas',
+    whatsappOp1Url: '#',
+    whatsappOp2Name: 'Soporte al Cliente',
+    whatsappOp2Url: '#',
   },
   dashboard: {
     eyebrow: 'Yuma Bay',
