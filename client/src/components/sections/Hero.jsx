@@ -256,9 +256,6 @@ export default function Hero() {
       
       <div className="hs-content-bottom">
         <div className="hs-cta-row hs-anim">
-          <a href="#properties" className="hs-cta-btn">
-            <span className="hs-cta-label">{t.hero?.exploreProperties || 'Explore Properties'}</span>
-          </a>
           <Link to="/contact" className="hs-cta-btn">
             <span className="hs-cta-label">{t.hero?.contactUs || 'Contact Us'}</span>
           </Link>

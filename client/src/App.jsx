@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { useEffect, useRef, lazy, Suspense } from 'react';
 import { LanguageProvider } from './context/LanguageContext.jsx';
 import { EditModeProvider } from './context/EditModeContext.jsx';
@@ -134,6 +134,7 @@ export default function App() {
               <Route path="/sitemap" element={<SiteMap />} />
             </Route>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </Suspense>
         <InlineTextEditor />
