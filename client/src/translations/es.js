@@ -229,6 +229,8 @@ export const es = {
     copyright: '© 2025 Yuma Bay Eco Lodge. Todos los derechos reservados.',
     instagram: 'Instagram',
     instagramUrl: '#',
+    whatsapp: 'WhatsApp',
+    whatsappUrl: '#',
     facebook: 'Facebook',
     facebookUrl: '#',
     xLabel: 'X',

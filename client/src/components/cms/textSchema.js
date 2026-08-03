@@ -191,6 +191,8 @@ export const TEXT_SECTIONS = [
       { key: 'copyright', label: 'Copyright line', kind: 'text' },
       { key: 'instagram', label: 'Instagram link label', kind: 'text' },
       { key: 'instagramUrl', label: 'Instagram URL', kind: 'text' },
+      { key: 'whatsapp', label: 'WhatsApp link label', kind: 'text' },
+      { key: 'whatsappUrl', label: 'WhatsApp URL (e.g., https://wa.me/18090000000)', kind: 'text' },
       { key: 'facebook', label: 'Facebook link label', kind: 'text' },
       { key: 'facebookUrl', label: 'Facebook URL', kind: 'text' },
       { key: 'xLabel', label: 'X link label', kind: 'text' },
