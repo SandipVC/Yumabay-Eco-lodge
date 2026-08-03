@@ -38,6 +38,7 @@ export function EditModeProvider({ children }) {
   const [draft, setDraft]     = useState({ en: {}, es: {} });
   const [touched, setTouched] = useState(() => new Set()); // "lang:path" keys
   const [editor, setEditor]   = useState(null);            // { paths:[], label }
+  const [mediaEditor, setMediaEditor] = useState(null);    // { section, slot }
   const [saving, setSaving]   = useState(false);
   const [saved, setSaved]     = useState(false);
   const [error, setError]     = useState(null);
@@ -75,10 +76,14 @@ export function EditModeProvider({ children }) {
     ss.del('yb_edit');
     setEditing(false);
     setEditor(null);
+    setMediaEditor(null);
   }, []);
 
   const openEditor  = useCallback((paths, label) => setEditor({ paths, label: label || 'Edit text' }), []);
   const closeEditor = useCallback(() => setEditor(null), []);
+
+  const openMediaEditor = useCallback((section, slot) => setMediaEditor({ section, slot }), []);
+  const closeMediaEditor = useCallback(() => setMediaEditor(null), []);
 
   const save = useCallback(async () => {
     setSaving(true); setError(null);
@@ -112,6 +117,7 @@ export function EditModeProvider({ children }) {
   const value = {
     editing, enterEdit, exitEdit,
     editor, openEditor, closeEditor,
+    mediaEditor, openMediaEditor, closeMediaEditor,
     effective, getValue, setValue,
     dirtyCount: touched.size,
     save, saving, saved, error,

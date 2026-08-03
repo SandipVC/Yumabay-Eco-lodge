@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useLang } from '../../context/LanguageContext.jsx';
 
-export default function MediaLibraryPicker({ token, onPick, onCancel }) {
+export default function MediaLibraryPicker({ token, onPick, onUpload, onCancel }) {
   const { t } = useLang();
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -41,14 +41,30 @@ export default function MediaLibraryPicker({ token, onPick, onCancel }) {
           <button className="cms-modal-close" onClick={onCancel}>×</button>
         </div>
         
-        <div className="cms-media-picker-tools">
+        <div className="cms-media-picker-tools" style={{ display: 'flex', gap: '12px' }}>
           <input 
             type="text" 
             placeholder="Search by label or section..." 
             value={filter}
             onChange={e => setFilter(e.target.value)}
             className="cms-input"
+            style={{ flex: 1 }}
           />
+          {onUpload && (
+            <label className="cms-btn-primary" style={{ cursor: 'pointer', whiteSpace: 'nowrap' }}>
+              Upload New
+              <input
+                type="file"
+                accept="image/*,video/*"
+                hidden
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    onUpload(e.target.files[0]);
+                  }
+                }}
+              />
+            </label>
+          )}
         </div>
 
         <div className="cms-media-picker-body">

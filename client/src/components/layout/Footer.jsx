@@ -33,6 +33,7 @@ export default function Footer() {
           <EditMark path="footer.copyright" label="Copyright line">{f.copyright}</EditMark>
         </p>
         <div className="footer-social">
+
           <a href={f.instagramUrl || '#'} aria-label={f.instagram} target="_blank" rel="noopener noreferrer"><img src={igIcon} alt={f.instagram} loading="lazy" /></a>
           <a href={f.facebookUrl || '#'} aria-label={f.facebook} target="_blank" rel="noopener noreferrer"><img src={fbIcon} alt={f.facebook} loading="lazy" /></a>
           <a href={f.xUrl || '#'} aria-label={f.xLabel} target="_blank" rel="noopener noreferrer">

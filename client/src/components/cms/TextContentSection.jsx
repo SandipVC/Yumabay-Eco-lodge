@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useAssets, invalidateAssetsCache } from '../../hooks/useAssets.js';
 import { en as EN_DEFAULTS } from '../../translations/en.js';
 import { es as ES_DEFAULTS } from '../../translations/es.js';
+import { useLang } from '../../context/LanguageContext.jsx';
 import { TEXT_SECTIONS } from './textSchema.js';
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -205,6 +206,8 @@ function ListBlock({ field, valuesEn, valuesEs, onChangeEn, onChangeEs }) {
 // ── per-section editor ────────────────────────────────────────────────────────
 
 function SectionEditor({ section, cmsTranslations, token, refresh }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const [enData, setEnData] = useState(() => mergedSectionData(section.id, 'en', cmsTranslations));
   const [esData, setEsData] = useState(() => mergedSectionData(section.id, 'es', cmsTranslations));
   const [initial] = useState(() => ({
@@ -322,8 +325,8 @@ function SectionEditor({ section, cmsTranslations, token, refresh }) {
     <div className="cms-section-body">
       <div className="cms-text-status">
         <span className="cms-text-section-title">{section.label}</span>
-        {dirty && <span className="cms-text-dirty">● unsaved</span>}
-        {savedFlash && <span className="cms-text-saved">✓ saved</span>}
+        {dirty && <span className="cms-text-dirty">{c.textUnsaved}</span>}
+        {savedFlash && <span className="cms-text-saved">{c.textSaved}</span>}
       </div>
       {err && <p className="cms-error">{err}</p>}
       <div className="cms-text-fields">
@@ -335,14 +338,14 @@ function SectionEditor({ section, cmsTranslations, token, refresh }) {
           onClick={handleReset}
           disabled={!dirty || saving}
         >
-          Reset
+          {c.textBtnReset}
         </button>
         <button
           className="cms-btn-gold"
           onClick={handleSave}
           disabled={!dirty || saving}
         >
-          {saving ? 'Saving…' : 'Save Section'}
+          {saving ? c.textBtnSaving : c.textBtnSave}
         </button>
       </div>
     </div>
@@ -352,23 +355,20 @@ function SectionEditor({ section, cmsTranslations, token, refresh }) {
 // ── main panel ────────────────────────────────────────────────────────────────
 
 export default function TextContentSection({ token }) {
+  const { t } = useLang();
+  const c = t.dashboard;
   const { assets, loading, error, refresh } = useAssets();
   const [activeId, setActiveId] = useState(TEXT_SECTIONS[0].id);
   const cmsTranslations = assets?.translations;
 
-  if (loading) return <p className="cms-hint">Loading text content…</p>;
-  if (error)   return <p className="cms-error">Could not load: {error}</p>;
+  if (loading) return <p className="cms-hint">{c.textPanelLoading}</p>;
+  if (error)   return <p className="cms-error">{c.textPanelError} {error}</p>;
 
   const active = TEXT_SECTIONS.find(s => s.id === activeId) || TEXT_SECTIONS[0];
 
   return (
     <div className="cms-panel cms-text-panel">
-      <p className="cms-hint">
-        Edit every text string on the public site. Each section has English (EN) and
-        Spanish (ES) inputs side-by-side. Press Enter inside a multi-line field to insert
-        a line break. Empty fields fall back to the built-in defaults. Switching sections
-        before saving discards unsaved edits.
-      </p>
+      <p className="cms-hint">{c.textPanelHint}</p>
 
       {/* Horizontal section tabs (matches Media Manager) */}
       <div className="cms-tabs">

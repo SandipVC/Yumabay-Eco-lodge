@@ -6,6 +6,7 @@ import { BACKDROP_URL } from '../components/sitemap/SiteMapBackdrop.jsx';
 import { ZONE_DEFAULTS, AVAIL, zoneCenter, clampZone } from '../components/sitemap/zonesData.js';
 import UnitGrid from '../components/sitemap/UnitGrid.jsx';
 import ZoneIcon from '../components/sitemap/ZoneIcon.jsx';
+import EditMark from '../components/cms/EditMark.jsx';
 
 const SITEMAP_DEFAULTS = {
   planImage: 'https://firebasestorage.googleapis.com/v0/b/vessel-contianer.firebasestorage.app/o/assets%2Fsitemap%2Fmaster-plan-layout.jpg?alt=media',
@@ -23,6 +24,17 @@ const brighten = (rgba, mult) =>
 export default function SiteMap() {
   const { t, lang }    = useLang();
   const s              = t.sitemap;
+  const translateZoneText = (text) => {
+    if (!text) return '';
+    return t.sitemap?.zones?.[text] || text;
+  };
+  const formatZonePrice = (price) => {
+    if (!price) return '';
+    if (price.startsWith('From ')) {
+      return `${t.properties?.priceFrom || 'From'} ${price.replace('From ', '')}`;
+    }
+    return price;
+  };
   const navigate       = useNavigate();
   const { assets }     = useAssets();
   const [activeId, setActiveId]       = useState(null);
@@ -162,9 +174,13 @@ export default function SiteMap() {
 
   return (
     <div className="sitemap-page">
-      <p className="section-label reveal">{s.label}</p>
+      <p className="section-label reveal">
+        <EditMark path="sitemap.label" label="Sitemap label">{s.label}</EditMark>
+      </p>
       <h1 className="section-title reveal rd1">
-        {s.title} <em>{s.titleEm}</em>
+        <EditMark as="div" path={['sitemap.title', 'sitemap.titleEm']} label="Sitemap heading">
+          {s.title} <em>{s.titleEm}</em>
+        </EditMark>
       </h1>
 
       <div className="sitemap-layout">
@@ -315,7 +331,7 @@ export default function SiteMap() {
                     strokeWidth="2.5"
                     style={{ pointerEvents: 'none', userSelect: 'none', paintOrder: 'stroke' }}
                   >
-                    Phase {z.phase}
+                    {t.sitemap?.phase || 'Phase'} {z.phase}
                   </text>
                 </g>
               );
@@ -328,7 +344,7 @@ export default function SiteMap() {
                 fontWeight="500"
                 stroke="rgba(0,0,0,0.75)" strokeWidth="3"
                 style={{ paintOrder: 'stroke' }}>
-                CLICK ANY ZONE FOR DETAILS
+                <EditMark path="sitemap.clickAnyZone" label="SVG click hint">{s.clickAnyZone || 'CLICK ANY ZONE FOR DETAILS'}</EditMark>
               </text>
             )}
           </svg>
@@ -340,9 +356,15 @@ export default function SiteMap() {
           {!activeZone ? (
             <div className="sitemap-panel-empty">
               <div className="sitemap-panel-icon"><ZoneIcon name="map" size={40} /></div>
-              <p className="sitemap-panel-hint-title">Interactive Master Plan</p>
+              <p className="sitemap-panel-hint-title">
+                <EditMark path="sitemap.interactiveTitle" label="Interactive plan title">
+                  {s.interactiveTitle || 'Interactive Master Plan'}
+                </EditMark>
+              </p>
               <p className="sitemap-panel-hint-body">
-                Click any building, villa, or amenity zone on the plan to view unit details and availability.
+                <EditMark path="sitemap.interactiveDesc" label="Interactive plan description">
+                  {s.interactiveDesc || 'Click any building, villa, or amenity zone on the plan to view unit details and availability.'}
+                </EditMark>
               </p>
               <div className="sitemap-zone-list">
                 {ZONES.filter(z => z.price).map(z => (
@@ -354,7 +376,7 @@ export default function SiteMap() {
                     <span className="sitemap-zone-pill-icon" style={{ color: AVAIL[z.availability]?.badge }}>
                       <ZoneIcon zone={z} size={18} />
                     </span>
-                    {z.label}
+                    {translateZoneText(z.label)}
                   </button>
                 ))}
               </div>
@@ -363,9 +385,9 @@ export default function SiteMap() {
             <div className="sitemap-zone-card sitemap-enquiry-panel">
               <button className="sitemap-card-close" onClick={() => setActiveEnquiry(null)} aria-label="Close">✕</button>
 
-              <h2 className="sitemap-card-title">{lang === 'es' ? 'Consulta' : 'Enquiry'}</h2>
+              <h2 className="sitemap-card-title">{s.enquiry || 'Enquiry'}</h2>
               <p className="sitemap-card-type">
-                {activeEnquiry.unitCode ? `${lang === 'es' ? 'Unidad' : 'Unit'} ${activeEnquiry.unitCode}` : activeEnquiry.interest}
+                {activeEnquiry.unitCode ? `${s.unit || 'Unit'} ${activeEnquiry.unitCode}` : translateZoneText(activeEnquiry.interest)}
               </p>
 
               {submitStatus === 'success' ? (
@@ -384,7 +406,7 @@ export default function SiteMap() {
                       setSubmitStatus('idle');
                     }}
                   >
-                    {lang === 'es' ? 'Volver' : 'Back'}
+                    {s.back || 'Back'}
                   </button>
                 </div>
               ) : (
@@ -440,7 +462,7 @@ export default function SiteMap() {
                   </button>
 
                   <button type="button" className="btn-ghost" onClick={() => setActiveEnquiry(null)} style={{ border: 'none', padding: '10px 0', fontSize: '14px', background: 'none', cursor: 'pointer' }}>
-                    {lang === 'es' ? 'Cancelar' : 'Cancel'}
+                    {s.cancel || 'Cancel'}
                   </button>
                 </form>
               )}
@@ -451,21 +473,21 @@ export default function SiteMap() {
 
               <h2 className="sitemap-card-title">
                 <ZoneIcon zone={activeZone} size={22} />
-                <span style={{ marginLeft: 8 }}>{activeZone.label}</span>
+                <span style={{ marginLeft: 8 }}>{translateZoneText(activeZone.label)}</span>
               </h2>
-              <p className="sitemap-card-type">{activeZone.type}</p>
+              <p className="sitemap-card-type">{translateZoneText(activeZone.type)}</p>
 
               {inventoryBuilding ? (
                 <>
                   <div className="sitemap-card-meta" style={{ marginBottom: 12 }}>
                     <div className="sitemap-meta-row">
-                      <span className="meta-key">Phase</span>
+                      <span className="meta-key"><EditMark path="sitemap.phase" label="Phase label">{s.phase || 'Phase'}</EditMark></span>
                       <span className="meta-val">{activeZone.phase}</span>
                     </div>
                     {activeZone.area && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">Area Range</span>
-                        <span className="meta-val">{activeZone.area}</span>
+                        <span className="meta-key"><EditMark path="sitemap.areaRange" label="Area Range label">{s.areaRange || 'Area Range'}</EditMark></span>
+                        <span className="meta-val">{translateZoneText(activeZone.area)}</span>
                       </div>
                     )}
                   </div>
@@ -475,24 +497,24 @@ export default function SiteMap() {
                 <>
                   <div className="sitemap-card-meta">
                     <div className="sitemap-meta-row">
-                      <span className="meta-key">Phase</span>
+                      <span className="meta-key"><EditMark path="sitemap.phase" label="Phase label">{s.phase || 'Phase'}</EditMark></span>
                       <span className="meta-val">{activeZone.phase}</span>
                     </div>
                     {activeZone.beds && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">Units</span>
-                        <span className="meta-val">{activeZone.beds}</span>
+                        <span className="meta-key"><EditMark path="sitemap.units" label="Units label">{s.units || 'Units'}</EditMark></span>
+                        <span className="meta-val">{translateZoneText(activeZone.beds)}</span>
                       </div>
                     )}
                     {activeZone.area && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">Area</span>
-                        <span className="meta-val">{activeZone.area}</span>
+                        <span className="meta-key"><EditMark path="sitemap.area" label="Area label">{s.area || 'Area'}</EditMark></span>
+                        <span className="meta-val">{translateZoneText(activeZone.area)}</span>
                       </div>
                     )}
                     {activeZone.units && (
                       <div className="sitemap-meta-row">
-                        <span className="meta-key">Total Units</span>
+                        <span className="meta-key"><EditMark path="sitemap.totalUnits" label="Total Units label">{s.totalUnits || 'Total Units'}</EditMark></span>
                         <span className="meta-val">{activeZone.units}</span>
                       </div>
                     )}
@@ -507,13 +529,19 @@ export default function SiteMap() {
                     </button>
                   ) : (
                     <p className="sitemap-amenity-note">
-                      This is a shared amenity available to all residents.
+                      <EditMark path="sitemap.sharedAmenity" label="Shared amenity description">
+                        {s.sharedAmenity || 'This is a shared amenity available to all residents.'}
+                      </EditMark>
                     </p>
                   )}
                 </>
               )}
 
-              <p className="sitemap-card-nav-hint">← Click another zone to compare</p>
+              <p className="sitemap-card-nav-hint">
+                <EditMark path="sitemap.clickCompare" label="Compare navigation hint">
+                  {s.clickCompare || '← Click another zone to compare'}
+                </EditMark>
+              </p>
             </div>
           )}
         </div>
@@ -523,12 +551,12 @@ export default function SiteMap() {
       <div className="sitemap-downloads">
         {masterPdf && (
           <a href={masterPdf} target="_blank" rel="noopener noreferrer" className="btn-primary">
-            {s.downloadPlan}
+            <EditMark path="sitemap.downloadPlan" label="Download Plan button">{s.downloadPlan}</EditMark>
           </a>
         )}
         {villasPdf && (
           <a href={villasPdf} target="_blank" rel="noopener noreferrer" className="btn-ghost">
-            Villas Floor Plans
+            <EditMark path="sitemap.villasPlan" label="Villas Plan button">{s.villasPlan || 'Villas Floor Plans'}</EditMark>
           </a>
         )}
         {brochurePdf && (
@@ -536,7 +564,9 @@ export default function SiteMap() {
             href={brochurePdf}
             target="_blank" rel="noopener noreferrer" className="btn-ghost"
           >
-            {lang === 'es' ? 'Descargar Folleto' : 'Download Brochure'}
+            <EditMark path="sitemap.downloadBrochure" label="Download Brochure button">
+              {s.downloadBrochure || 'Download Brochure'}
+            </EditMark>
           </a>
         )}
         {amenitiesPdf && (
@@ -544,7 +574,9 @@ export default function SiteMap() {
             href={amenitiesPdf}
             target="_blank" rel="noopener noreferrer" className="btn-ghost"
           >
-            {lang === 'es' ? 'Descargar Amenidades' : 'Download Amenities'}
+            <EditMark path="sitemap.downloadAmenities" label="Download Amenities button">
+              {s.downloadAmenities || 'Download Amenities'}
+            </EditMark>
           </a>
         )}
       </div>

@@ -194,14 +194,14 @@ export default function Dashboard() {
           <>
             <div className="cms-inline-cta">
               <div>
-                <strong>Edit text directly on the live site</strong>
-                <p>See each text in its real place and edit English + Spanish inline. Opens the home page in edit mode.</p>
+                <strong>{d.inlineCtaTitle}</strong>
+                <p>{d.inlineCtaDesc}</p>
               </div>
               <button
                 className="btn-primary"
                 onClick={() => { editMode?.enterEdit(); navigate('/'); }}
               >
-                ✏️ Edit on live site
+                {d.inlineCtaBtn}
               </button>
             </div>
             <TextContentSection token={token} />
