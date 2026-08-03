@@ -14,6 +14,8 @@ export const es = {
     title: 'CLUB LOUNGE',
     kicker: 'CARIBE',
     desc: 'VIDA EXCLUSIVA. HORIZONTES INFINITOS.',
+    exploreProperties: 'Explorar Propiedades',
+    contactUs: 'Contáctenos',
   },
   strip: [
     'Eco-Lodge Caribeño',

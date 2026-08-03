@@ -1166,6 +1166,7 @@ a  { color: inherit; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
 .contact-grid > div:last-child { padding-top: 49px; }
 .contact-page .section-label { color: var(--gold); opacity: 1; }
+.contact-info .section-title { margin-bottom: 16px; }
 .contact-info .section-body { font-size: 14px; }
 .contact-detail { margin-top: 20px; display: flex; flex-direction: column; gap: 24px; }
 .contact-detail-item { display: flex; flex-direction: column; gap: 4px; }
@@ -3804,6 +3805,67 @@ footer { background: var(--teal); color: var(--white); }
   margin-right: -.16em;
 }
 
+/* ── Hero CTA buttons row ─────────────────────────────────── */
+.hs-cta-row {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.hs-cta-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 32px;
+  min-width: 210px;
+  font-family: var(--font-body);
+  font-size: clamp(13px, 1.1vw, 17px);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: #FFF;
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
+  background: transparent;
+  cursor: pointer;
+  transition: color 0.35s ease, border-color 0.35s ease;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Pseudo-element handles the blurred frosted-glass backdrop on hover */
+.hs-cta-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  background: transparent;
+  transition: backdrop-filter 0.35s ease, -webkit-backdrop-filter 0.35s ease, background 0.35s ease;
+}
+
+.hs-cta-btn:hover::before {
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.hs-cta-btn:hover {
+  color: var(--ink, #0A2229);
+  border-color: rgba(255, 255, 255, 0.95);
+}
+
+/* Label keeps z-index above the pseudo-element */
+.hs-cta-label {
+  position: relative;
+  z-index: 1;
+}
+
 /* Bottom right navigation dots */
 .hs-dots {
   position: absolute; z-index: 4;
@@ -3877,6 +3939,18 @@ footer { background: var(--teal); color: var(--white); }
     justify-content: center;
     width: 100%;
     margin-top: 24px;
+  }
+
+  .hs-cta-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .hs-cta-btn {
+    width: 100%;
+    text-align: center;
+    padding: 14px 24px;
   }
 }
 

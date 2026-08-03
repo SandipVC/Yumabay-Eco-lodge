@@ -14,6 +14,8 @@ export const en = {
     title: 'CLUB LOUNGE',
     kicker: 'CARIBBEAN',
     desc: 'EXCLUSIVE LIVING. ENDLESS HORIZONS.',
+    exploreProperties: 'Explore Properties',
+    contactUs: 'Contact Us',
   },
   strip: [
     'Caribbean Eco-Lodge',

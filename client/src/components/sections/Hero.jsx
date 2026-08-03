@@ -6,6 +6,7 @@
  * keep the section alive when the API is down or the CMS list is empty.
  */
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
@@ -254,6 +255,14 @@ export default function Hero() {
       </div>
       
       <div className="hs-content-bottom">
+        <div className="hs-cta-row hs-anim">
+          <a href="#properties" className="hs-cta-btn">
+            <span className="hs-cta-label">{t.hero?.exploreProperties || 'Explore Properties'}</span>
+          </a>
+          <Link to="/contact" className="hs-cta-btn">
+            <span className="hs-cta-label">{t.hero?.contactUs || 'Contact Us'}</span>
+          </Link>
+        </div>
         <p className="hs-slide-desc hs-anim">
           <EditMark path="hero.desc" label="Hero Description">{t.hero?.desc}</EditMark>
         </p>
