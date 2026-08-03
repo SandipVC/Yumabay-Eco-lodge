@@ -131,7 +131,7 @@ export default function Contact() {
             <div className="contact-detail-item">
               <span className="contact-detail-label">Email</span>
               <span className="contact-detail-value">
-                <a href="mailto:Info@yumabay-ecolodge.com" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <a href={`mailto:${t.footer.email}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   {t.footer.email}
                 </a>
               </span>
@@ -139,7 +139,7 @@ export default function Contact() {
             <div className="contact-detail-item">
               <span className="contact-detail-label">WhatsApp</span>
               <span className="contact-detail-value">
-                <a href="https://wa.me/+18295489863" style={{ textDecoration: 'none', color: 'inherit' }}>
+                <a href={`https://wa.me/${t.footer.phone.replace(/[^0-9+]/g, '')}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                   {t.footer.phone}
                 </a>
               </span>
