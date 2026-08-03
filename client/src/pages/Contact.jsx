@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext.jsx';
 import { useAssets } from '../hooks/useAssets.js';
+import EditMark from '../components/cms/EditMark.jsx';
 
 export default function Contact() {
   const { t, lang } = useLang();
@@ -114,25 +115,25 @@ export default function Contact() {
     <div className="contact-page">
       <div className="contact-grid">
         <div className="contact-info">
-          <p className="section-label reveal">{c.label}</p>
+          <p className="section-label reveal"><EditMark path="contact.label" label="Label">{c.label}</EditMark></p>
           <h1 className="section-title reveal rd1">
-            {c.title} <em>{c.titleEm}</em>
+            <EditMark path="contact.title" label="Title">{c.title}</EditMark> <em><EditMark path="contact.titleEm" label="Title (Italic)">{c.titleEm}</EditMark></em>
           </h1>
           <p className="section-body reveal rd2">
-            {t.location.body}
+            <EditMark path="location.body" label="Location Body">{t.location.body}</EditMark>
           </p>
           <div className="contact-detail reveal rd2">
             <div className="contact-detail-item">
-              <span className="contact-detail-label">{t.footer.contactCol}</span>
+              <span className="contact-detail-label"><EditMark path="footer.contactCol" label="Contact Column">{t.footer.contactCol}</EditMark></span>
               <span className="contact-detail-value" style={{ whiteSpace: 'pre-line' }}>
-                {t.footer.address}
+                <EditMark path="footer.address" label="Address">{t.footer.address}</EditMark>
               </span>
             </div>
             <div className="contact-detail-item">
               <span className="contact-detail-label">Email</span>
               <span className="contact-detail-value">
                 <a href={`mailto:${t.footer.email}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {t.footer.email}
+                  <EditMark path="footer.email" label="Email">{t.footer.email}</EditMark>
                 </a>
               </span>
             </div>
@@ -140,7 +141,7 @@ export default function Contact() {
               <span className="contact-detail-label">WhatsApp</span>
               <span className="contact-detail-value">
                 <a href={`https://wa.me/${t.footer.phone.replace(/[^0-9+]/g, '')}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  {t.footer.phone}
+                  <EditMark path="footer.phone" label="Phone">{t.footer.phone}</EditMark>
                 </a>
               </span>
             </div>
@@ -150,14 +151,14 @@ export default function Contact() {
         <div>
           {status === 'success' ? (
             <div className="form-success">
-              <h3>{c.successTitle}</h3>
-              <p>{c.successBody}</p>
+              <h3><EditMark path="contact.successTitle" label="Success Title">{c.successTitle}</EditMark></h3>
+              <p><EditMark path="contact.successBody" label="Success Body">{c.successBody}</EditMark></p>
             </div>
           ) : (
             <form className="enquiry-form" onSubmit={handleSubmit} noValidate>
               <div className="form-row">
                 <div className="form-field">
-                  <label className="form-label" htmlFor="name">{c.namePlaceholder}</label>
+                  <label className="form-label" htmlFor="name"><EditMark path="contact.namePlaceholder" label="Name Label">{c.namePlaceholder}</EditMark></label>
                   <input
                     id="name" name="name" type="text" className="form-input"
                     placeholder={c.namePlaceholder} value={form.name} onChange={handleChange}
@@ -166,7 +167,7 @@ export default function Contact() {
                   {errors.name && <span className="form-error">{errors.name}</span>}
                 </div>
                 <div className="form-field">
-                  <label className="form-label" htmlFor="email">{c.emailPlaceholder}</label>
+                  <label className="form-label" htmlFor="email"><EditMark path="contact.emailPlaceholder" label="Email Label">{c.emailPlaceholder}</EditMark></label>
                   <input
                     id="email" name="email" type="email" className="form-input"
                     placeholder={c.emailPlaceholder} value={form.email} onChange={handleChange}
@@ -178,7 +179,7 @@ export default function Contact() {
 
               <div className="form-row">
                 <div className="form-field">
-                  <label className="form-label" htmlFor="phone">{c.phonePlaceholder}</label>
+                  <label className="form-label" htmlFor="phone"><EditMark path="contact.phonePlaceholder" label="Phone Label">{c.phonePlaceholder}</EditMark></label>
                   <input
                     id="phone" name="phone" type="tel" className="form-input"
                     placeholder={c.phonePlaceholder} value={form.phone} onChange={handleChange}
@@ -187,7 +188,7 @@ export default function Contact() {
                   {errors.phone && <span className="form-error">{errors.phone}</span>}
                 </div>
                 <div className="form-field">
-                  <label className="form-label" htmlFor="propertyInterest">{c.interestLabel}</label>
+                  <label className="form-label" htmlFor="propertyInterest"><EditMark path="contact.interestLabel" label="Interest Label">{c.interestLabel}</EditMark></label>
                   <select
                     id="propertyInterest" name="propertyInterest" className="form-select"
                     value={form.propertyInterest} onChange={handleChange}
@@ -201,7 +202,7 @@ export default function Contact() {
               </div>
 
               <div className="form-field">
-                <label className="form-label" htmlFor="message">{c.messagePlaceholder}</label>
+                <label className="form-label" htmlFor="message"><EditMark path="contact.messagePlaceholder" label="Message Label">{c.messagePlaceholder}</EditMark></label>
                 <textarea
                   id="message" name="message" className="form-textarea"
                   placeholder={c.messagePlaceholder} value={form.message} onChange={handleChange}
@@ -211,7 +212,7 @@ export default function Contact() {
               </div>
 
               {status === 'error' && (
-                <div className="form-alert">{c.errorMsg}</div>
+                <div className="form-alert"><EditMark path="contact.errorMsg" label="Error">{c.errorMsg}</EditMark></div>
               )}
 
               <button
@@ -219,7 +220,7 @@ export default function Contact() {
                 disabled={status === 'sending'}
                 style={{ opacity: status === 'sending' ? .6 : 1 }}
               >
-                {status === 'sending' ? c.sending : c.submitBtn}
+                {status === 'sending' ? <EditMark path="contact.sending" label="Sending">{c.sending}</EditMark> : <EditMark path="contact.submitBtn" label="Submit">{c.submitBtn}</EditMark>}
               </button>
             </form>
           )}
