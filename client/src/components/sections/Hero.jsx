@@ -6,10 +6,13 @@
  * keep the section alive when the API is down or the CMS list is empty.
  */
 import { useState, useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
+import EditMark from '../cms/EditMark.jsx';
+import EditMedia from '../cms/EditMedia.jsx';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -218,11 +221,13 @@ export default function Hero() {
               overflow: 'hidden',
             }}
           >
-            <img
-              className="hs-bg-img"
-              src={slide.src}
-              alt={pick(slide, lang, 'title')}
-            />
+            <EditMedia section="heroSlider" slot={idx} style={{ width: '100%', height: '100%' }}>
+              <img
+                className="hs-bg-img"
+                src={slide.src}
+                alt={pick(slide, lang, 'title')}
+              />
+            </EditMedia>
           </div>
         ))}
       </div>
@@ -236,15 +241,28 @@ export default function Hero() {
 
       {/* Static brand block — does NOT change with the slides */}
       <div className="hs-content-top" ref={contentRef}>
-        <span className="hs-brand-name hs-anim">YUMA BAY</span>
-        <h1 className="hs-slide-title hs-anim">CLUB LOUNGE</h1>
+        <span className="hs-brand-name hs-anim">
+          <EditMark path="hero.brandName" label="Hero Brand Name">{t.hero?.brandName}</EditMark>
+        </span>
+        <h1 className="hs-slide-title hs-anim">
+          <EditMark path="hero.title" label="Hero Title">{t.hero?.title}</EditMark>
+        </h1>
         <div className="hs-slide-kicker hs-anim">
-          <span>CARRIBEAN</span>
+          <span>
+            <EditMark path="hero.kicker" label="Hero Kicker">{t.hero?.kicker}</EditMark>
+          </span>
         </div>
       </div>
       
       <div className="hs-content-bottom">
-        <p className="hs-slide-desc hs-anim">EXCLUSIVE LIVING. ENDLESS HORIZONS.</p>
+        <div className="hs-cta-row hs-anim">
+          <Link to="/contact" className="hs-cta-btn">
+            <span className="hs-cta-label">{t.hero?.contactUs || 'Contact Us'}</span>
+          </Link>
+        </div>
+        <p className="hs-slide-desc hs-anim">
+          <EditMark path="hero.desc" label="Hero Description">{t.hero?.desc}</EditMark>
+        </p>
       </div>
 
       {slides.length > 1 && (

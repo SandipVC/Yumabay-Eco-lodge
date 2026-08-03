@@ -136,11 +136,28 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Cache CMS font selection (font-family + custom font file URL) in localStorage; inline script in index.html applies it synchronously before React renders — zero font flicker on refresh for any CMS-uploaded custom font | `index.html`, `App.jsx` | — |
 | Load dynamic site map backdrop from CMS assets instead of hardcoded fallback; add site map backdrop and plan layout images to Preloader image list to cache them before rendering to eliminate load lag | `SiteMap.jsx`, `Preloader.jsx` | — |
 
+### Hero Brand Text Editability (2026-07-21, branch `release`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Make hero brand block text (Brand Name, Title, Kicker, and Description) fully editable through the bilingual CMS panel | `en.js`, `es.js`, `textSchema.js`, `Hero.jsx` | — |
+| Integrate click-to-edit inline overlays for all four hero brand text fields | `Hero.jsx` | — |
+| Update database clean-up script to remove stale hero translation keys from Firestore and fallback assets.json, ensuring the new defaults load correctly | `strip-stale-overrides.mjs` | — |
+
+### Sitemap Translation, Dropdown, and Inline Edit Support (2026-07-21, branch `release`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Localize sitemap page details sidebar keys (Phase, Area Range, Units, Blocked, Click to compare, etc.) and support runtime bilingual translation of default building names/types | `en.js`, `es.js`, `UnitGrid.jsx`, `SiteMap.jsx` | — |
+| Convert horizontal level selector tabs to a custom select dropdown styled for the dark detail card | `UnitGrid.jsx`, `global.css` | — |
+| Integrate click-to-edit inline overlays for all sitemap page headings, action buttons, and download files | `SiteMap.jsx` | — |
+| Add a Page Navigation switcher to the inline editor bottom toolbar to switch between Home and Site Map pages | `InlineTextEditor.jsx`, `global.css` | — |
+
 ### What's next
 
-- Run `firebase deploy --only hosting,functions` to verify that the deployment completes without timeouts.
-- Merge `text-changes-client` → `drishti-new-design` → `firebase` when client sign-off received.
-- Merge `hero-new-animation` → `main` after client reviews the new hero slider.
+- Ask the client to test the new sitemap levels select dropdown on mobile and desktop.
+- Verify sitemap inline translations and downloads are click-to-edit.
+- Merge `release` to `main` when client sign-off is received.
 
 
 **Note:** The hero scrub video iOS/Android buffering bug and touch-scroll keyframing issue have both been fully resolved. The video was re-encoded with `-movflags +faststart` and `-g 1`, and `Hero.jsx` was updated with `autoPlay` and a `touchstart` unlocker.

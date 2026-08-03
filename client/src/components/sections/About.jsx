@@ -3,6 +3,7 @@ import { useInView } from 'motion/react';
 import { useLang }   from '../../context/LanguageContext.jsx';
 import { useAssets } from '../../hooks/useAssets.js';
 import EditMark from '../cms/EditMark.jsx';
+import EditMedia from '../cms/EditMedia.jsx';
 import CountUp from '../ui/CountUp.jsx';
 
 const DEFAULTS = {
@@ -32,7 +33,13 @@ export default function About() {
 
   return (
     <>
-      <section id="about" style={{ backgroundImage: `url(${mainImg})` }}>
+      <EditMedia 
+        as="section" 
+        id="about" 
+        section="about" 
+        slot="main" 
+        style={{ backgroundImage: `url(${mainImg})` }}
+      >
         
         <div className="about-centered-content wrap">
           <p className="about-label section-label reveal">
@@ -53,7 +60,7 @@ export default function About() {
             </EditMark>
           </div>
         </div>
-      </section>
+      </EditMedia>
 
       {/* Stats strip */}
       <div className="about-stats-band reveal" ref={statsRef}>

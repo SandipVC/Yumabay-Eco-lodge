@@ -152,3 +152,9 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 - [x] Change the website's default heading font to Cormorant Garamond to match your selected font, completely resolving the preloader runtime font flicker. (`global.css`, `CmsPanel.jsx`, `SiteMap.jsx`, `cms.js`)
 - [x] Cache CMS font selection in localStorage; inline script in index.html applies it before React renders — zero flicker for any custom uploaded font. (`index.html`, `App.jsx`)
 - [x] Load dynamic site map backdrop from CMS assets and add site map assets to Preloader pre-caching list to prevent slow background loading. (`SiteMap.jsx`, `Preloader.jsx`)
+
+## Done — hero-text-editable (2026-07-21)
+- [x] Make hero brand block text (Brand Name, Title, Kicker, and Description) fully editable through the bilingual CMS panel. (`en.js`, `es.js`, `textSchema.js`, `Hero.jsx`)
+- [x] Integrate click-to-edit inline overlays for all four hero brand text fields. (`Hero.jsx`)
+- [x] Update database clean-up script to remove stale hero translation keys from Firestore and fallback assets.json, ensuring the new defaults load correctly. (`strip-stale-overrides.mjs`)
+

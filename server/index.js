@@ -53,7 +53,7 @@ app.use((err, _req, res, _next) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Internal server error' });
 });
-const isMain = import.meta.url === pathToFileURL(process.argv[1]).href;
+const isMain = process.argv[1] ? import.meta.url === pathToFileURL(process.argv[1]).href : false;
 
 if (isMain && !process.env.FIREBASE_CONFIG && !process.env.FUNCTIONS_EMULATOR) {
   app.listen(PORT, '0.0.0.0', () => {
