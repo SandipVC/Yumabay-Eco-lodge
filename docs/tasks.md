@@ -158,3 +158,9 @@ Purpose: client feedback implementation — Tiers A (text) + B (structural) + mo
 - [x] Integrate click-to-edit inline overlays for all four hero brand text fields. (`Hero.jsx`)
 - [x] Update database clean-up script to remove stale hero translation keys from Firestore and fallback assets.json, ensuring the new defaults load correctly. (`strip-stale-overrides.mjs`)
 
+## Done — whatsapp-and-contact (2026-08-03)
+- [x] Replace static footer WhatsApp icon with a floating action button (FAB) widget.
+- [x] Integrate CMS support for WhatsApp widget popup titles, option names, and URLs.
+- [x] Add auto-hide animation to WhatsApp widget based on scroll position (hidden in Hero section).
+- [x] Replace hardcoded email and phone links in the Contact page with dynamic translation values (`t.footer.email` and `t.footer.phone`).
+- [x] Make Contact page text fully live-editable via the CMS inline editor (`EditMark`).

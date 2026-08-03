@@ -267,6 +267,11 @@ To polish the preloader/loading screen to match luxury visual identity guideline
 - **Enlarge Logo & Title:** Increased the palm tree logo scale to `clamp(64px, 16vw, 96px)` and the "YUMA BAY" title font size to `clamp(36px, 10vw, 56px)`.
 - **Refine Spacing:** Increased the space between the logo and the title block (`margin-bottom: 24px` on logo wrap), tightened the gap inside the text block (`gap: 8px` on preloader content) to keep title/tagline closely grouped, and increased the distance to the progress bar (`margin-top: 48px`).
 
-
-
-
+### ADR-17 — Floating WhatsApp Widget & Contact Page Editability
+To replace the static footer WhatsApp icon with a more prominent, interactive widget, and improve CMS text editability.
+**Decision:**
+- **Floating Widget:** Implemented a new `WhatsAppWidget.jsx` component that displays a floating action button (FAB) in the bottom-right corner. When clicked, it expands a popup with customizable titles and multiple WhatsApp options.
+- **Scroll-Linked Visibility:** Added a scroll listener to hide the widget when the user is at the very top (Hero section, first 300px) and smoothly fade/slide it in as they scroll down, preventing it from conflicting with the hero UI.
+- **CMS Integration:** Added new translation fields (`whatsappWidgetTitle`, `whatsappWidgetSub`, `whatsappOp1Name`, `whatsappOp1Url`, etc.) to `en.js`, `es.js`, and `textSchema.js` so the widget is fully managed via the CMS.
+- **Contact Page Live Editing:** Wrapped all visible strings, titles, placeholders, and button texts in the `Contact.jsx` page with `<EditMark>`, making it fully live-editable in the CMS dashboard inline editor, mirroring the main site and sitemap experience.
+- **Dynamic Contact Links:** Replaced hardcoded `mailto:` and `wa.me` links in `Contact.jsx` to dynamically pull from `t.footer.email` and `t.footer.phone`, ensuring zero ambiguity between the displayed text and the link destination.

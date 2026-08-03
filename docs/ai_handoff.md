@@ -153,6 +153,16 @@ See [`docs/architecture.md`](architecture.md) for technical architecture.
 | Integrate click-to-edit inline overlays for all sitemap page headings, action buttons, and download files | `SiteMap.jsx` | — |
 | Add a Page Navigation switcher to the inline editor bottom toolbar to switch between Home and Site Map pages | `InlineTextEditor.jsx`, `global.css` | — |
 
+### WhatsApp Widget & Contact Page Editability (2026-08-03, branch `release`)
+
+| Change | Files | ADR |
+|---|---|---|
+| Replaced static footer WhatsApp icon with a floating WhatsApp widget popup | `Footer.jsx`, `WhatsAppWidget.jsx`, `Layout.jsx` | — |
+| Integrated CMS support for WhatsApp widget (titles, URLs) | `textSchema.js`, `en.js`, `es.js` | — |
+| Added auto-hide/show animation to WhatsApp widget based on scroll position (hidden at top) | `WhatsAppWidget.jsx`, `global.css` | — |
+| Replaced hardcoded contact links with CMS variables (`t.footer.email`, `t.footer.phone`) | `Contact.jsx` | — |
+| Made Contact page fully live-editable via CMS inline editor (`EditMark`) | `Contact.jsx` | — |
+
 ### What's next
 
 - Ask the client to test the new sitemap levels select dropdown on mobile and desktop.
