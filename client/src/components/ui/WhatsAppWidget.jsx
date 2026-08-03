@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLang } from '../../context/LanguageContext.jsx';
 import EditMark from '../cms/EditMark.jsx';
 
@@ -6,9 +6,28 @@ export default function WhatsAppWidget() {
   const { t } = useLang();
   const f = t.footer;
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show widget after scrolling past the first 300px
+      if (window.scrollY > 300) {
+        setIsVisible(true);
+      } else {
+        setIsVisible(false);
+        setIsOpen(false); // also close popup if it's open when scrolling back up
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    // Check initial position
+    handleScroll();
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="wa-widget">
+    <div className={`wa-widget ${isVisible ? 'is-visible' : ''}`}>
       {isOpen && (
         <div className="wa-popup hs-anim fade-in">
           <div className="wa-popup-header">
