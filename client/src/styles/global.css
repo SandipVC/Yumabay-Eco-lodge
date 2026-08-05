@@ -1175,6 +1175,7 @@ a  { color: inherit; }
 
 /* ── Form ── */
 .enquiry-form { display: flex; flex-direction: column; gap: 24px; }
+.enquiry-form .btn-primary { align-self: flex-start; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .form-field { display: flex; flex-direction: column; gap: 6px; }
 .form-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); font-weight: 400; }
